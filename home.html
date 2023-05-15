@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<!-- === Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home | LiScTech</title>
+    <link rel="shortcut icon" href="..\img\Lisctech.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- ===== CSS ===== -->
+    <style>
+        /* ===== Google Font Import - Poppins ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.4s ease;
+
+        }
+
+
+        /* ===== Colours ===== */
+        :root {
+            --body-color: #E4E9F7;
+            --nav-color: #08ac4c;
+            --side-nav: #010718;
+            --text-color: #FFF;
+            --search-bar: #F2F2F2;
+            --search-text: #010718;
+        }
+
+        body {
+            height: 50vh;
+            background-color: var(--body-color);
+
+        }
+
+        body.dark {
+            --body-color: #18191A;
+            --nav-color: #242526;
+            --side-nav: #242526;
+            --text-color: #CCC;
+            --search-bar: #242526;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            width: 100%;
+            background-color: var(--nav-color);
+            z-index: 100;
+        }
+
+        body.dark nav {
+            border: 1px solid #393838;
+
+        }
+
+        nav .nav-bar {
+            position: relative;
+            height: 100%;
+            max-width: 1000px;
+            width: 100%;
+            background-color: var(--nav-color);
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .nav-bar .sidebarOpen {
+            color: var(--text-color);
+            font-size: 25px;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        nav .nav-bar .logo a {
+            font-size: 25px;
+            font-weight: 500;
+            margin-left: -150px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .menu .logo-toggle {
+            display: none;
+        }
+
+        .nav-bar .nav-links {
+            margin-right: -400px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links .logout {
+            font-weight: bold;
+            background-color: #0107188c;
+            padding-top: 27%;
+            padding-bottom: 29%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links li {
+            margin: 10px 10px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            position: relative;
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .nav-links li a::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background-color: var(--text-color);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li:hover a::before {
+            opacity: 1;
+        }
+
+        .nav-bar .darkLight-searchBox {
+            margin-right: -150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .darkLight-searchBox .dark-light,
+        .darkLight-searchBox .searchToggle {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+
+        .dark-light i,
+        .searchToggle i {
+            position: absolute;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-light i.sun {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dark-light.active i.sun {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dark-light.active i.moon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle i.cancel {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle.active i.cancel {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .searchToggle.active i.search {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchBox {
+            position: relative;
+        }
+
+        .searchBox .search-field {
+            position: absolute;
+            bottom: -85px;
+            right: 5px;
+            height: 50px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+            background-color: var(--nav-color);
+            padding: 3px;
+            border-radius: 6px;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .searchToggle.active~.search-field {
+            bottom: -74px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-field::before {
+            content: '';
+            position: absolute;
+            right: 14px;
+            top: -4px;
+            height: 12px;
+            width: 12px;
+            background-color: var(--nav-color);
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+
+        .search-field input {
+            height: 100%;
+            width: 100%;
+            padding: 0 45px 0 15px;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--search-text);
+            background-color: var(--search-bar);
+        }
+
+        body.dark .search-field input {
+            color: var(--text-color);
+        }
+
+        .search-field i {
+            position: absolute;
+            color: var(--nav-color);
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        body.dark .search-field i {
+            color: var(--text-color);
+        }
+
+        th,
+        td {
+            background-color: #FFF;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            padding: 15px;
+            background-color: #08ac4c;
+            color: white;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        .center {
+            margin-top: 5px;
+            text-align: center;
+            margin-left: 50px;
+            margin-right: 50px;
+
+        }
+
+
+        h2 {
+            text-align: center;
+            font-size: 30px;
+            -webkit-text-stroke: 1px #F8F8F8;
+            text-shadow: 0px 2px 4px rgb(0, 104, 5);
+        }
+
+        h1 {
+            padding-top: 80px;
+        }
+
+        @media (max-width: 790px) {
+            nav .nav-bar .sidebarOpen {
+                display: block;
+            }
+
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 320px;
+                z-index: 9999;
+                left: -100%;
+                top: 0;
+                padding: 20px;
+                background-color: var(--side-nav);
+                transition: all 0.4s ease;
+            }
+
+            nav.active .menu {
+                left: -0%;
+
+            }
+
+            .top2 {
+                width: 30px;
+            }
+
+            .top1 {
+                width: 30px;
+            }
+
+            .top3 {
+                width: 30px;
+            }
+
+            .center {
+                width: 95%;
+                margin: auto;
+                margin-top: 20px;
+            }
+
+            table {
+                margin-bottom: 20px;
+            }
+
+
+            .menu ul {
+                padding: 10px 0;
+                margin: 0;
+            }
+
+            .nav-links,
+            li {
+                width: 250px;
+                margin-right: 500px;
+            }
+
+            a {
+                width: 200px;
+            }
+
+            nav.active .nav-bar .navLogo a {
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .menu .logo-toggle {
+                display: block;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo-toggle .siderbarClose {
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .nav-bar .nav-links {
+                flex-direction: column;
+                padding-top: 30px;
+            }
+
+
+            .nav-links li a {
+                display: block;
+                margin-top: 20px;
+                margin-right: 500px;
+            }
+
+            .logo.navLogo {
+                justify-content: center;
+                margin-right: 100px;
+            }
+
+        }
+    </style>
+
+    <!-- ===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--<title>Responsive Navigation Menu Bar</title>-->
+</head>
+
+<body>
+
+
+    <nav>
+        <div class="nav-bar">
+            <i class='bx bx-menu sidebarOpen'></i>
+            
+           <span class="logo navLogo" style="display: flex; align-items: center;">
+   <img src="..\img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
+   <a href="home.html" style="margin-left: 10px;">LiScTech</a>
+</span>
+
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="home.html">LiScTech</a></span>
+                    <i class='bx bx-x siderbarClose'></i>
+                </div>
+                <ul class="nav-links">
+                    <li style="background-color: #089442; padding: 22px; border-radius: 10px;"><a
+                            href="home.html">Home</a></li>
+                    <li><a href="monitor.html">Monitor</a></li>
+                    <li id="users-link"><a href="users.html">Users</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="" id="logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+
+            </div>
+    </nav>
+
+    </div class="topusers" style="width:100%;">
+    <div style="display: flex; justify-content: center; align-items: flex-end; margin-top: 100px;">
+
+        <div class="top2"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 30px;">
+            <h2 id="name2" style="margin-bottom: 0;">Name 2</h2>
+            <img src="../img/Silver-Trophy-PNG.png" alt="trophy" style="width: 70px; height: 80px;">
+            <div style="background-color: rgb(0, 126, 0); width: 70px; height: 80px;"></div>
+        </div>
+
+        <div class="top1"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 30px;">
+            <h2 id="name1" style="margin-bottom: 0;">Name 1</h2>
+            <img src="../img/Gold-Trophy-PNG.png" alt="trophy" style="width: 70px; height: 80px;">
+            <div style="background-color: rgb(0, 126, 0); width: 70px; height: 170px;"></div>
+        </div>
+
+        <div class="top3"
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 30px;">
+            <h2 id="name3" style="margin-bottom: 0;">Name 3</h2>
+            <img src="../img/Bronze-Trophy-PNG.png" alt="trophy" style="width: 70px; height: 80px;">
+            <div style="background-color: rgb(0, 126, 0); width: 70px; height: 30px;"></div>
+        </div>
+    </div>
+    </div>
+
+    <div class="center" style="overflow: auto; height: 530px;">
+        <table id="myTable" class="Table" style="width:100%;">
+            <thead>
+                <th>Rank No.</th>
+                <th><img src="" id="image" width="" height="">Profile</th>
+                <th>Username</th>
+                <th>Total Points</th>
+                <th>Total Star</th>
+            <tbody id="tbody1"></tbody>
+            </thead>
+        </table>
+
+    </div>
+
+
+    <script>
+
+        const body = document.querySelector("body"),
+            nav = document.querySelector("nav"),
+            modeToggle = document.querySelector(".dark-light"),
+            searchToggle = document.querySelector(".searchToggle"),
+            sidebarOpen = document.querySelector(".sidebarOpen"),
+            siderbarClose = document.querySelector(".siderbarClose");
+
+
+
+        //   js code to toggle sidebar
+        sidebarOpen.addEventListener("click", () => {
+            nav.classList.add("active");
+        });
+
+        body.addEventListener("click", e => {
+            let clickedElm = e.target;
+
+            if (!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")) {
+                nav.classList.remove("active");
+            }
+        });
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+    import {
+        getDatabase, ref, child, onValue, get, orderByKey,
+        query, limitToFirst, limitToLast, orderByChild,
+        startAt, startAfter, endAt, endBefore, equalTo
+    } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth();
+    const database = getDatabase();
+    console.log(app);
+
+
+    //user auth
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User logged in:', user);
+            const uid = user.uid;
+            console.log("Sign-in provider: " + user.providerId);
+            console.log("  Provider-specific UID: " + user.uid);
+            console.log("  Name: " + user.displayName);
+            console.log("  Email: " + user.email);
+            console.log("  Photo URL: " + user.photoURL);
+
+            // Get a reference to the current user's node in the database
+            const currentUserRef = ref(database, 'users/' + uid);
+
+            // Attach a listener to the current user's node in the database
+            onValue(currentUserRef, snapshot => {
+                // Get the value of the node
+                const currentUserRef = snapshot.val();
+
+                // Check if the value is null
+                if (currentUserRef === null) {
+                    // If the value is null, delete the current user's account
+                    auth.currentUser.delete()
+                        .then(() => {
+                            console.log('User account deleted');
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user account:', error);
+                        });
+                }
+            });
+
+            // Get the user's ID token
+            user.getIdToken().then(idToken => {
+                // Use the user's ID token to authenticate requests to Firebase services
+                // ...
+            }).catch(error => {
+                // Failed to get the user's ID token
+                console.error('Error getting user ID token:', error);
+            });
+
+        } else {
+            console.log('User logged out');
+        }
+    });
+
+    //----- Logout code start	  
+    document.getElementById("logout").addEventListener("click", function () {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log('Sign-out successful.');
+            alert('Sign-out successful.');
+            window.location = "index.html";
+        }).catch((error) => {
+            // An error happened.
+            console.log('An error happened.');
+        });
+    });
+    //----- End
+
+    var rankno = 0;
+    var tbody = document.getElementById("tbody1");
+    var img = document.getElementById("image");
+    var size = 40;
+
+    function AddItemToTable(profile, username, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td3.innerHTML = username;
+        td4.innerHTML = totalpoints.toFixed(2);
+        td5.innerHTML = totalstar;
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+
+        tbody.appendChild(trow);
+
+        Rankshow();
+
+    }
+
+    function AddAllItemsToTable(TheUsers) {
+
+        rankno = 0;
+        tbody.innerHTML = "";
+        TheUsers.forEach(element => {
+            AddItemToTable(element.profileurl, element.username, element.totalpoints, element.totalstar);
+        });
+    }
+
+    const db = getDatabase();
+
+    function GetAllDataRealTime() {
+        const ref1 = query(ref(db, "users"), orderByChild("totalpoints"), limitToFirst(150));
+        const ref2 = query(ref(db, "users"), orderByChild("type"), equalTo("Student"), limitToFirst(150));
+
+        // Retrieve user type from localStorage
+        const userType = localStorage.getItem('userType');
+
+        // Hide users link if user type is not Admin or Teacher
+        if (userType !== "Admin" && userType !== "Teacher") {
+            $('#users-link').hide();
+        }
+
+        // Fetch data from both references in parallel
+        Promise.all([get(ref1), get(ref2)])
+            .then((snapshots) => {
+                const data1 = snapshots[0].val() || {};
+                const data2 = snapshots[1].val() || {};
+
+                // Merge the two data sets and remove duplicates
+                const mergedData = { ...data1, ...data2 };
+                Object.keys(data1).forEach((key) => {
+                    if (key in data2) {
+                        mergedData[key] = { ...data1[key], ...data2[key] };
+                    }
+                });
+
+                // Log the merged data
+                console.log(mergedData);
+
+                // Filter the merged data to only include records with "type" field equal to "Student"
+                const studentData = Object.values(mergedData).filter(item => item.type === "Student");
+
+                // Order the filtered data by "totalpoints" field
+                const sortedData = studentData.sort((a, b) => b.totalpoints - a.totalpoints);
+
+                // Pass the sorted data to AddAllItemsToTable function
+                AddAllItemsToTable(sortedData);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch data", error);
+            });
+    }
+
+
+    const usersLink = $('#users-link');
+
+    function checkAuth(user) {
+        const dbRef = database;
+        const uid = user.uid;
+
+        const que = ref(database, "users/" + uid + "/type");
+
+        onValue(que, (snapshot) => {
+            const userType = snapshot.val();
+            console.log(userType);
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', userType);
+
+            // Retrieve user type from localStorage
+            const storedUserType = localStorage.getItem('userType');
+
+            if (storedUserType !== "Admin" && storedUserType !== "Teacher") {
+                alert("Unauthorized User!!!");
+                auth.signOut();
+                window.location = "index.html";
+            } else if (storedUserType == "Teacher") {
+                $('#users-link').hide();
+            }
+            else if (storedUserType == "Admin") {
+                $('#users-link').show();
+            }
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', storedUserType);
+
+            GetAllDataRealTime();
+        });
+    }
+
+    // Call checkAuth when auth state changes
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            checkAuth(user);
+        } else {
+            // Redirect to login page if user is not signed in
+            window.location = "index.html";
+        }
+    });
+
+    $(document).ready(function () {
+        $('#users-link').hide();
+    });
+
+    function Rankshow() {
+        // Access the table element
+        var table = document.getElementById("myTable");
+        if (!table) {
+            console.error("Table element not found!");
+            return;
+        }
+
+        // Get the first three rows
+        var rows = table.getElementsByTagName("tr");
+
+        var name1 = rows[1] ? rows[1].getElementsByTagName("td")[2].innerHTML : "unknown";
+        var name2 = rows[2] ? rows[2].getElementsByTagName("td")[2].innerHTML : "unknown";
+        var name3 = rows[3] ? rows[3].getElementsByTagName("td")[2].innerHTML : "unknown";
+
+        // Create a header element and add it to the page
+        var n1 = document.getElementById("name1");
+        var n2 = document.getElementById("name2");
+        var n3 = document.getElementById("name3");
+
+        n1.innerHTML = "1st " + name1;
+        n2.innerHTML = "2nd " + name2;
+        n3.innerHTML = "3rd " + name3;
+    }
+    window.onload = GetAllDataRealTime;
+
+
+
+</script>
+
+</html>

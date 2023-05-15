@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Login | LiScTech</title>
+    <link rel="shortcut icon" href="..\img\Lisctech.png">
+    <!-- Cool Google Fonts -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.4s ease;
+
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 300;
+        background: whitesmoke;
+        color: black;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-weight: 300;
+    }
+
+    #error-message {
+        text-align: center;
+    }
+
+    #wrapper {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #left {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    #right {
+        display: block;
+
+    }
+
+    /* Sign In */
+    #signin {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+        padding-bottom: 1rem;
+    }
+
+    #signin form {
+        width: 80%;
+        padding-bottom: 3rem;
+    }
+
+    #signin .header {
+        margin-top: 8vh;
+        margin-bottom: 8vh;
+        font-size: 5rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    #signin .header label {
+        margin-top: 8vh;
+        margin-bottom: 8vh;
+        font-size: 5rem;
+        align-items: center;
+        text-align: center;
+    }
+
+    #signin label {
+        font-size: 0.9rem;
+        line-height: 2rem;
+        font-weight: 500;
+    }
+
+    #signin .text-input {
+        margin-bottom: 1.3rem;
+        width: 100%;
+        border-radius: 2px;
+        background: whitesmoke;
+        border: 1px solid black;
+        color: black;
+        padding: 0.5rem 1rem;
+        line-height: 1.3rem;
+    }
+
+    #signin .primary-btn {
+        width: 100%;
+    }
+
+    #signin .secondary-btn,
+    .or,
+    .links {
+        width: 60%;
+    }
+
+    #signin .links a {
+        display: block;
+        color: black;
+        text-decoration: none;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    #signin .or {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 1.2rem;
+        align-items: center;
+    }
+
+    #signin .or .bar {
+        flex: auto;
+        border: none;
+        height: 1px;
+        background: #aaa;
+    }
+
+    #signin .or span {
+        color: black;
+        padding: 0 0.8rem;
+    }
+
+    /* Showcase */
+    #showcase {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url('../img/LisctechBg.jpg') no-repeat center / cover;
+        height: 100vh;
+        text-align: center;
+    }
+
+    #showcase .showcase-text {
+        font-size: 4rem;
+        width: 100%;
+        color: rgb(0, 87, 0);
+        margin-bottom: 1.5rem;
+        font-weight: 900;
+        -webkit-text-stroke: 2px #F8F8F8;
+    }
+
+    #showcase .secondary-btn {
+        width: 60%;
+        margin: auto;
+        color: rgb(0, 70, 17);
+        font-weight: 900;
+        font-size: large;
+        -webkit-text-stroke: .2px rgb(255, 255, 255);
+        margin-bottom: 40px;
+    }
+
+    /* Footer */
+    #main-footer {
+        color: black;
+        text-align: center;
+        font-size: 0.8rem;
+        max-width: 80%;
+        padding-top: 5rem;
+    }
+
+    #main-footer a {
+        color: red;
+        text-decoration: underline;
+    }
+
+    /* Button */
+    .primary-btn {
+        padding: 0.7rem 1rem;
+        height: 2.7rem;
+        display: block;
+        border: 1px solid grey;
+        border-radius: 4px;
+        font-weight: 500;
+        background: grey;
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.5s;
+    }
+
+    .primary-btn:hover {
+        background: #b3b1b1;
+        border-color: grey;
+        color: white;
+    }
+
+    .primary-btn2 {
+        padding: 0.7rem 1rem;
+        height: 2.7rem;
+        display: block;
+        font-weight: 500;
+        background: none;
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.5s;
+    }
+
+    .primary-btn2:hover {
+        color: red;
+    }
+
+    .secondary-btn {
+        padding: 0.7rem 1rem;
+        height: 3.4rem;
+        display: block;
+        border: 3px solid rgb(0, 87, 0);
+        border-radius: 10px;
+        font-weight: 500;
+        background: rgba(206, 255, 206, 0.438);
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.5s;
+    }
+
+    .secondary-btn:hover {
+        border-color: rgb(255, 255, 255);
+        color: rgb(255, 255, 255);
+        background: rgba(0, 128, 0, 0.267);
+    }
+
+    /* Media Queries */
+    @media (min-width: 1200px) {
+
+
+        #main-footer {
+            padding-bottom: 100px;
+        }
+
+        #left {
+            flex: 4;
+        }
+
+        #right {
+            flex: 6;
+        }
+
+        .header .logo {
+            max-width: 130px;
+            max-height: 130px;
+        }
+
+    }
+
+    @media (max-width: 790px) {
+
+        #right {
+            display: none;
+        }
+
+        #left {
+            justify-content: center;
+        }
+
+        #signin .header {
+            font-size: 3rem;
+
+        }
+
+        #signin .header label {
+            margin-bottom: 2vh;
+            font-size: 3rem;
+
+        }
+
+        .header .logo {
+            margin-top: 5vh;
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+
+    }
+</style>
+
+<body>
+    <div id="wrapper">
+
+        <!--left-->
+        <div id="left">
+            <div id="signin">
+                <div class="header" style="display: flex; align-items: center;">
+                    <img class="logo" src="..\img\LisctechLogo3.png" alt="logo" style="width: 160px; height: 160px;">
+                    <label>LiScTech</label>
+                </div>
+                <form>
+                    <div id="error-message" style="display: none; color: red;"></div>
+                    <div>
+                        <label>Email</label>
+                        <input type="email" class="text-input" id="email" required>
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" class="text-input" id="password" required>
+                    </div>
+                    <button type="button" id="login" name="login" class="primary-btn">Login</button>
+                </form>
+                <div class="links">
+                    <a href="#" id="forgot">Forgot Password</a>
+                </div>
+                <div class="or">
+                    <hr class="bar" />
+                    <hr class="bar" />
+                </div>
+
+            </div>
+            <footer id="main-footer">
+                <p>Copyright &copy; 2023, LiScTech's All Rights Reserved</p>
+                <div>
+
+                </div>
+            </footer>
+        </div>
+
+        <!--right-->
+        <div id="right">
+            <div id="showcase">
+                <div class="showcase-content">
+                    <h1 class="showcase-text">
+                        Welcome to LiScTech
+                    </h1>
+                    <a href="#" class="secondary-btn">Download the App!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+    import {
+        getDatabase, ref, child, onValue, get,
+        query, limitToFirst, limitToLast, orderByChild,
+        startAt, startAfter, endAt, endBefore, equalTo
+    } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    const firebaseConfigs = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const apps = initializeApp(firebaseConfigs, "Secondary");
+    const auths = getAuth(apps);
+    const databases = getDatabase(apps);
+    console.log(app);
+
+    //user auth
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User logged in:', user);
+            const uid = user.uid;
+            console.log("Sign-in provider: " + user.providerId);
+            console.log("  Provider-specific UID: " + user.uid);
+            console.log("  Name: " + user.displayName);
+            console.log("  Email: " + user.email);
+            console.log("  Photo URL: " + user.photoURL);
+
+            // Get a reference to the current user's node in the database
+            const currentUserRef = ref(database, 'users/' + uid);
+
+            // Attach a listener to the current user's node in the database
+            onValue(currentUserRef, snapshot => {
+                // Get the value of the node
+                const currentUserRef = snapshot.val();
+
+                // Check if the value is null
+                if (currentUserRef === null) {
+                    // If the value is null, delete the current user's account
+                    auth.currentUser.delete()
+                        .then(() => {
+                            console.log('User account deleted');
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user account:', error);
+                        });
+                }
+            });
+
+            // Get the user's ID token
+            user.getIdToken().then(idToken => {
+                // Use the user's ID token to authenticate requests to Firebase services
+                // ...
+            }).catch(error => {
+                // Failed to get the user's ID token
+                console.error('Error getting user ID token:', error);
+            });
+
+        } else {
+            console.log('User logged out');
+        }
+    });
+
+    //user checkAuth
+    function checkAuth(user) {
+
+        const dbRef = database;
+        const uid = user.uid;
+        const que = ref(database, "users/" + uid + "/type");
+        onValue(que, (snapshot) => {
+            const userType = snapshot.val();
+            console.log(userType);
+            localStorage.setItem('userType', userType);
+
+            // Retrieve user type from localStorage
+            const storedUserType = localStorage.getItem('userType');
+
+            if (storedUserType != "Admin" && storedUserType != "Teacher") {
+                alert("Unauthorized User!!!");
+                auth.signOut();
+                window.location = "index.html";
+            } else {
+                alert(user.email + " Login Successfully!!!");
+                window.location = "home.html";
+            }
+        });
+    }
+
+    //user checkAuth
+    auth.onAuthStateChanged(user => {
+
+        const dbRef = database;
+        const uid = user.uid;
+        const que = ref(database, "users/" + uid + "/type");
+        onValue(que, (snapshot) => {
+            const userType = snapshot.val();
+            console.log(userType);
+            localStorage.setItem('userType', userType);
+
+            // Retrieve user type from localStorage
+            const storedUserType = localStorage.getItem('userType');
+
+            if (storedUserType != "Admin" && storedUserType != "Teacher") {
+                alert("Unauthorized User!!!");
+                auth.signOut();
+                window.location = "index.html";
+            } else {
+                window.location = "home.html";
+            }
+        });
+    })
+
+    //----- Login code start	  
+    document.getElementById("email").addEventListener("keypress", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            signIn();
+        }
+    });
+
+    document.getElementById("password").addEventListener("keypress", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            signIn();
+        }
+    });
+
+    function signIn() {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                console.log(user);
+                checkAuth(user);
+
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorMessage);
+                alert(errorMessage);
+            });
+    }
+
+    document.getElementById("login").addEventListener("click", signIn);
+
+    document.getElementById("forgot").addEventListener("click", function () {
+        var email = document.getElementById("email").value;
+        var errorMessage = document.getElementById("error-message");
+
+        // Send a password reset email to the user's email
+        sendPasswordResetEmail(auth, email)
+            .then(function () {
+                // Password reset email sent
+                errorMessage.textContent = "Password reset email sent. Please check your inbox.";
+                errorMessage.style.display = "block";
+                errorMessage.style.color = "green";
+            })
+            .catch(function (error) {
+                // An error occurred
+                errorMessage.textContent = (error.message);
+                errorMessage.style.display = "block";
+            });
+    })
+
+    //----- End
+
+</script>
+
+</html>

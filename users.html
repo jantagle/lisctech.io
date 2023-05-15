@@ -1,0 +1,3590 @@
+<!DOCTYPE html>
+<!-- === Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Management | LiScTech</title>
+    <link rel="shortcut icon" href="..\img\Lisctech.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===== CSS ===== -->
+    <style>
+        /* ===== Google Font Import - Poppins ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.4s ease;
+            ;
+        }
+
+
+        /* ===== Colours ===== */
+        :root {
+            --body-color: #E4E9F7;
+            --nav-color: #08ac4c;
+            --side-nav: #010718;
+            --text-color: #FFF;
+            --search-bar: #F2F2F2;
+            --search-text: #010718;
+        }
+
+        body {
+            height: 89vh;
+            background-color: var(--body-color);
+        }
+
+        body.dark {
+            --body-color: #18191A;
+            --nav-color: #242526;
+            --side-nav: #242526;
+            --text-color: #CCC;
+            --search-bar: #242526;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            width: 100%;
+            background-color: var(--nav-color);
+            z-index: 100;
+        }
+
+        body.dark nav {
+            border: 1px solid #393838;
+
+        }
+
+        nav .nav-bar {
+            position: relative;
+            height: 100%;
+            max-width: 1000px;
+            width: 100%;
+            background-color: var(--nav-color);
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .nav-bar .sidebarOpen {
+            color: var(--text-color);
+            font-size: 25px;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        nav .nav-bar .logo a {
+            font-size: 25px;
+            font-weight: 500;
+            margin-left: -150px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .menu .logo-toggle {
+            display: none;
+        }
+
+        .nav-bar .nav-links {
+            margin-right: -400px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links .logout {
+            font-weight: bold;
+            background-color: #0107188c;
+            padding-top: 27%;
+            padding-bottom: 29%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links li {
+            margin: 10px 10px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            position: relative;
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .nav-links li a::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background-color: var(--text-color);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li:hover a::before {
+            opacity: 1;
+        }
+
+        .nav-bar .darkLight-searchBox {
+            margin-right: -150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .darkLight-searchBox .dark-light,
+        .darkLight-searchBox .searchToggle {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+
+        .dark-light i,
+        .searchToggle i {
+            position: absolute;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-light i.sun {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dark-light.active i.sun {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dark-light.active i.moon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle i.cancel {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle.active i.cancel {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .searchToggle.active i.search {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchBox {
+            position: relative;
+        }
+
+        .searchBox .search-field {
+            position: absolute;
+            bottom: -85px;
+            right: 5px;
+            height: 50px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+            background-color: var(--nav-color);
+            padding: 3px;
+            border-radius: 6px;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        #search-container {
+            margin-left: 50px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 100px;
+        }
+
+        #search-input {
+            width: 300px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        #filter-select {
+            width: 150px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .searchinputs {
+            width: 150px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .searchtitle {
+            width: 300px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        #search-button {
+            margin-left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #search-button:hover {
+            background-color: #555;
+        }
+
+        .searchToggle.active~.search-field {
+            bottom: -74px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-field::before {
+            content: '';
+            position: absolute;
+            right: 14px;
+            top: -4px;
+            height: 12px;
+            width: 12px;
+            background-color: var(--nav-color);
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+
+        .search-field input {
+            height: 100%;
+            width: 100%;
+            padding: 0 45px 0 15px;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--search-text);
+            background-color: var(--search-bar);
+        }
+
+        body.dark .search-field input {
+            color: var(--text-color);
+        }
+
+        .search-field i {
+            position: absolute;
+            color: var(--nav-color);
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        body.dark .search-field i {
+            color: var(--text-color);
+        }
+
+        .Table {
+            position: relative;
+            text-align: center;
+            border-collapse: collapse;
+        }
+
+        .Table td,
+        .Table th {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background-color: #08ac4c;
+            color: white;
+        }
+
+        td {
+            background-color: #f7f7f7;
+        }
+
+        .fixed {
+            position: sticky !important;
+            left: 0;
+            right: 0;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .center {
+            margin-top: 30px;
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .input-container label {
+            margin-right: 10px;
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        #myModal-content {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 5px;
+        }
+
+        #editForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            align-items: center;
+            margin: 5% auto;
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .registration-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .user-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+
+        }
+
+        .button {
+            margin-top: 20px;
+            margin-left: 160px;
+            margin-right: 200px;
+
+            /* moved from inline style */
+        }
+
+        .button input[type="submit"] {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 25px;
+            cursor: pointer;
+        }
+
+        .button input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        button[type="submit"] {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 25px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        .input_field select {
+            width: 96%;
+            padding: 5px 0;
+            font-size: 18px;
+            color: #333;
+            border: none;
+            outline: none;
+            background: none;
+            border-bottom: 1px solid #999;
+        }
+
+        #openModal {
+            background-color: #333;
+            color: #fff;
+            margin-left: 115px;
+            padding: 9px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+        }
+
+        #openModal:hover {
+            background-color: #555;
+        }
+
+        .table-buttons {
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .table-buttons button {
+            background-color: #006905;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .table-buttons button:last-child {
+            margin-right: 0;
+        }
+
+        .table-buttons button:hover {
+            background-color: #555;
+        }
+
+        .table-buttons button.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .room-button {
+            background-color: #ccc;
+            color: #000;
+            padding: 10px;
+            border: none;
+            margin-right: 10px;
+        }
+
+        .room-button.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #thlow {
+            z-index: 998;
+        }
+
+        #thlow2 {
+            z-index: 998;
+        }
+
+        .hideme {
+            display: none;
+        }
+
+        @media (max-width: 790px) {
+            nav .nav-bar .sidebarOpen {
+                display: block;
+            }
+
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 320px;
+                left: -100%;
+                top: 0;
+                padding: 20px;
+                background-color: var(--side-nav);
+                z-index: 100;
+                transition: all 0.4s ease;
+            }
+
+
+
+            .center {
+                width: 90%;
+                margin: auto;
+            }
+
+
+
+            #search-input {
+                width: 133px;
+                margin-top: 10px;
+            }
+
+            .searchtitle {
+                margin-left: 0px;
+                margin-top: 10px;
+            }
+
+            .searchinputs {
+                width: 220px;
+                margin-top: 10px;
+            }
+
+            #searchinputschoolyear {
+                width: 252px;
+                margin-top: 10px;
+            }
+
+            #searchinputschool {
+                width: 220px;
+                margin-top: 10px;
+            }
+
+            #search-button {
+                width: 298px;
+                margin-top: 20px;
+                margin-left: 0px;
+
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: auto;
+
+            }
+
+
+
+            #openModal {
+                margin-bottom: 10px;
+                margin-top: 10px;
+                width: 298px;
+                margin-left: 0px;
+            }
+
+
+
+
+            nav {
+                z-index: 9999;
+            }
+
+            th {
+                position: sticky !important;
+                top: 0;
+                left: 0 !important;
+
+            }
+
+            .non-sticky,
+            .sticky {
+                position: static !important;
+                top: 0;
+
+            }
+
+            #thlow {
+                z-index: 997;
+            }
+
+            #thlow2 {
+                z-index: 997;
+            }
+
+            nav.active .menu {
+                left: -0%;
+            }
+
+            nav.active .nav-bar .navLogo a {
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links,
+            li {
+                width: 250px;
+                margin-right: 500px;
+            }
+
+            a {
+                width: 200px;
+            }
+
+            .menu .logo-toggle {
+                display: block;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo-toggle .siderbarClose {
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .nav-bar .nav-links {
+                flex-direction: column;
+                padding-top: 30px;
+            }
+
+            .nav-links li a {
+                display: block;
+                margin-top: 20px;
+                margin-right: 500px;
+            }
+
+            .logo.navLogo {
+                justify-content: center;
+                margin-right: 100px;
+            }
+
+        }
+    </style>
+
+    <!-- ===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--<title>Responsive Navigation Menu Bar</title>-->
+</head>
+
+<body>
+    <!--<script src="users.js"></script>-->
+
+    <nav>
+        <div class="nav-bar">
+            <i class='bx bx-menu sidebarOpen'></i>
+            <span class="logo navLogo" style="display: flex; align-items: center;">
+                <img src="..\img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
+                <a href="home.html" style="margin-left: 10px;">LiScTech</a>
+             </span>
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="home.html">LiScTech</a></span>
+                    <i class='bx bx-x siderbarClose'></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="monitor.html">Monitor</a></li>
+                    <li style="background-color: #089442; padding: 22px; border-radius: 10px;"><a
+                            href="users.html">Users</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="" id="logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+
+            </div>
+    </nav>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <select id="filter-select">
+            <option value="firstname">Firstname</option>
+            <option value="lastname">Lastname</option>
+            <option value="username">Username</option>
+            <option value="room">Room</option>
+            <option value="totalpoints">Total Points</option>
+            <option value="type">User type</option>
+        </select>
+        <span class="searchtitle" id="filter-select2" value="strand">Strand</span>
+        <select class="searchinputs" id="searchinputstrand">
+            <option value="">All</option>
+            <option value="GAS">GAS</option>
+            <option value="HUMMS">HUMMS</option>
+            <option value="STEM">STEM</option>
+            <option value="ABM">ABM</option>
+            <option value="TVL">TVL</option>
+        </select>
+        <span class="searchtitle" id="filter-select3" value="schoolyear">S.Y</span>
+        <select class="searchinputs" id="searchinputschoolyear">
+            <option value="">All</option>
+            <option value="2023-2024">2023-2024</option>
+            <option value="2024-2025">2024-2025</option>
+            <option value="2025-2026">2025-2026</option>
+            <option value="2026-2027">2026-2027</option>
+            <option value="2027-2028">2027-2028</option>
+            <option value="2028-2029">2028-2029</option>
+            <option value="2029-2030">2029-2030</option>
+            <option value="2030-2031">2030-2031</option>
+        </select>
+        <span class="searchtitle" id="filter-select4" value="school">School</span>
+        <select class="searchinputs" id="searchinputschool">
+            <option value="">All</option>
+            <option value="Bucal Integrated NHS">Bucal Integrated NHS</option>
+            <option value="Naic Integrated NHS">Naic Integrated NHS</option>
+            <option value="Naic Coastal Integrated NHS">Naic Coastal Integrated NHS</option>
+            <option value="Naic Senior HS Stand-Alone">Naic Senior HS Stand-Alone</option>
+            <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
+            <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science School</option>
+            <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+        </select>
+        <button id="search-button">Search</button>
+        <button id="openModal">Create a user</button>
+    </div>
+    <div class="center" style="overflow: auto;  height: 755px;">
+        <table id="myTable" class="Table" style="table-layout: fixed; width: 2005px;">
+            <thead>
+                <th style="left: 0; z-index: 999; width: 50px; ">No</th>
+                <th class="hideme" style="width: 300px;  z-index: 997;">User UID</th>
+                <th id="thlow" style="width: 70px; position: sticky; left: 52px; "><img src="" id="image" width=""
+                        height="">Profile</th>
+                <th id="thlow" style="width: 150px; position: sticky; left: 124px; ">Lastname
+                </th>
+                <th id="thlow" style="width: 200px; position: sticky; left: 276px; ">
+                    Firstname
+                </th>
+                <th style="width: 150px; z-index: 997;">Username</th>
+                <th style="width: 100px; z-index: 997;">Strand</th>
+                <th style="width: 100px; z-index: 997;">Section</th>
+                <th style="width: 120px; z-index: 997;">S.Y</th>
+                <th style="width: 200px; z-index: 997;">School</th>
+                <th style="width: 100px; z-index: 997;">Joined Room</th>
+                <th style="width: 100px; z-index: 997;">Classroom 1</th>
+                <th style="width: 100px; z-index: 997;">Classroom 2</th>
+                <th style="width: 100px; z-index: 997;">Classroom 3</th>
+                <th style="width: 100px; z-index: 997;">Classroom 4</th>
+                <th style="width: 100px; z-index: 997;">Classroom 5</th>
+                <th id="thlow2" style="width: 100px; position: sticky; left: 478px; ">Total
+                    Points</th>
+                <th id="thlow2" style="width: 100px; position: sticky; left: 580px; ">Total
+                    Stars</th>
+                <th style="width: 100px; z-index: 997;">M1Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M1Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M1Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M1Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M1Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M1Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M2Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M2Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M2Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M2Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M2Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M2Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M3Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M3Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M3Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M3Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M3Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M3Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M4Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M4Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M4Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M4Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M4Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M4Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M5Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M5Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M5Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M5Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M5Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M5Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M6Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M6Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M6Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M6Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M6Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M6Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M7Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M7Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M7Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M7Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M7Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M7Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M8Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M8Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M8Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M8Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M8Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M8Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M9Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M9Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M9Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M9Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M9Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M9Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">M10Q1 Points</th>
+                <th style="width: 100px; z-index: 997;">M10Q1 Score</th>
+                <th style="width: 100px; z-index: 997;">M10Q2 Points</th>
+                <th style="width: 100px; z-index: 997;">M10Q2 Score</th>
+                <th style="width: 100px; z-index: 997;">M10Q3 Points</th>
+                <th style="width: 100px; z-index: 997;">M10Q3 Score</th>
+                <th style="width: 100px; z-index: 997;">User Type</th>
+                <th style="width: 50px; position: sticky; right: 82px; z-index: 999; ">Edit</th>
+                <th style="width: 80px; position: sticky; right: 0; z-index: 999; ">Delete</th>
+            <tbody id="tbody1"></tbody>
+            </thead>
+        </table>
+
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form action="#">
+                    <div class="user-details">
+                        <div class="input-box">
+                            <span class="details">Username</span>
+                            <input type="text" id="username" placeholder="Enter your username" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Email</span>
+                            <input type="text" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Password</span>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">First Name</span>
+                            <input type="text" id="firstname" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Last Name</span>
+                            <input type="text" id="lastname" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="input-box hidden">
+                            <span class="details">Room</span>
+                            <input type="text" id="room" placeholder="Room" required>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">Strand</span>
+                            <select id="strand" required>
+                                <option value="">Select your strand</option>
+                                <option value="GAS">GAS</option>
+                                <option value="HUMMS">HUMMS</option>
+                                <option value="STEM">STEM</option>
+                                <option value="ABM">ABM</option>
+                                <option value="TVL">TVL</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Section</span>
+                            <input type="text" id="section" placeholder="Enter your section" required>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">School Year</span>
+                            <select id="schoolyear" required>
+                                <option value="">Select your school year</option>
+                                <option value="2023-2024">2023-2024</option>
+                                <option value="2024-2025">2024-2025</option>
+                                <option value="2025-2026">2025-2026</option>
+                                <option value="2026-2027">2026-2027</option>
+                                <option value="2027-2028">2027-2028</option>
+                                <option value="2028-2029">2028-2029</option>
+                                <option value="2029-2030">2029-2030</option>
+                                <option value="2030-2031">2030-2031</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">School</span>
+                            <select id="school" required>
+                                <option value="">Select your school</option>
+                                <option value="Bucal Integrated NHS">Bucal Integrated NHS</option>
+                                <option value="Naic Integrated NHS">Naic Integrated NHS</option>
+                                <option value="Naic Coastal Integrated NHS">Naic Coastal Integrated NHS</option>
+                                <option value="Naic Senior HS Stand-Alone">Naic Senior HS Stand-Alone</option>
+                                <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
+                                <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science School
+                                </option>
+                                <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+
+                        <span class="type-title">User type</span>
+                        <div class="input_field select_option">
+                            <select id="usertype" required>
+                                <option value="">Select user type</option>
+                                <option value="Student">Student</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="button" id="register">
+                            <input style="border-radius: 5px;" type="submit" value="Register">
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div id="myModal-content" class="modal-content">
+            <span class="close">&times;</span>
+            <form id="editForm">
+
+                <label for="avatar">Profile Picture: </label>
+                <input type="url" id="avatar" name="avatar" required>
+
+                <label for="lastname">Last Name:</label>
+                <input type="text" id="lastname" name="lastname" required>
+
+                <label for="firstname">First Name:</label>
+                <input type="text" id="firstname" name="firstname" required>
+
+                <label for="username">Userame:</label>
+                <input type="text" id="username" name="username" required>
+
+                <span class="type-title">Strand:</span>
+                <select id="strand" required>
+                    <option value="">Select your strand</option>
+                    <option value="GAS">GAS</option>
+                    <option value="HUMMS">HUMMS</option>
+                    <option value="STEM">STEM</option>
+                    <option value="ABM">ABM</option>
+                    <option value="TVL">TVL</option>
+                </select>
+                <span class="details">Section</span>
+                <input type="text" id="section" placeholder="Enter your section" required>
+                <span class="type-title">School Year:</span>
+                <select id="schoolyear" required>
+                    <option value="">Select your school year</option>
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026">2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                    <option value="2027-2028">2027-2028</option>
+                    <option value="2028-2029">2028-2029</option>
+                    <option value="2029-2030">2029-2030</option>
+                    <option value="2030-2031">2030-2031</option>
+                </select>
+                <label for="school">School:</label>
+                <select id="school" name="school" required>
+                    <option value="">Select your school</option>
+                    <option value="Bucal Integrated NHS">Bucal Integrated NHS</option>
+                    <option value="Naic Integrated NHS">Naic Integrated NHS</option>
+                    <option value="Naic Coastal Integrated NHS">Naic Coastal Integrated NHS</option>
+                    <option value="Naic Senior HS Stand-Alone">Naic Senior HS Stand-Alone</option>
+                    <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
+                    <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science School</option>
+                    <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+                </select>
+                <label for="type">User Type:</label>
+                <select id="usertype" name="usertype" required>
+                    <option value="">Select user type</option>
+                    <option value="Student">Student</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Admin">Admin</option>
+                </select>
+                <label for="room">Joined Room:</label>
+                <input type="text" id="room" name="room">
+
+
+                <div>
+                    <label for="totalstar">Total Star:</label>
+                    <input type="number" id="totalstar" name="totalstar" required readonly>
+                    <br>
+                    <label for="module1Q1">Module 1 Q1:</label>
+                    <input type="number" id="module1Q1" name="module1Q1" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module1Q2">Module 1 Q2:</label>
+                    <input type="number" id="module1Q2" name="module1Q2" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module1Q3">Module 1 Q3:</label>
+                    <input type="number" id="module1Q3" name="module1Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module2Q1">Module 2 Q1:</label>
+                    <input type="number" id="module2Q1" name="module2Q1" required style="width: 80px;" min="0" max="3">
+                    <br>
+                    <label for="module2Q2">Module 2 Q2:</label>
+                    <input type="number" id="module2Q2" name="module2Q2" required style="width: 80px;" min="0" max="7">
+                    <br>
+                    <label for="module2Q3">Module 2 Q3:</label>
+                    <input type="number" id="module2Q3" name="module2Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module3Q1">Module 3 Q1:</label>
+                    <input type="number" id="module3Q1" name="module3Q1" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module3Q2">Module 3 Q2:</label>
+                    <input type="number" id="module3Q2" name="module3Q2" required style="width: 80px;" min="0" max="10">
+                    <br>
+                    <label for="module3Q3">Module 3 Q3:</label>
+                    <input type="number" id="module3Q3" name="module3Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module4Q1">Module 4 Q1:</label>
+                    <input type="number" id="module4Q1" name="module4Q1" required style="width: 80px;" min="0" max="4">
+                    <br>
+                    <label for="module4Q2">Module 4 Q2:</label>
+                    <input type="number" id="module4Q2" name="module4Q2" required style="width: 80px;" min="0" max="6">
+                    <br>
+                    <label for="module4Q3">Module 4 Q3:</label>
+                    <input type="number" id="module4Q3" name="module4Q3" required style="width: 80px;" min="0"" max="
+                        5">
+                    <br>
+                    <label for="module5Q1">Module 5 Q1:</label>
+                    <input type="number" id="module5Q1" name="module5Q1" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module5Q2">Module 5 Q2:</label>
+                    <input type="number" id="module5Q2" name="module5Q2" required style="width: 80px;" min="0" max="7">
+                    <br>
+                    <label for="module5Q3">Module 5 Q3:</label>
+                    <input type="number" id="module5Q3" name="module5Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module6Q1">Module 6 Q1:</label>
+                    <input type="number" id="module6Q1" name="module6Q1" required style="width: 80px;" min="0" max="9">
+                    <br>
+                    <label for="module6Q2">Module 6 Q2:</label>
+                    <input type="number" id="module6Q2" name="module6Q2" required style="width: 80px;" min="0" max="9">
+                    <br>
+                    <label for="module6Q3">Module 6 Q3:</label>
+                    <input type="number" id="module6Q3" name="module6Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module7Q1">Module 7 Q1:</label>
+                    <input type="number" id="module7Q1" name="module7Q1" required style="width: 80px;" min="0" max="10">
+                    <br>
+                    <label for="module7Q2">Module 7 Q2:</label>
+                    <input type="number" id="module7Q2" name="module7Q2" required style="width: 80px;" min="0" max="10">
+                    <br>
+                    <label for="module7Q3">Module 7 Q3:</label>
+                    <input type="number" id="module7Q3" name="module7Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module8Q1">Module 8 Q1:</label>
+                    <input type="number" id="module8Q1" name="module8Q1" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module8Q2">Module 8 Q2:</label>
+                    <input type="number" id="module8Q2" name="module8Q2" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module8Q3">Module 8 Q3:</label>
+                    <input type="number" id="module8Q3" name="module8Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module9Q1">Module 9 Q1:</label>
+                    <input type="number" id="module9Q1" name="module9Q1" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module9Q2">Module 9 Q2:</label>
+                    <input type="number" id="module9Q2" name="module9Q2" required style="width: 80px;" min="0" max="4">
+                    <br>
+                    <label for="module9Q3">Module 9 Q3:</label>
+                    <input type="number" id="module9Q3" name="module9Q3" required style="width: 80px;" min="0" max="5">
+                    <br>
+                    <label for="module10Q1">Module 10 Q1:</label>
+                    <input type="number" id="module10Q1" name="module10Q1" required style="width: 80px;" min="0"
+                        max="10">
+                    <br>
+                    <label for="module10Q2">Module 10 Q2:</label>
+                    <input type="number" id="module10Q2" name="module10Q2" required style="width: 80px;" min="0"
+                        max="5">
+                    <br>
+                    <label for="module10Q3">Module 10 Q3:</label>
+                    <input type="number" id="module10Q3" name="module10Q3" required style="width: 80px;" min="0"
+                        max="5">
+                    <br>
+                </div>
+
+                <div>
+                    <label for="totalpoints">Total Points:</label>
+                    <input type="number" step="any" id="totalpoints" name="totalpoints" required readonly>
+                    <br>
+                    <label for="module1Q1points">Module 1 Q1 points:</label>
+                    <input type="number" id="module1Q1points" name="module1Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module1Q2points">Module 1 Q2 points:</label>
+                    <input type="number" id="module1Q2points" name="module1Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module1Q3points">Module 1 Q3 points:</label>
+                    <input type="number" id="module1Q3points" name="module1Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module2Q1points">Module 2 Q1 points:</label>
+                    <input type="number" id="module2Q1points" name="module2Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module2Q2points">Module 2 Q2 points:</label>
+                    <input type="number" id="module2Q2points" name="module2Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module2Q3points">Module 2 Q3 points:</label>
+                    <input type="number" id="module2Q3points" name="module2Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module3Q1points">Module 3 Q1 points:</label>
+                    <input type="number" id="module3Q1points" name="module3Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module3Q2points">Module 3 Q2 points:</label>
+                    <input type="number" id="module3Q2points" name="module3Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module3Q3points">Module 3 Q3 points:</label>
+                    <input type="number" id="module3Q3points" name="module3Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module4Q1points">Module 4 Q1 points:</label>
+                    <input type="number" id="module4Q1points" name="module4Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module4Q2points">Module 4 Q2 points:</label>
+                    <input type="number" id="module4Q2points" name="module4Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module4Q3points">Module 4 Q3 points:</label>
+                    <input type="number" id="module4Q3points" name="module4Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module5Q1points">Module 5 Q1 points:</label>
+                    <input type="number" id="module5Q1points" name="module5Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module5Q2points">Module 5 Q2 points:</label>
+                    <input type="number" id="module5Q2points" name="module5Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module5Q3points">Module 5 Q3 points:</label>
+                    <input type="number" id="module5Q3points" name="module5Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module6Q1points">Module 6 Q1 points:</label>
+                    <input type="number" id="module6Q1points" name="module6Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module6Q2points">Module 6 Q2 points:</label>
+                    <input type="number" id="module6Q2points" name="module6Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module6Q3points">Module 6 Q3 points:</label>
+                    <input type="number" id="module6Q3points" name="module6Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module7Q1points">Module 7 Q1 points:</label>
+                    <input type="number" id="module7Q1points" name="module7Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module7Q2points">Module 7 Q2 points:</label>
+                    <input type="number" id="module7Q2points" name="module7Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module7Q3points">Module 7 Q3 points:</label>
+                    <input type="number" id="module7Q3points" name="module7Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module8Q1points">Module 8 Q1 points:</label>
+                    <input type="number" id="module8Q1points" name="module8Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module8Q2points">Module 8 Q2 points:</label>
+                    <input type="number" id="module8Q2points" name="module8Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module8Q3points">Module 8 Q3 points:</label>
+                    <input type="number" id="module8Q3points" name="module8Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module9Q1points">Module 9 Q1 points:</label>
+                    <input type="number" id="module9Q1points" name="module9Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module9Q2points">Module 9 Q2 points:</label>
+                    <input type="number" id="module9Q2points" name="module9Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module9Q3points">Module 9 Q3 points:</label>
+                    <input type="number" id="module9Q3points" name="module9Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module10Q1points">Module 10 Q1 points:</label>
+                    <input type="number" id="module10Q1points" name="module10Q1points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module10Q2points">Module 10 Q2 points:</label>
+                    <input type="number" id="module10Q2points" name="module10Q2points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                    <label for="module10Q3points">Module 10 Q3 points:</label>
+                    <input type="number" id="module10Q3points" name="module10Q3points" required style="width: 80px;"
+                        min="0" step="0.0001" max="180">
+                    <br>
+                </div>
+                <br>
+                <button style="margin-top: 20px;" type="submit">Save Changes</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+
+        const body = document.querySelector("body"),
+            nav = document.querySelector("nav"),
+            modeToggle = document.querySelector(".dark-light"),
+            searchToggle = document.querySelector(".searchToggle"),
+            sidebarOpen = document.querySelector(".sidebarOpen"),
+            siderbarClose = document.querySelector(".siderbarClose");
+        const menu = document.querySelector('#search-input');
+
+
+
+        //   js code to toggle sidebar
+        sidebarOpen.addEventListener("click", () => {
+            nav.classList.add("active");
+            nav.style.zIndex = "10000";
+            menu.style.zIndex = "100";
+        });
+
+        body.addEventListener("click", e => {
+            let clickedElm = e.target;
+
+            if (!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")) {
+                nav.classList.remove("active");
+                menu.style.zIndex = "10000";
+                nav.style.zIndex = "100";
+            }
+        });
+
+        // Get the modal
+        const modal = document.getElementById("userModal");
+
+        // Get the button that opens the modal
+        const btn = document.getElementById("openModal");
+
+        // Get the <span> element that closes the modal
+        const span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        };
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+    </script>
+
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+    import {
+        getDatabase, update, set, remove, ref, child, onValue, get, orderByKey,
+        query, limitToFirst, limitToLast, orderByChild,
+        startAt, startAfter, endAt, endBefore, equalTo
+    } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    const firebaseConfigs = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const apps = initializeApp(firebaseConfigs, "Secondary");
+    const auths = getAuth(apps);
+    const databases = getDatabase(apps);
+    console.log(app);
+
+
+    //user auth
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User logged in:', user);
+            const uid = user.uid;
+            console.log("Sign-in provider: " + user.providerId);
+            console.log("  Provider-specific UID: " + user.uid);
+            console.log("  Name: " + user.displayName);
+            console.log("  Email: " + user.email);
+            console.log("  Photo URL: " + user.photoURL);
+
+            // Get a reference to the current user's node in the database
+            const currentUserRef = ref(database, 'users/' + uid);
+
+            // Attach a listener to the current user's node in the database
+            onValue(currentUserRef, snapshot => {
+                // Get the value of the node
+                const currentUserRef = snapshot.val();
+
+                // Check if the value is null
+                if (currentUserRef === null) {
+                    // If the value is null, delete the current user's account
+                    auth.currentUser.delete()
+                        .then(() => {
+                            console.log('User account deleted');
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user account:', error);
+                        });
+                }
+            });
+
+            // Get the user's ID token
+            user.getIdToken().then(idToken => {
+                // Use the user's ID token to authenticate requests to Firebase services
+                // ...
+            }).catch(error => {
+                // Failed to get the user's ID token
+                console.error('Error getting user ID token:', error);
+            });
+
+        } else {
+            console.log('User logged out');
+        }
+    });
+
+    //----- Logout code start	  
+    document.getElementById("logout").addEventListener("click", function () {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log('Sign-out successful.');
+            alert('Sign-out successful.');
+            window.location = "index.html";
+        }).catch((error) => {
+            // An error happened.
+            console.log('An error happened.');
+        });
+    });
+    //----- End
+
+    var rankno = 0;
+    var tbody = document.getElementById("tbody1");
+    var img = document.getElementById("image");
+    const filterSelect = document.getElementById("filter-select");
+    const filterSelect2 = document.getElementById("filter-select2");
+    const filterSelect3 = document.getElementById("filter-select3");
+    const filterSelect4 = document.getElementById("filter-select4");
+    var size = 40;
+
+    function SearchTable() {
+        console.log("Starting SearchTable function");
+
+        const filterValue = filterSelect.value;
+        const filterValue2 = "strand";
+        const filterValue3 = "schoolyear";
+        const filterValue4 = "school";
+
+        const inputValue = searchInput.value.trim().replace(/[^a-zA-Z0-9\s]/g, '');
+        const inputValue2 = searchinputstrand.value || "";
+        const inputValue3 = searchinputschoolyear.value || "";
+        const inputValue4 = searchinputschool.value || "";
+
+        const dbRef = ref(database, "users");
+        let queryRef = dbRef;
+
+        if (filterValue) {
+            queryRef = query(queryRef, orderByChild(filterValue));
+        }
+        if (filterValue2) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue2));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue2);
+            }
+        }
+        if (filterValue3) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue3));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue3);
+            }
+        }
+        if (filterValue4) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue4));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue4);
+            }
+        }
+
+        console.log("queryRef:", queryRef);
+
+        get(queryRef)
+            .then((snapshot) => {
+                const data = snapshot.val() || {};
+
+                const dataArray = Object.entries(data)
+                    .filter(([key, value]) => {
+                        const fields = [filterValue, filterValue2, filterValue3, filterValue4];
+                        const inputValues = [inputValue, inputValue2, inputValue3, inputValue4];
+
+                        const matches = fields.map((field, index) => {
+                            const fieldValue = value[field];
+                            const inputValue = inputValues[index];
+                            if (typeof fieldValue === "number") {
+                                return fieldValue.toString().includes(inputValue);
+                            } else {
+                                return fieldValue && fieldValue.toUpperCase().includes(inputValue.toUpperCase());
+                            }
+                        });
+                        return matches.every((match) => match);
+                    })
+                    .map(([key, value]) => ({
+                        ...value,
+                        uid: key,
+                    }))
+                    .sort((a, b) => {
+                        if (typeof a[filterValue] === "number") {
+                            return b[filterValue] - a[filterValue];
+                        } else {
+                            return a[filterValue]
+                                .toLowerCase()
+                                .localeCompare(b[filterValue].toLowerCase());
+                        }
+                    });
+                AddAllItemsToTable(dataArray);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch data", error);
+            });
+    }
+
+    const searchButton = document.getElementById("search-button");
+    searchButton.addEventListener("click", SearchTable);
+
+    const searchInput = document.getElementById("search-input");
+    searchInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            SearchTable();
+        }
+    });
+
+    function AddItemToTable(useruid, profile, lastname, firstname, username, school, section, room, room1, room2, room3, room4, room5, totalpoints, totalstar,
+        module1Q1points, module1Q1, module1Q2points, module1Q2, module1Q3points, module1Q3, module2Q1points, module2Q1,
+        module2Q2points, module2Q2, module2Q3points, module2Q3, module3Q1points, module3Q1, module3Q2points, module3Q2,
+        module3Q3points, module3Q3, module4Q1points, module4Q1, module4Q2points, module4Q2, module4Q3points, module4Q3,
+        module5Q1points, module5Q1, module5Q2points, module5Q2, module5Q3points, module5Q3, module6Q1points, module6Q1,
+        module6Q2points, module6Q2, module6Q3points, module6Q3, module7Q1points, module7Q1, module7Q2points, module7Q2,
+        module7Q3points, module7Q3, module8Q1points, module8Q1, module8Q2points, module8Q2, module8Q3points, module8Q3,
+        module9Q1points, module9Q1, module9Q2points, module9Q2, module9Q3points, module9Q3, module10Q1points, module10Q1,
+        module10Q2points, module10Q2, module10Q3points, module10Q3, type, strand, schoolyear) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            const status = userData.status;
+
+            let trow = document.createElement("tr");
+            let td1 = document.createElement("td");
+            let td2 = document.createElement("td");
+            let td3 = document.createElement("td");
+            let td4 = document.createElement("td");
+            let td5 = document.createElement("td");
+            let td6 = document.createElement("td");
+            let td7 = document.createElement("td");
+            let td8 = document.createElement("td");
+            let td9 = document.createElement("td");
+            let td10 = document.createElement("td");
+            let td11 = document.createElement("td");
+            let td12 = document.createElement("td");
+            let td13 = document.createElement("td");
+            let td14 = document.createElement("td");
+            let td15 = document.createElement("td");
+            let td16 = document.createElement("td");
+            let td17 = document.createElement("td");
+            let td18 = document.createElement("td");
+            let td19 = document.createElement("td");
+            let td20 = document.createElement("td");
+            let td21 = document.createElement("td");
+            let td22 = document.createElement("td");
+            let td23 = document.createElement("td");
+            let td24 = document.createElement("td");
+            let td25 = document.createElement("td");
+            let td26 = document.createElement("td");
+            let td27 = document.createElement("td");
+            let td28 = document.createElement("td");
+            let td29 = document.createElement("td");
+            let td30 = document.createElement("td");
+            let td31 = document.createElement("td");
+            let td32 = document.createElement("td");
+            let td33 = document.createElement("td");
+            let td34 = document.createElement("td");
+            let td35 = document.createElement("td");
+            let td36 = document.createElement("td");
+            let td37 = document.createElement("td");
+            let td38 = document.createElement("td");
+            let td39 = document.createElement("td");
+            let td40 = document.createElement("td");
+            let td41 = document.createElement("td");
+            let td42 = document.createElement("td");
+            let td43 = document.createElement("td");
+            let td44 = document.createElement("td");
+            let td45 = document.createElement("td");
+            let td46 = document.createElement("td");
+            let td47 = document.createElement("td");
+            let td48 = document.createElement("td");
+            let td49 = document.createElement("td");
+            let td50 = document.createElement("td");
+            let td51 = document.createElement("td");
+            let td52 = document.createElement("td");
+            let td53 = document.createElement("td");
+            let td54 = document.createElement("td");
+            let td55 = document.createElement("td");
+            let td56 = document.createElement("td");
+            let td57 = document.createElement("td");
+            let td58 = document.createElement("td");
+            let td59 = document.createElement("td");
+            let td60 = document.createElement("td");
+            let td61 = document.createElement("td");
+            let td62 = document.createElement("td");
+            let td63 = document.createElement("td");
+            let td64 = document.createElement("td");
+            let td65 = document.createElement("td");
+            let td66 = document.createElement("td");
+            let td67 = document.createElement("td");
+            let td68 = document.createElement("td");
+            let td69 = document.createElement("td");
+            let td70 = document.createElement("td");
+            let td71 = document.createElement("td");
+            let td72 = document.createElement("td");
+            let td73 = document.createElement("td");
+            let td74 = document.createElement("td");
+            let td75 = document.createElement("td");
+            let td76 = document.createElement("td");
+            let td77 = document.createElement("td");
+            let td78 = document.createElement("td");
+            let td79 = document.createElement("td");
+            let td80 = document.createElement("td");
+            let td81 = document.createElement("td");
+
+
+            td1.innerHTML = ++rankno;
+            td1.classList.add("fixed");
+            td2.innerHTML = useruid;
+            td2.classList.add("hideme");
+            td3.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+            td3.classList.add("fixed");
+            td3.classList.add("non-sticky");
+            td3.style.position = "sticky";
+            td3.style.left = "52px";
+            td4.innerHTML = lastname;
+            td4.classList.add("fixed");
+            td4.classList.add("sticky");
+            td4.style.position = "sticky";
+            td4.style.left = "124px";
+            td5.innerHTML = firstname;
+            td5.classList.add("fixed");
+            td5.classList.add("non-sticky");
+            td5.style.position = "sticky";
+            td5.style.left = "276px";
+            td6.innerHTML = username;
+            td7.innerHTML = strand;
+            td8.innerHTML = section;
+            td9.innerHTML = schoolyear;
+            td10.innerHTML = school;
+            td11.innerHTML = room || "Not in room";
+            td12.innerHTML = room1 || "Haven't created";
+            td13.innerHTML = room2 || "Haven't created";
+            td14.innerHTML = room3 || "Haven't created";
+            td15.innerHTML = room4 || "Haven't created";
+            td16.innerHTML = room5 || "Haven't created";
+            td17.innerHTML = totalpoints.toFixed(2);
+            td17.classList.add("fixed");
+            td17.classList.add("non-sticky");
+            td17.style.position = "sticky";
+            td17.style.left = "478px";
+            td18.innerHTML = totalstar;
+            td18.classList.add("fixed");
+            td18.classList.add("non-sticky");
+            td18.style.position = "sticky";
+            td18.style.left = "580px";
+            td19.innerHTML = (module1Q1points || 0).toFixed(2);
+            td20.innerHTML = (module1Q1 || 0) + "/5";
+            td21.innerHTML = (module1Q2points || 0).toFixed(2);
+            td22.innerHTML = (module1Q2 || 0) + "/5";
+            td23.innerHTML = (module1Q3points || 0).toFixed(2);
+            td24.innerHTML = (module1Q3 || 0) + "/5";
+            td25.innerHTML = (module2Q1points || 0).toFixed(2);
+            td26.innerHTML = (module2Q1 || 0) + "/3";
+            td27.innerHTML = (module2Q2points || 0).toFixed(2);
+            td28.innerHTML = (module2Q2 || 0) + "/7";
+            td29.innerHTML = (module2Q3points || 0).toFixed(2);
+            td30.innerHTML = (module2Q3 || 0) + "/5";
+            td31.innerHTML = (module3Q1points || 0).toFixed(2);
+            td32.innerHTML = (module3Q1 || 0) + "/5";
+            td33.innerHTML = (module3Q2points || 0).toFixed(2);
+            td34.innerHTML = (module3Q2 || 0) + "/10";
+            td35.innerHTML = (module3Q3points || 0).toFixed(2);
+            td36.innerHTML = (module3Q3 || 0) + "/5";
+            td37.innerHTML = (module4Q1points || 0).toFixed(2);
+            td38.innerHTML = (module4Q1 || 0) + "/4";
+            td39.innerHTML = (module4Q2points || 0).toFixed(2);
+            td40.innerHTML = (module4Q2 || 0) + "/6";
+            td41.innerHTML = (module4Q3points || 0).toFixed(2);
+            td42.innerHTML = (module4Q3 || 0) + "/5";
+            td43.innerHTML = (module5Q1points || 0).toFixed(2);
+            td44.innerHTML = (module5Q1 || 0) + "/5";
+            td45.innerHTML = (module5Q2points || 0).toFixed(2);
+            td46.innerHTML = (module5Q2 || 0) + "/7";
+            td47.innerHTML = (module5Q3points || 0).toFixed(2);
+            td48.innerHTML = (module5Q3 || 0) + "/5";
+            td49.innerHTML = (module6Q1points || 0).toFixed(2);
+            td50.innerHTML = (module6Q1 || 0) + "/9";
+            td51.innerHTML = (module6Q2points || 0).toFixed(2);
+            td52.innerHTML = (module6Q2 || 0) + "/9";
+            td53.innerHTML = (module6Q3points || 0).toFixed(2);
+            td54.innerHTML = (module6Q3 || 0) + "/5";
+            td55.innerHTML = (module7Q1points || 0).toFixed(2);
+            td56.innerHTML = (module7Q1 || 0) + "/10";
+            td57.innerHTML = (module7Q2points || 0).toFixed(2);
+            td58.innerHTML = (module7Q2 || 0) + "/10";
+            td59.innerHTML = (module7Q3points || 0).toFixed(2);
+            td60.innerHTML = (module7Q3 || 0) + "/5";
+            td61.innerHTML = (module8Q1points || 0).toFixed(2);
+            td62.innerHTML = (module8Q1 || 0) + "/5";
+            td63.innerHTML = (module8Q2points || 0).toFixed(2);
+            td64.innerHTML = (module8Q2 || 0) + "/5";
+            td65.innerHTML = (module8Q3points || 0).toFixed(2);
+            td66.innerHTML = (module8Q3 || 0) + "/5";
+            td67.innerHTML = (module9Q1points || 0).toFixed(2);
+            td68.innerHTML = (module9Q1 || 0) + "/5";
+            td69.innerHTML = (module9Q2points || 0).toFixed(2);
+            td70.innerHTML = (module9Q2 || 0) + "/4";
+            td71.innerHTML = (module9Q3points || 0).toFixed(2);
+            td72.innerHTML = (module9Q3 || 0) + "/5";
+            td73.innerHTML = (module10Q1points || 0).toFixed(2);
+            td74.innerHTML = (module10Q1 || 0) + "/10";
+            td75.innerHTML = (module10Q2points || 0).toFixed(2);
+            td76.innerHTML = (module10Q2 || 0) + "/5";
+            td77.innerHTML = (module10Q3points || 0).toFixed(2);
+            td78.innerHTML = (module10Q3 || 0) + "/5";
+            td79.innerHTML = type;
+            td80.innerHTML = '<button class="edit-btn" data-username="' + useruid + '">Edit</button>';
+            td80.classList.add("fixed");
+            td80.style.position = "sticky";
+            td80.style.right = "82px";
+            if (status === "delete") {
+                td81.innerHTML = '<button class="undelete-btn" data-username="' + useruid + '">Delete Pending</button>';
+                td81.classList.add("fixed");
+            }
+            else {
+                td81.innerHTML = '<button class="delete-btn" data-username="' + useruid + '">Delete</button>';
+                td81.classList.add("fixed");
+            }
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+            trow.appendChild(td4);
+            trow.appendChild(td5);
+            trow.appendChild(td6);
+            trow.appendChild(td7);
+            trow.appendChild(td8);
+            trow.appendChild(td9);
+            trow.appendChild(td10);
+            trow.appendChild(td11);
+            trow.appendChild(td12);
+            trow.appendChild(td13);
+            trow.appendChild(td14);
+            trow.appendChild(td15);
+            trow.appendChild(td16);
+            trow.appendChild(td17);
+            trow.appendChild(td18);
+            trow.appendChild(td19);
+            trow.appendChild(td20);
+            trow.appendChild(td21);
+            trow.appendChild(td22);
+            trow.appendChild(td23);
+            trow.appendChild(td24);
+            trow.appendChild(td25);
+            trow.appendChild(td26);
+            trow.appendChild(td27);
+            trow.appendChild(td28);
+            trow.appendChild(td29);
+            trow.appendChild(td30);
+            trow.appendChild(td31);
+            trow.appendChild(td32);
+            trow.appendChild(td33);
+            trow.appendChild(td34);
+            trow.appendChild(td35);
+            trow.appendChild(td36);
+            trow.appendChild(td37);
+            trow.appendChild(td38);
+            trow.appendChild(td39);
+            trow.appendChild(td40);
+            trow.appendChild(td41);
+            trow.appendChild(td42);
+            trow.appendChild(td43);
+            trow.appendChild(td44);
+            trow.appendChild(td45);
+            trow.appendChild(td46);
+            trow.appendChild(td47);
+            trow.appendChild(td48);
+            trow.appendChild(td49);
+            trow.appendChild(td50);
+            trow.appendChild(td51);
+            trow.appendChild(td52);
+            trow.appendChild(td53);
+            trow.appendChild(td54);
+            trow.appendChild(td55);
+            trow.appendChild(td56);
+            trow.appendChild(td57);
+            trow.appendChild(td58);
+            trow.appendChild(td59);
+            trow.appendChild(td60);
+            trow.appendChild(td61);
+            trow.appendChild(td62);
+            trow.appendChild(td63);
+            trow.appendChild(td64);
+            trow.appendChild(td65);
+            trow.appendChild(td66);
+            trow.appendChild(td67);
+            trow.appendChild(td68);
+            trow.appendChild(td69);
+            trow.appendChild(td70);
+            trow.appendChild(td71);
+            trow.appendChild(td72);
+            trow.appendChild(td73);
+            trow.appendChild(td74);
+            trow.appendChild(td75);
+            trow.appendChild(td76);
+            trow.appendChild(td77);
+            trow.appendChild(td78);
+            trow.appendChild(td79);
+            trow.appendChild(td80);
+            trow.appendChild(td81);
+
+            tbody.appendChild(trow);
+
+            const editButton = trow.querySelector('.edit-btn');
+            editButton.addEventListener('click', () => {
+                EditUser(useruid);
+            });
+
+            const deleteButton = trow.querySelector('.delete-btn');
+            if (deleteButton) {
+                deleteButton.addEventListener('click', () => {
+                    DeleteUser(useruid);
+                });
+            }
+
+            const undeleteButton = trow.querySelector('.undelete-btn');
+            if (undeleteButton) {
+                undeleteButton.addEventListener('click', () => {
+                    UnDeleteUser(useruid);
+                });
+            }
+        });
+    }
+
+    function updateTotalPoints() {
+        const totalPoints = parseFloat(editForm.module1Q1points.value) + parseFloat(editForm.module1Q2points.value) + parseFloat(editForm.module1Q3points.value) +
+            parseFloat(editForm.module2Q1points.value) + parseFloat(editForm.module2Q2points.value) + parseFloat(editForm.module2Q3points.value) +
+            parseFloat(editForm.module3Q1points.value) + parseFloat(editForm.module3Q2points.value) + parseFloat(editForm.module3Q3points.value) +
+            parseFloat(editForm.module4Q1points.value) + parseFloat(editForm.module4Q2points.value) + parseFloat(editForm.module4Q3points.value) +
+            parseFloat(editForm.module5Q1points.value) + parseFloat(editForm.module5Q2points.value) + parseFloat(editForm.module5Q3points.value) +
+            parseFloat(editForm.module6Q1points.value) + parseFloat(editForm.module6Q2points.value) + parseFloat(editForm.module6Q3points.value) +
+            parseFloat(editForm.module7Q1points.value) + parseFloat(editForm.module7Q2points.value) + parseFloat(editForm.module7Q3points.value) +
+            parseFloat(editForm.module8Q1points.value) + parseFloat(editForm.module8Q2points.value) + parseFloat(editForm.module8Q3points.value) +
+            parseFloat(editForm.module9Q1points.value) + parseFloat(editForm.module9Q2points.value) + parseFloat(editForm.module9Q3points.value) +
+            parseFloat(editForm.module10Q1points.value) + parseFloat(editForm.module10Q2points.value) + parseFloat(editForm.module10Q3points.value);
+
+        editForm.totalpoints.value = totalPoints;
+    }
+
+    function updateTotalStar() {
+        const totalStar = 0;
+
+        let M1Lesson1Hs = 0;
+        let M1Lesson2Hs = 0;
+        let M1Lesson3Hs = 0;
+        let M2Lesson1HsCm = 0;
+        let M2Lesson2HsCm = 0;
+        let M2Lesson3Hs = 0;
+        let M3Lesson1Hs = 0;
+        let M3Lesson2HsCm = 0;
+        let M3Lesson3Hs = 0;
+        let M4Lesson1HsCm = 0;
+        let M4Lesson2HsCm = 0;
+        let M4Lesson3Hs = 0;
+        let M5Lesson1Hs = 0;
+        let M5Lesson2HsCm = 0;
+        let M5Lesson3Hs = 0;
+        let M6Lesson1HsCm = 0;
+        let M6Lesson2HsCm = 0;
+        let M6Lesson3Hs = 0;
+        let M7Lesson1HsCm = 0;
+        let M7Lesson2HsCm = 0;
+        let M7Lesson3Hs = 0;
+        let M8Lesson1Hs = 0;
+        let M8Lesson2Hs = 0;
+        let M8Lesson3Hs = 0;
+        let M9Lesson1Hs = 0;
+        let M9Lesson2HsCm = 0;
+        let M9Lesson3Hs = 0;
+        let M10Lesson1HsCm = 0;
+        let M10Lesson2Hs = 0;
+        let M10Lesson3Hs = 0;
+
+        if (editForm.module1Q1.value == 0) {
+            M1Lesson1Hs = 0;
+        } else if (editForm.module1Q1.value == 1) {
+            M1Lesson1Hs = 1;
+        } else if (editForm.module1Q1.value == 2) {
+            M1Lesson1Hs = 2;
+        } else if (editForm.module1Q1.value == 3) {
+            M1Lesson1Hs = 3;
+        } else if (editForm.module1Q1.value == 4) {
+            M1Lesson1Hs = 4;
+        } else if (editForm.module1Q1.value == 5) {
+            M1Lesson1Hs = 5;
+        }
+
+        if (editForm.module1Q2.value == 0) {
+            M1Lesson2Hs = 0;
+        } else if (editForm.module1Q2.value == 1) {
+            M1Lesson2Hs = 1;
+        } else if (editForm.module1Q2.value == 2) {
+            M1Lesson2Hs = 2;
+        } else if (editForm.module1Q2.value == 3) {
+            M1Lesson2Hs = 3;
+        } else if (editForm.module1Q2.value == 4) {
+            M1Lesson2Hs = 4;
+        } else if (editForm.module1Q2.value == 5) {
+            M1Lesson2Hs = 5;
+        }
+
+        if (editForm.module1Q3.value == 0) {
+            M1Lesson3Hs = 0;
+        } else if (editForm.module1Q3.value == 1) {
+            M1Lesson3Hs = 1;
+        } else if (editForm.module1Q3.value == 2) {
+            M1Lesson3Hs = 2;
+        } else if (editForm.module1Q3.value == 3) {
+            M1Lesson3Hs = 3;
+        } else if (editForm.module1Q3.value == 4) {
+            M1Lesson3Hs = 4;
+        } else if (editForm.module1Q3.value == 5) {
+            M1Lesson3Hs = 5;
+        }
+
+        if (editForm.module2Q1.value == 0) {
+            M2Lesson1HsCm = 0;
+        } else if (editForm.module2Q1.value == 1) {
+            M2Lesson1HsCm = 1;
+        } else if (editForm.module2Q1.value == 2) {
+            M2Lesson1HsCm = 3;
+        } else if (editForm.module2Q1.value == 3) {
+            M2Lesson1HsCm = 5;
+        }
+
+        if (editForm.module2Q2.value == 0) {
+            M2Lesson2HsCm = 0;
+        } else if (editForm.module2Q2.value <= 2) {
+            M2Lesson2HsCm = 1;
+        } else if (editForm.module2Q2.value == 3) {
+            M2Lesson2HsCm = 2;
+        } else if (editForm.module2Q2.value <= 5) {
+            M2Lesson2HsCm = 3;
+        } else if (editForm.module2Q2.value == 6) {
+            M2Lesson2HsCm = 4;
+        } else if (editForm.module2Q2.value == 7) {
+            M2Lesson2HsCm = 5;
+        }
+
+        if (editForm.module2Q3.value == 0) {
+            M2Lesson3Hs = 0;
+        } else if (editForm.module2Q3.value == 1) {
+            M2Lesson3Hs = 1;
+        } else if (editForm.module2Q3.value == 2) {
+            M2Lesson3Hs = 2;
+        } else if (editForm.module2Q3.value == 3) {
+            M2Lesson3Hs = 3;
+        } else if (editForm.module2Q3.value == 4) {
+            M2Lesson3Hs = 4;
+        } else if (editForm.module2Q3.value == 5) {
+            M2Lesson3Hs = 5;
+        }
+
+        if (editForm.module3Q1.value == 0) {
+            M3Lesson1Hs = 0;
+        } else if (editForm.module3Q1.value == 1) {
+            M3Lesson1Hs = 1;
+        } else if (editForm.module3Q1.value == 2) {
+            M3Lesson1Hs = 2;
+        } else if (editForm.module3Q1.value == 3) {
+            M3Lesson1Hs = 3;
+        } else if (editForm.module3Q1.value == 4) {
+            M3Lesson1Hs = 4;
+        } else if (editForm.module3Q1.value == 5) {
+            M3Lesson1Hs = 5;
+        }
+
+        if (editForm.module3Q2.value == 0) {
+            M3Lesson2HsCm = 0;
+        } else if (editForm.module3Q2.value <= 2) {
+            M3Lesson2HsCm = 1;
+        } else if (editForm.module3Q2.value <= 5) {
+            M3Lesson2HsCm = 2;
+        } else if (editForm.module3Q2.value <= 7) {
+            M3Lesson2HsCm = 3;
+        } else if (editForm.module3Q2.value <= 9) {
+            M3Lesson2HsCm = 4;
+        } else if (editForm.module3Q2.value == 10) {
+            M3Lesson2HsCm = 5;
+        }
+
+        if (editForm.module3Q3.value == 0) {
+            M3Lesson3Hs = 0;
+        } else if (editForm.module3Q3.value == 1) {
+            M3Lesson3Hs = 1;
+        } else if (editForm.module3Q3.value == 2) {
+            M3Lesson3Hs = 2;
+        } else if (editForm.module3Q3.value == 3) {
+            M3Lesson3Hs = 3;
+        } else if (editForm.module3Q3.value == 4) {
+            M3Lesson3Hs = 4;
+        } else if (editForm.module3Q3.value == 5) {
+            M3Lesson3Hs = 5;
+        }
+
+        if (editForm.module4Q1.value == 0) {
+            M4Lesson1HsCm = 0;
+        } else if (editForm.module4Q1.value == 1) {
+            M4Lesson1HsCm = 1;
+        } else if (editForm.module4Q1.value == 2) {
+            M4Lesson1HsCm = 3;
+        } else if (editForm.module4Q1.value == 3) {
+            M4Lesson1HsCm = 4;
+        } else if (editForm.module4Q1.value == 4) {
+            M4Lesson1HsCm = 5;
+        }
+
+        if (editForm.module4Q2.value == 0) {
+            M4Lesson2HsCm = 0;
+        } else if (editForm.module4Q2.value == 1) {
+            M4Lesson2HsCm = 1;
+        } else if (editForm.module4Q2.value == 2) {
+            M4Lesson2HsCm = 2;
+        } else if (editForm.module4Q2.value == 3) {
+            M4Lesson2HsCm = 3;
+        } else if (editForm.module4Q2.value <= 5) {
+            M4Lesson2HsCm = 4;
+        } else if (editForm.module4Q2.value == 6) {
+            M4Lesson2HsCm = 5;
+        }
+
+        if (editForm.module4Q3.value == 0) {
+            M4Lesson3Hs = 0;
+        } else if (editForm.module4Q3.value == 1) {
+            M4Lesson3Hs = 1;
+        } else if (editForm.module4Q3.value == 2) {
+            M4Lesson3Hs = 2;
+        } else if (editForm.module4Q3.value == 3) {
+            M4Lesson3Hs = 3;
+        } else if (editForm.module4Q3.value == 4) {
+            M4Lesson3Hs = 4;
+        } else if (editForm.module4Q3.value == 5) {
+            M4Lesson3Hs = 5;
+        }
+
+        if (editForm.module5Q1.value == 0) {
+            M5Lesson1Hs = 0;
+        } else if (editForm.module5Q1.value == 1) {
+            M5Lesson1Hs = 1;
+        } else if (editForm.module5Q1.value == 2) {
+            M5Lesson1Hs = 2;
+        } else if (editForm.module5Q1.value == 3) {
+            M5Lesson1Hs = 3;
+        } else if (editForm.module5Q1.value == 4) {
+            M5Lesson1Hs = 4;
+        } else if (editForm.module5Q1.value == 5) {
+            M5Lesson1Hs = 5;
+        }
+
+        if (editForm.module5Q2.value == 0) {
+            M5Lesson2HsCm = 0;
+        } else if (editForm.module5Q2.value == 1) {
+            M5Lesson2HsCm = 1;
+        } else if (editForm.module5Q2.value == 2) {
+            M5Lesson2HsCm = 2;
+        } else if (editForm.module5Q2.value <= 4) {
+            M5Lesson2HsCm = 3;
+        } else if (editForm.module5Q2.value <= 6) {
+            M5Lesson2HsCm = 4;
+        } else if (editForm.module5Q2.value == 7) {
+            M5Lesson2HsCm = 5;
+        }
+
+        if (editForm.module5Q3.value == 0) {
+            M5Lesson3Hs = 0;
+        } else if (editForm.module5Q3.value == 1) {
+            M5Lesson3Hs = 1;
+        } else if (editForm.module5Q3.value == 2) {
+            M5Lesson3Hs = 2;
+        } else if (editForm.module5Q3.value == 3) {
+            M5Lesson3Hs = 3;
+        } else if (editForm.module5Q3.value == 4) {
+            M5Lesson3Hs = 4;
+        } else if (editForm.module5Q3.value == 5) {
+            M5Lesson3Hs = 5;
+        }
+
+        if (editForm.module6Q1.value == 0) {
+            M6Lesson1HsCm = 0;
+        } else if (editForm.module6Q1.value <= 2) {
+            M6Lesson1HsCm = 1;
+        } else if (editForm.module6Q1.value <= 4) {
+            M6Lesson1HsCm = 2;
+        } else if (editForm.module6Q1.value <= 6) {
+            M6Lesson1HsCm = 3;
+        } else if (editForm.module6Q1.value <= 8) {
+            M6Lesson1HsCm = 4;
+        } else if (editForm.module6Q1.value == 9) {
+            M6Lesson1HsCm = 5;
+        }
+
+        if (editForm.module6Q2.value == 0) {
+            M6Lesson2HsCm = 0;
+        } else if (editForm.module6Q2.value <= 2) {
+            M6Lesson2HsCm = 1;
+        } else if (editForm.module6Q2.value <= 4) {
+            M6Lesson2HsCm = 2;
+        } else if (editForm.module6Q2.value <= 6) {
+            M6Lesson2HsCm = 3;
+        } else if (editForm.module6Q2.value <= 8) {
+            M6Lesson2HsCm = 4;
+        } else if (editForm.module6Q2.value == 9) {
+            M6Lesson2HsCm = 5;
+        }
+
+        if (editForm.module6Q3.value == 0) {
+            M6Lesson3Hs = 0;
+        } else if (editForm.module6Q3.value == 1) {
+            M6Lesson3Hs = 1;
+        } else if (editForm.module6Q3.value == 2) {
+            M6Lesson3Hs = 2;
+        } else if (editForm.module6Q3.value == 3) {
+            M6Lesson3Hs = 3;
+        } else if (editForm.module6Q3.value == 4) {
+            M6Lesson3Hs = 4;
+        } else if (editForm.module6Q3.value == 5) {
+            M6Lesson3Hs = 5;
+        }
+
+        if (editForm.module7Q1.value == 0) {
+            M7Lesson1HsCm = 0;
+        } else if (editForm.module7Q1.value <= 2) {
+            M7Lesson1HsCm = 1;
+        } else if (editForm.module7Q1.value <= 5) {
+            M7Lesson1HsCm = 2;
+        } else if (editForm.module7Q1.value <= 7) {
+            M7Lesson1HsCm = 3;
+        } else if (editForm.module7Q1.value <= 9) {
+            M7Lesson1HsCm = 4;
+        } else if (editForm.module7Q1.value == 10) {
+            M7Lesson1HsCm = 5;
+        }
+
+        if (editForm.module7Q2.value == 0) {
+            M7Lesson2HsCm = 0;
+        } else if (editForm.module7Q2.value <= 2) {
+            M7Lesson2HsCm = 1;
+        } else if (editForm.module7Q2.value <= 5) {
+            M7Lesson2HsCm = 2;
+        } else if (editForm.module7Q2.value <= 7) {
+            M7Lesson2HsCm = 3;
+        } else if (editForm.module7Q2.value <= 9) {
+            M7Lesson2HsCm = 4;
+        } else if (editForm.module7Q2.value == 10) {
+            M7Lesson2HsCm = 5;
+        }
+
+        if (editForm.module7Q3.value == 0) {
+            M7Lesson3Hs = 0;
+        } else if (editForm.module7Q3.value == 1) {
+            M7Lesson3Hs = 1;
+        } else if (editForm.module7Q3.value == 2) {
+            M7Lesson3Hs = 2;
+        } else if (editForm.module7Q3.value == 3) {
+            M7Lesson3Hs = 3;
+        } else if (editForm.module7Q3.value == 4) {
+            M7Lesson3Hs = 4;
+        } else if (editForm.module7Q3.value == 5) {
+            M7Lesson3Hs = 5;
+        }
+
+        if (editForm.module8Q1.value == 0) {
+            M8Lesson1Hs = 0;
+        } else if (editForm.module8Q1.value == 1) {
+            M8Lesson1Hs = 1;
+        } else if (editForm.module8Q1.value == 2) {
+            M8Lesson1Hs = 2;
+        } else if (editForm.module8Q1.value == 3) {
+            M8Lesson1Hs = 3;
+        } else if (editForm.module8Q1.value == 4) {
+            M8Lesson1Hs = 4;
+        } else if (editForm.module8Q1.value == 5) {
+            M8Lesson1Hs = 5;
+        }
+
+        if (editForm.module8Q2.value == 0) {
+            M8Lesson2Hs = 0;
+        } else if (editForm.module8Q2.value == 1) {
+            M8Lesson2Hs = 1;
+        } else if (editForm.module8Q2.value == 2) {
+            M8Lesson2Hs = 2;
+        } else if (editForm.module8Q2.value == 3) {
+            M8Lesson2Hs = 3;
+        } else if (editForm.module8Q2.value == 4) {
+            M8Lesson2Hs = 4;
+        } else if (editForm.module8Q2.value == 5) {
+            M8Lesson2Hs = 5;
+        }
+
+        if (editForm.module8Q3.value == 0) {
+            M8Lesson3Hs = 0;
+        } else if (editForm.module8Q3.value == 1) {
+            M8Lesson3Hs = 1;
+        } else if (editForm.module8Q3.value == 2) {
+            M8Lesson3Hs = 2;
+        } else if (editForm.module8Q3.value == 3) {
+            M8Lesson3Hs = 3;
+        } else if (editForm.module8Q3.value == 4) {
+            M8Lesson3Hs = 4;
+        } else if (editForm.module8Q3.value == 5) {
+            M8Lesson3Hs = 5;
+        }
+
+        if (editForm.module9Q1.value == 0) {
+            M9Lesson1Hs = 0;
+        } else if (editForm.module9Q1.value == 1) {
+            M9Lesson1Hs = 1;
+        } else if (editForm.module9Q1.value == 2) {
+            M9Lesson1Hs = 2;
+        } else if (editForm.module9Q1.value == 3) {
+            M9Lesson1Hs = 3;
+        } else if (editForm.module9Q1.value == 4) {
+            M9Lesson1Hs = 4;
+        } else if (editForm.module9Q1.value == 5) {
+            M9Lesson1Hs = 5;
+        }
+
+        if (editForm.module9Q2.value == 0) {
+            M9Lesson2HsCm = 0;
+        } else if (editForm.module9Q2.value == 1) {
+            M9Lesson2HsCm = 1;
+        } else if (editForm.module9Q2.value == 2) {
+            M9Lesson2HsCm = 3;
+        } else if (editForm.module9Q2.value == 3) {
+            M9Lesson2HsCm = 4;
+        } else if (editForm.module9Q2.value == 4) {
+            M9Lesson2HsCm = 5;
+        }
+
+        if (editForm.module9Q3.value == 0) {
+            M9Lesson3Hs = 0;
+        } else if (editForm.module9Q3.value == 1) {
+            M9Lesson3Hs = 1;
+        } else if (editForm.module9Q3.value == 2) {
+            M9Lesson3Hs = 2;
+        } else if (editForm.module9Q3.value == 3) {
+            M9Lesson3Hs = 3;
+        } else if (editForm.module9Q3.value == 4) {
+            M9Lesson3Hs = 4;
+        } else if (editForm.module9Q3.value == 5) {
+            M9Lesson3Hs = 5;
+        }
+
+        if (editForm.module10Q1.value == 0) {
+            M10Lesson1HsCm = 0;
+        } else if (editForm.module10Q1.value <= 2) {
+            M10Lesson1HsCm = 1;
+        } else if (editForm.module10Q1.value <= 4) {
+            M10Lesson1HsCm = 2;
+        } else if (editForm.module10Q1.value <= 6) {
+            M10Lesson1HsCm = 3;
+        } else if (editForm.module10Q1.value <= 8) {
+            M10Lesson1HsCm = 4;
+        } else if (editForm.module10Q1.value <= 10) {
+            M10Lesson1HsCm = 5;
+        }
+
+        if (editForm.module10Q2.value == 0) {
+            M10Lesson2Hs = 0;
+        } else if (editForm.module10Q2.value == 1) {
+            M10Lesson2Hs = 1;
+        } else if (editForm.module10Q2.value == 2) {
+            M10Lesson2Hs = 2;
+        } else if (editForm.module10Q2.value == 3) {
+            M10Lesson2Hs = 3;
+        } else if (editForm.module10Q2.value == 4) {
+            M10Lesson2Hs = 4;
+        } else if (editForm.module10Q2.value == 5) {
+            M10Lesson2Hs = 5;
+        }
+
+        if (editForm.module10Q3.value == 0) {
+            M10Lesson3Hs = 0;
+        } else if (editForm.module10Q3.value == 1) {
+            M10Lesson3Hs = 1;
+        } else if (editForm.module10Q3.value == 2) {
+            M10Lesson3Hs = 2;
+        } else if (editForm.module10Q3.value == 3) {
+            M10Lesson3Hs = 3;
+        } else if (editForm.module10Q3.value == 4) {
+            M10Lesson3Hs = 4;
+        } else if (editForm.module10Q3.value == 5) {
+            M10Lesson3Hs = 5;
+        }
+
+        editForm.totalstar.value = totalStar + M1Lesson1Hs + M1Lesson2Hs + M1Lesson3Hs + M2Lesson1HsCm + M2Lesson2HsCm + M2Lesson3Hs + M3Lesson1Hs + M3Lesson2HsCm +
+            M3Lesson3Hs + M4Lesson1HsCm + M4Lesson2HsCm + M4Lesson3Hs + M5Lesson1Hs + M5Lesson2HsCm + M5Lesson3Hs + M6Lesson1HsCm + M6Lesson2HsCm + M6Lesson3Hs + M7Lesson1HsCm +
+            M7Lesson2HsCm + M7Lesson3Hs + M8Lesson1Hs + M8Lesson2Hs + M8Lesson3Hs + M9Lesson1Hs + M9Lesson2HsCm + M9Lesson3Hs + M10Lesson1HsCm + M10Lesson2Hs + M10Lesson3Hs;
+    }
+
+    function calculateTotalStar() {
+        const editForm = document.querySelector('#editForm');
+        let totalStar = 0;
+
+        if (editForm.module1Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module1Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module1Q1.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module1Q1.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module1Q1.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module1Q1.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module1Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module1Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module1Q2.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module1Q2.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module1Q2.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module1Q2.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module1Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module1Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module1Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module1Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module1Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module1Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module2Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module2Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module2Q1.value == 2) {
+            totalStar += 3;
+        } else if (editForm.module2Q1.value == 3) {
+            totalStar += 5;
+        }
+
+        if (editForm.module2Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module2Q2.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module2Q2.value == 3) {
+            totalStar += 2;
+        } else if (editForm.module2Q2.value <= 5) {
+            totalStar += 3;
+        } else if (editForm.module2Q2.value == 6) {
+            totalStar += 4;
+        } else if (editForm.module2Q2.value == 7) {
+            totalStar += 5;
+        }
+
+        if (editForm.module2Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module2Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module2Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module2Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module2Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module2Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module3Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module3Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module3Q1.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module3Q1.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module3Q1.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module3Q1.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module3Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module3Q2.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module3Q2.value <= 5) {
+            totalStar += 2;
+        } else if (editForm.module3Q2.value <= 7) {
+            totalStar += 3;
+        } else if (editForm.module3Q2.value <= 9) {
+            totalStar += 4;
+        } else if (editForm.module3Q2.value == 10) {
+            totalStar += 5;
+        }
+
+        if (editForm.module3Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module3Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module3Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module3Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module3Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module3Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module4Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module4Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module4Q1.value == 2) {
+            totalStar += 3;
+        } else if (editForm.module4Q1.value == 3) {
+            totalStar += 4;
+        } else if (editForm.module4Q1.value == 4) {
+            totalStar += 5;
+        }
+
+        if (editForm.module4Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module4Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module4Q2.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module4Q2.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module4Q2.value <= 5) {
+            totalStar += 4;
+        } else if (editForm.module4Q2.value == 6) {
+            totalStar += 5;
+        }
+
+        if (editForm.module4Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module4Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module4Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module4Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module4Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module4Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module5Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module5Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module5Q1.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module5Q1.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module5Q1.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module5Q1.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module5Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module5Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module5Q2.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module5Q2.value <= 4) {
+            totalStar += 3;
+        } else if (editForm.module5Q2.value <= 6) {
+            totalStar += 4;
+        } else if (editForm.module5Q2.value == 7) {
+            totalStar += 5;
+        }
+
+        if (editForm.module5Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module5Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module5Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module5Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module5Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module5Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module6Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module6Q1.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module6Q1.value <= 4) {
+            totalStar += 2;
+        } else if (editForm.module6Q1.value <= 6) {
+            totalStar += 3;
+        } else if (editForm.module6Q1.value <= 8) {
+            totalStar += 4;
+        } else if (editForm.module6Q1.value == 9) {
+            totalStar += 5;
+        }
+
+        if (editForm.module6Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module6Q2.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module6Q2.value <= 4) {
+            totalStar += 2;
+        } else if (editForm.module6Q2.value <= 6) {
+            totalStar += 3;
+        } else if (editForm.module6Q2.value <= 8) {
+            totalStar += 4;
+        } else if (editForm.module6Q2.value == 9) {
+            totalStar += 5;
+        }
+
+        if (editForm.module6Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module6Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module6Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module6Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module6Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module6Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module7Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module7Q1.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module7Q1.value <= 5) {
+            totalStar += 2;
+        } else if (editForm.module7Q1.value <= 7) {
+            totalStar += 3;
+        } else if (editForm.module7Q1.value <= 9) {
+            totalStar += 4;
+        } else if (editForm.module7Q1.value == 10) {
+            totalStar += 5;
+        }
+
+        if (editForm.module7Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module7Q2.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module7Q2.value <= 5) {
+            totalStar += 2;
+        } else if (editForm.module7Q2.value <= 7) {
+            totalStar += 3;
+        } else if (editForm.module7Q2.value <= 9) {
+            totalStar += 4;
+        } else if (editForm.module7Q2.value == 10) {
+            totalStar += 5;
+        }
+
+        if (editForm.module7Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module7Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module7Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module7Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module7Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module7Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module8Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module8Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module8Q1.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module8Q1.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module8Q1.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module8Q1.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module8Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module8Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module8Q2.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module8Q2.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module8Q2.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module8Q2.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module8Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module8Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module8Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module8Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module8Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module8Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module9Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module9Q1.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module9Q1.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module9Q1.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module9Q1.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module9Q1.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module9Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module9Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module9Q2.value == 2) {
+            totalStar += 3;
+        } else if (editForm.module9Q2.value == 3) {
+            totalStar += 4;
+        } else if (editForm.module9Q2.value == 4) {
+            totalStar += 5;
+        }
+
+        if (editForm.module9Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module9Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module9Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module9Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module9Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module9Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module10Q1.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module10Q1.value <= 2) {
+            totalStar += 1;
+        } else if (editForm.module10Q1.value <= 4) {
+            totalStar += 2;
+        } else if (editForm.module10Q1.value <= 6) {
+            totalStar += 3;
+        } else if (editForm.module10Q1.value <= 8) {
+            totalStar += 4;
+        } else if (editForm.module10Q1.value <= 10) {
+            totalStar += 5;
+        }
+
+        if (editForm.module10Q2.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module10Q2.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module10Q2.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module10Q2.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module10Q2.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module10Q2.value == 5) {
+            totalStar += 5;
+        }
+
+        if (editForm.module10Q3.value == 0) {
+            totalStar += 0;
+        } else if (editForm.module10Q3.value == 1) {
+            totalStar += 1;
+        } else if (editForm.module10Q3.value == 2) {
+            totalStar += 2;
+        } else if (editForm.module10Q3.value == 3) {
+            totalStar += 3;
+        } else if (editForm.module10Q3.value == 4) {
+            totalStar += 4;
+        } else if (editForm.module10Q3.value == 5) {
+            totalStar += 5;
+        }
+
+        editForm.totalstar.value = totalStar;
+    }
+
+
+    let userRef = null;
+
+    function EditUser(useruid) {
+        userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+
+            console.log(userData);
+            // Update the values of the form fields with the user data
+            const editForm = document.querySelector('#editForm');
+            editForm.avatar.value = userData.profileurl;
+            editForm.lastname.value = userData.lastname;
+            editForm.firstname.value = userData.firstname;
+            editForm.username.value = userData.username;
+            editForm.strand.value = userData.strand;
+            editForm.section.value = userData.section;
+            editForm.schoolyear.value = userData.schoolyear;
+            editForm.school.value = userData.school;
+            editForm.usertype.value = userData.type;
+            editForm.room.value = userData.room || "";
+            editForm.totalpoints.value = userData.totalpoints || 0;
+
+            editForm.module1Q1.value = userData.module1Q1 || 0;
+            editForm.module1Q2.value = userData.module1Q2 || 0;
+            editForm.module1Q3.value = userData.module1Q3 || 0;
+            editForm.module2Q1.value = userData.module2Q1 || 0;
+            editForm.module2Q2.value = userData.module2Q2 || 0;
+            editForm.module2Q3.value = userData.module2Q3 || 0;
+            editForm.module3Q1.value = userData.module3Q1 || 0;
+            editForm.module3Q2.value = userData.module3Q2 || 0;
+            editForm.module3Q3.value = userData.module3Q3 || 0;
+            editForm.module4Q1.value = userData.module4Q1 || 0;
+            editForm.module4Q2.value = userData.module4Q2 || 0;
+            editForm.module4Q3.value = userData.module4Q3 || 0;
+            editForm.module5Q1.value = userData.module5Q1 || 0;
+            editForm.module5Q2.value = userData.module5Q2 || 0;
+            editForm.module5Q3.value = userData.module5Q3 || 0;
+            editForm.module6Q1.value = userData.module6Q1 || 0;
+            editForm.module6Q2.value = userData.module6Q2 || 0;
+            editForm.module6Q3.value = userData.module6Q3 || 0;
+            editForm.module7Q1.value = userData.module7Q1 || 0;
+            editForm.module7Q2.value = userData.module7Q2 || 0;
+            editForm.module7Q3.value = userData.module7Q3 || 0;
+            editForm.module8Q1.value = userData.module8Q1 || 0;
+            editForm.module8Q2.value = userData.module8Q2 || 0;
+            editForm.module8Q3.value = userData.module8Q3 || 0;
+            editForm.module9Q1.value = userData.module9Q1 || 0;
+            editForm.module9Q2.value = userData.module9Q2 || 0;
+            editForm.module9Q3.value = userData.module9Q3 || 0;
+            editForm.module10Q1.value = userData.module10Q1 || 0;
+            editForm.module10Q2.value = userData.module10Q2 || 0;
+            editForm.module10Q3.value = userData.module10Q3 || 0;
+
+            editForm.module1Q1points.value = userData.module1Q1points.toFixed(4) || 0;
+            editForm.module1Q2points.value = userData.module1Q2points.toFixed(4) || 0;
+            editForm.module1Q3points.value = userData.module1Q3points.toFixed(4) || 0;
+            editForm.module2Q1points.value = userData.module2Q1points.toFixed(4) || 0;
+            editForm.module2Q2points.value = userData.module2Q2points.toFixed(4) || 0;
+            editForm.module2Q3points.value = userData.module2Q3points.toFixed(4) || 0;
+            editForm.module3Q1points.value = userData.module3Q1points.toFixed(4) || 0;
+            editForm.module3Q2points.value = userData.module3Q2points.toFixed(4) || 0;
+            editForm.module3Q3points.value = userData.module3Q3points.toFixed(4) || 0;
+            editForm.module4Q1points.value = userData.module4Q1points.toFixed(4) || 0;
+            editForm.module4Q2points.value = userData.module4Q2points.toFixed(4) || 0;
+            editForm.module4Q3points.value = userData.module4Q3points.toFixed(4) || 0;
+            editForm.module5Q1points.value = userData.module5Q1points.toFixed(4) || 0;
+            editForm.module5Q2points.value = userData.module5Q2points.toFixed(4) || 0;
+            editForm.module5Q3points.value = userData.module5Q3points.toFixed(4) || 0;
+            editForm.module6Q1points.value = userData.module6Q1points.toFixed(4) || 0;
+            editForm.module6Q2points.value = userData.module6Q2points.toFixed(4) || 0;
+            editForm.module6Q3points.value = userData.module6Q3points.toFixed(4) || 0;
+            editForm.module7Q1points.value = userData.module7Q1points.toFixed(4) || 0;
+            editForm.module7Q2points.value = userData.module7Q2points.toFixed(4) || 0;
+            editForm.module7Q3points.value = userData.module7Q3points.toFixed(4) || 0;
+            editForm.module8Q1points.value = userData.module8Q1points.toFixed(4) || 0;
+            editForm.module8Q2points.value = userData.module8Q2points.toFixed(4) || 0;
+            editForm.module8Q3points.value = userData.module8Q3points.toFixed(4) || 0;
+            editForm.module9Q1points.value = userData.module9Q1points.toFixed(4) || 0;
+            editForm.module9Q2points.value = userData.module9Q2points.toFixed(4) || 0;
+            editForm.module9Q3points.value = userData.module9Q3points.toFixed(4) || 0;
+            editForm.module10Q1points.value = userData.module10Q1points.toFixed(4) || 0;
+            editForm.module10Q2points.value = userData.module10Q2points.toFixed(4) || 0;
+            editForm.module10Q3points.value = userData.module10Q3points.toFixed(4) || 0;
+
+            calculateTotalStar();
+
+            // Show the modal
+            const modal = document.querySelector('#myModal');
+            modal.style.display = "block";
+
+            editForm.module1Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module1Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module1Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module2Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module2Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module2Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module3Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module3Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module3Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module4Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module4Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module4Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module5Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module5Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module5Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module6Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module6Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module6Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module7Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module7Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module7Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module8Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module8Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module8Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module9Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module9Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module9Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module10Q1.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module10Q2.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            editForm.module10Q3.addEventListener('input', () => {
+                updateTotalStar();
+            });
+
+            //points
+            editForm.module1Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module1Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module1Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module2Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module2Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module2Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module3Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module3Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module3Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module4Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module4Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module4Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module5Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module5Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module5Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module6Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module6Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module6Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module7Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module7Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module7Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module8Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module8Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module8Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module9Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module9Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module9Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module10Q1points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module10Q2points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            editForm.module10Q3points.addEventListener('input', () => {
+                updateTotalPoints();
+            });
+
+            // Handle form submission
+            editForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const newProfileUrl = editForm.avatar.value;
+                const newLastName = editForm.lastname.value;
+                const newFirstName = editForm.firstname.value;
+                const newUserName = editForm.username.value;
+                const newStrand = editForm.strand.value;
+                const newSection = editForm.section.value;
+                const newSchoolYear = editForm.schoolyear.value;
+                const newSchool = editForm.school.value;
+                const newUserType = editForm.usertype.value;
+                const newRoom = editForm.room.value;
+                const newTotalPoints = parseFloat(editForm.totalpoints.value);
+                const newTotalStar = parseInt(editForm.totalstar.value);
+                const newM1Q1 = parseInt(editForm.module1Q1.value);
+                const newM1Q2 = parseInt(editForm.module1Q2.value);
+                const newM1Q3 = parseInt(editForm.module1Q3.value);
+                const newM2Q1 = parseInt(editForm.module2Q1.value);
+                const newM2Q2 = parseInt(editForm.module2Q2.value);
+                const newM2Q3 = parseInt(editForm.module2Q3.value);
+                const newM3Q1 = parseInt(editForm.module3Q1.value);
+                const newM3Q2 = parseInt(editForm.module3Q2.value);
+                const newM3Q3 = parseInt(editForm.module3Q3.value);
+                const newM4Q1 = parseInt(editForm.module4Q1.value);
+                const newM4Q2 = parseInt(editForm.module4Q2.value);
+                const newM4Q3 = parseInt(editForm.module4Q3.value);
+                const newM5Q1 = parseInt(editForm.module5Q1.value);
+                const newM5Q2 = parseInt(editForm.module5Q2.value);
+                const newM5Q3 = parseInt(editForm.module5Q3.value);
+                const newM6Q1 = parseInt(editForm.module6Q1.value);
+                const newM6Q2 = parseInt(editForm.module6Q2.value);
+                const newM6Q3 = parseInt(editForm.module6Q3.value);
+                const newM7Q1 = parseInt(editForm.module7Q1.value);
+                const newM7Q2 = parseInt(editForm.module7Q2.value);
+                const newM7Q3 = parseInt(editForm.module7Q3.value);
+                const newM8Q1 = parseInt(editForm.module8Q1.value);
+                const newM8Q2 = parseInt(editForm.module8Q2.value);
+                const newM8Q3 = parseInt(editForm.module8Q3.value);
+                const newM9Q1 = parseInt(editForm.module9Q1.value);
+                const newM9Q2 = parseInt(editForm.module9Q2.value);
+                const newM9Q3 = parseInt(editForm.module9Q3.value);
+                const newM10Q1 = parseInt(editForm.module10Q1.value);
+                const newM10Q2 = parseInt(editForm.module10Q2.value);
+                const newM10Q3 = parseInt(editForm.module10Q3.value);
+                const newM1Q1points = parseInt(editForm.module1Q1points.value);
+                const newM1Q2points = parseInt(editForm.module1Q2points.value);
+                const newM1Q3points = parseInt(editForm.module1Q3points.value);
+                const newM2Q1points = parseInt(editForm.module2Q1points.value);
+                const newM2Q2points = parseInt(editForm.module2Q2points.value);
+                const newM2Q3points = parseInt(editForm.module2Q3points.value);
+                const newM3Q1points = parseInt(editForm.module3Q1points.value);
+                const newM3Q2points = parseInt(editForm.module3Q2points.value);
+                const newM3Q3points = parseInt(editForm.module3Q3points.value);
+                const newM4Q1points = parseInt(editForm.module4Q1points.value);
+                const newM4Q2points = parseInt(editForm.module4Q2points.value);
+                const newM4Q3points = parseInt(editForm.module4Q3points.value);
+                const newM5Q1points = parseInt(editForm.module5Q1points.value);
+                const newM5Q2points = parseInt(editForm.module5Q2points.value);
+                const newM5Q3points = parseInt(editForm.module5Q3points.value);
+                const newM6Q1points = parseInt(editForm.module6Q1points.value);
+                const newM6Q2points = parseInt(editForm.module6Q2points.value);
+                const newM6Q3points = parseInt(editForm.module6Q3points.value);
+                const newM7Q1points = parseInt(editForm.module7Q1points.value);
+                const newM7Q2points = parseInt(editForm.module7Q2points.value);
+                const newM7Q3points = parseInt(editForm.module7Q3points.value);
+                const newM8Q1points = parseInt(editForm.module8Q1points.value);
+                const newM8Q2points = parseInt(editForm.module8Q2points.value);
+                const newM8Q3points = parseInt(editForm.module8Q3points.value);
+                const newM9Q1points = parseInt(editForm.module9Q1points.value);
+                const newM9Q2points = parseInt(editForm.module9Q2points.value);
+                const newM9Q3points = parseInt(editForm.module9Q3points.value);
+                const newM10Q1points = parseInt(editForm.module10Q1points.value);
+                const newM10Q2points = parseInt(editForm.module10Q2points.value);
+                const newM10Q3points = parseInt(editForm.module10Q3points.value);
+
+                // Update the user's data in the database
+                update(userRef, {
+                    profileurl: newProfileUrl,
+                    lastname: newLastName,
+                    firstname: newFirstName,
+                    username: newUserName,
+                    strand: newStrand,
+                    section: newSection,
+                    schoolyear: newSchoolYear,
+                    school: newSchool,
+                    type: newUserType,
+                    room: newRoom,
+                    totalpoints: newTotalPoints,
+                    totalstar: newTotalStar,
+                    module1Q1: newM1Q1,
+                    module1Q2: newM1Q2,
+                    module1Q3: newM1Q3,
+                    module2Q1: newM2Q1,
+                    module2Q2: newM2Q2,
+                    module2Q3: newM2Q3,
+                    module3Q1: newM3Q1,
+                    module3Q2: newM3Q2,
+                    module3Q3: newM3Q3,
+                    module4Q1: newM4Q1,
+                    module4Q2: newM4Q2,
+                    module4Q3: newM4Q3,
+                    module5Q1: newM5Q1,
+                    module5Q2: newM5Q2,
+                    module5Q3: newM5Q3,
+                    module6Q1: newM6Q1,
+                    module6Q2: newM6Q2,
+                    module6Q3: newM6Q3,
+                    module7Q1: newM7Q1,
+                    module7Q2: newM7Q2,
+                    module7Q3: newM7Q3,
+                    module8Q1: newM8Q1,
+                    module8Q2: newM8Q2,
+                    module8Q3: newM8Q3,
+                    module9Q1: newM9Q1,
+                    module9Q2: newM9Q2,
+                    module9Q3: newM9Q3,
+                    module10Q1: newM10Q1,
+                    module10Q2: newM10Q2,
+                    module10Q3: newM10Q3,
+                    module1Q1points: newM1Q1points,
+                    module1Q2points: newM1Q2points,
+                    module1Q3points: newM1Q3points,
+                    module2Q1points: newM2Q1points,
+                    module2Q2points: newM2Q2points,
+                    module2Q3points: newM2Q3points,
+                    module3Q1points: newM3Q1points,
+                    module3Q2points: newM3Q2points,
+                    module3Q3points: newM3Q3points,
+                    module4Q1points: newM4Q1points,
+                    module4Q2points: newM4Q2points,
+                    module4Q3points: newM4Q3points,
+                    module5Q1points: newM5Q1points,
+                    module5Q2points: newM5Q2points,
+                    module5Q3points: newM5Q3points,
+                    module6Q1points: newM6Q1points,
+                    module6Q2points: newM6Q2points,
+                    module6Q3points: newM6Q3points,
+                    module7Q1points: newM7Q1points,
+                    module7Q2points: newM7Q2points,
+                    module7Q3points: newM7Q3points,
+                    module8Q1points: newM8Q1points,
+                    module8Q2points: newM8Q2points,
+                    module8Q3points: newM8Q3points,
+                    module9Q1points: newM9Q1points,
+                    module9Q2points: newM9Q2points,
+                    module9Q3points: newM9Q3points,
+                    module10Q1points: newM10Q1points,
+                    module10Q2points: newM10Q2points,
+                    module10Q3points: newM10Q3points,
+                }).then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+                    // Hide the modal
+                    modal.style.display = "none";
+                }).catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+            });
+
+            // Handle modal close button
+            const closeBtn = modal.querySelector('.close');
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = "none";
+            });
+
+            // Handle clicks outside of the modal
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            });
+        }).catch((error) => {
+            console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+        });
+    }
+
+
+    function DeleteUser(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+            const confirmed = confirm("Are you sure you want to delete this user?");
+            if (confirmed) {
+                // Delete the user's data from the database
+                remove(userRef).then(() => {
+                    console.log(`User ${useruid} data deleted successfully`);
+                    alert(`User ${useruid} data deleted successfully`);
+                });
+            }
+        }).catch((error) => {
+            console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+        });
+
+    }
+
+    function UnDeleteUser(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Ask for confirmation before undeleting user
+            const confirmed = confirm("Are you sure you want to undelete this user?");
+
+            if (confirmed) {
+                // Update the "status" data in the user's data to ""
+                update(userRef, {
+                    status: "",
+                })
+                    .then(() => {
+                        console.log(`User ${useruid} data updated successfully`);
+                    })
+                    .catch((error) => {
+                        console.error(`Error updating user ${useruid} data: ${error}`);
+                    });
+            }
+        });
+    }
+
+
+    function AddAllItemsToTable(TheUsers) {
+        rankno = 0;
+        tbody.innerHTML = "";
+        TheUsers.forEach(element => {
+            const uid = element.uid;
+            AddItemToTable(uid, element.profileurl, element.lastname, element.firstname, element.username, element.school, element.section,
+                element.room, element.room1, element.room2, element.room3, element.room4, element.room5,
+                element.totalpoints, element.totalstar, element.module1Q1points, element.module1Q1, element.module1Q2points, element.module1Q2,
+                element.module1Q3points, element.module1Q3, element.module2Q1points, element.module2Q1, element.module2Q2points, element.module2Q2, element.module2Q3points, element.module2Q3,
+                element.module3Q1points, element.module3Q1, element.module3Q2points, element.module3Q2, element.module3Q3points, element.module3Q3, element.module4Q1points, element.module4Q1,
+                element.module4Q2points, element.module4Q2, element.module4Q3points, element.module4Q3, element.module5Q1points, element.module5Q1, element.module5Q2points, element.module5Q2,
+                element.module5Q3points, element.module5Q3, element.module6Q1points, element.module6Q1, element.module6Q2points, element.module6Q2, element.module6Q3points, element.module6Q3,
+                element.module7Q1points, element.module7Q1, element.module7Q2points, element.module7Q2, element.module7Q3points, element.module7Q3, element.module8Q1points, element.module8Q1,
+                element.module8Q2points, element.module8Q2, element.module8Q3points, element.module8Q3, element.module9Q1points, element.module9Q1, element.module9Q2points, element.module9Q2,
+                element.module9Q3points, element.module9Q3, element.module10Q1points1, element.module10Q1, element.module10Q1points2, element.module10Q2, element.module10Q1points3,
+                element.module10Q3, element.type, element.strand, element.schoolyear);
+        });
+    }
+
+    const db = getDatabase();
+
+    let tableIsEmpty = true;
+
+    function GetAllDataRealTime() {
+        const ref1 = query(ref(db, "users"), orderByChild("username"));
+
+        onValue(ref1, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            // Convert the data to an array and filter it based on the search criteria
+            const dataArray = Object.entries(data).filter(([key, element]) => {
+                const searchValue = element[filterSelect.value].toUpperCase();
+                const inputValue = searchInput.value.toUpperCase();
+                return searchValue.indexOf(inputValue) > -1;
+            }).sort(([, a], [, b]) => a.username.toLowerCase().localeCompare(b.username.toLowerCase()))
+                .map(([key, element]) => ({
+                    ...element,
+                    uid: key // Add the user's UID to the element
+                }));
+
+            // Pass the filtered data to AddAllItemsToTable function
+            AddAllItemsToTable(dataArray);
+            // If the table is still empty, show the "No available users" message
+            if (dataArray.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;">No available users</td></tr>';
+                tableIsEmpty = true;
+            } else {
+                tableIsEmpty = false;
+            }
+        }, {
+            error: (error) => {
+                console.error("Failed to fetch data", error);
+            }
+        });
+    }
+
+    window.onload = GetAllDataRealTime;
+
+
+    auth.onAuthStateChanged(user => {
+
+        const dbRef = database;
+        const uid = user.uid;
+        const que = ref(database, "users/" + uid + "/type");
+        onValue(que, (snapshot) => {
+            var shit = snapshot.val();
+            console.log(shit);
+            {
+                if (shit != "Admin" && shit != "Teacher") {
+                    auth.signOut();
+                }
+                if (shit == "Teacher") {
+                    alert("Oopsss Unauthorized User!!!");
+                    if (window.history.length <= 1) {
+                        window.location.href = "home.html";
+                    } else {
+                        window.history.back();
+                    }
+                }
+            }
+        });
+
+        const currentUserRef = ref(database, 'users/' + uid);
+
+        // Attach a listener to the current user's node in the database
+        onValue(currentUserRef, (snapshot) => {
+            // Get the value of the node
+            const value = snapshot.val();
+
+            // Check if the value is null
+            if (value === null) {
+                // If the value is null, delete the current user's account
+                auth.currentUser.delete()
+                    .then(function () {
+                        console.log('User account deleted');
+                    })
+                    .catch(function (error) {
+                        console.error('Error deleting user account:', error);
+                    });
+            }
+        });
+
+    })
+
+    document.getElementById("register").addEventListener('click', function () {
+
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var username = document.getElementById('username').value;
+        var firstname = document.getElementById('firstname').value;
+        var lastname = document.getElementById('lastname').value;
+        var strand = document.getElementById('strand').value;
+        var section = document.getElementById('section').value;
+        var schoolyear = document.getElementById('schoolyear').value;
+        var school = document.getElementById('school').value;
+        var room = document.getElementById('room').value;
+        var usertype = document.getElementById('usertype').value;
+
+        // Check if school and user type are selected
+        if (school === "" || email === "" || password === "" || username === "" || firstname === "" || lastname === "" ||
+            strand === "" || section === "" || schoolyear === "" || usertype === "") {
+            alert("Please fill out the fields!");
+            return;
+        }
+
+
+        createUserWithEmailAndPassword(auths, email, password, username)
+            .then((userCredential) => {
+                // Signed in
+                console.log("User created successfully with email:", email);
+                const user = userCredential.user;
+                console.log("User UID:", user.uid);
+
+                // Get a reference to the users node in the database
+                const usersRef = ref(databases, 'users');
+
+                // Create the user data object
+                const userData = {
+                    username: username,
+                    firstname: firstname,
+                    lastname: lastname,
+                    strand: strand,
+                    school: school,
+                    schoolyear: schoolyear,
+                    section: section,
+                    type: usertype,
+                    totalpoints: 0,
+                    totalstar: 0,
+                    module1Q1: 0,
+                    module1Q2: 0,
+                    module1Q3: 0,
+                    module2Q1: 0,
+                    module2Q2: 0,
+                    module2Q3: 0,
+                    module3Q1: 0,
+                    module3Q2: 0,
+                    module3Q3: 0,
+                    module4Q1: 0,
+                    module4Q2: 0,
+                    module4Q3: 0,
+                    module5Q1: 0,
+                    module5Q2: 0,
+                    module5Q3: 0,
+                    module6Q1: 0,
+                    module6Q2: 0,
+                    module6Q3: 0,
+                    module7Q1: 0,
+                    module7Q2: 0,
+                    module7Q3: 0,
+                    module8Q1: 0,
+                    module8Q2: 0,
+                    module8Q3: 0,
+                    module9Q1: 0,
+                    module9Q2: 0,
+                    module9Q3: 0,
+                    module10Q1: 0,
+                    module10Q2: 0,
+                    module10Q3: 0,
+                    module1Q1points: 0,
+                    module1Q2points: 0,
+                    module1Q3points: 0,
+                    module2Q1points: 0,
+                    module2Q2points: 0,
+                    module2Q3points: 0,
+                    module3Q1points: 0,
+                    module3Q2points: 0,
+                    module3Q3points: 0,
+                    module4Q1points: 0,
+                    module4Q2points: 0,
+                    module4Q3points: 0,
+                    module5Q1points: 0,
+                    module5Q2points: 0,
+                    module5Q3points: 0,
+                    module6Q1points: 0,
+                    module6Q2points: 0,
+                    module6Q3points: 0,
+                    module7Q1points: 0,
+                    module7Q2points: 0,
+                    module7Q3points: 0,
+                    module8Q1points: 0,
+                    module8Q2points: 0,
+                    module8Q3points: 0,
+                    module9Q1points: 0,
+                    module9Q2points: 0,
+                    module9Q3points: 0,
+                    module10Q1points: 0,
+                    module10Q2points: 0,
+                    module10Q3points: 0,
+                    novicebool: 0,
+                    apprenticebool: 0,
+                    juniorbool: 0,
+                    intermidiatebool: 0,
+                    seniorbool: 0,
+                    expertbool: 0,
+                    masterbool: 0,
+                    grandmasterbool: 0,
+                    wizardbool: 0,
+                    room: "",
+                    profileurl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                }
+
+                // Set the user data in the database under the user's UID
+                set(child(usersRef, user.uid), userData)
+                    .then(() => {
+                        console.log("User data saved successfully.");
+                        alert('User created successfully');
+                        document.getElementById('email').value = '';
+                        document.getElementById('password').value = '';
+                        document.getElementById('username').value = '';
+                        document.getElementById('firstname').value = '';
+                        document.getElementById('lastname').value = '';
+                    })
+                    .catch((error) => {
+                        console.error("Error writing user data:", error);
+                        alert(error);
+                    });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Error creating user:", errorMessage);
+                alert(errorMessage);
+            });
+        return false;
+    });
+
+</script>
+
+
+</html>

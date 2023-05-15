@@ -1,0 +1,3281 @@
+<!DOCTYPE html>
+<!-- === Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom Monitor | LiScTech</title>
+    <link rel="shortcut icon" href="..\img\Lisctech.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- ===== CSS ===== -->
+    <style>
+        /* ===== Google Font Import - Poppins ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.4s ease;
+            ;
+        }
+
+
+        /* ===== Colours ===== */
+        :root {
+            --body-color: #E4E9F7;
+            --nav-color: #08ac4c;
+            --side-nav: #010718;
+            --text-color: #FFF;
+            --search-bar: #F2F2F2;
+            --search-text: #010718;
+        }
+
+        body {
+            height: 100vh;
+            background-color: var(--body-color);
+        }
+
+        body.dark {
+            --body-color: #18191A;
+            --nav-color: #242526;
+            --side-nav: #242526;
+            --text-color: #CCC;
+            --search-bar: #242526;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            width: 100%;
+            background-color: var(--nav-color);
+            z-index: 100;
+        }
+
+        body.dark nav {
+            border: 1px solid #393838;
+
+        }
+
+        nav .nav-bar {
+            position: relative;
+            height: 100%;
+            max-width: 1000px;
+            width: 100%;
+            background-color: var(--nav-color);
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .nav-bar .sidebarOpen {
+            color: var(--text-color);
+            font-size: 25px;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        nav .nav-bar .logo a {
+            font-size: 25px;
+            font-weight: 500;
+            margin-left: -150px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .menu .logo-toggle {
+            display: none;
+        }
+
+        .nav-bar .nav-links {
+            margin-right: -400px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links .logout {
+            font-weight: bold;
+            background-color: #0107188c;
+            padding-top: 27%;
+            padding-bottom: 29%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links li {
+            margin: 10px 10px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            position: relative;
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .nav-links li a::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background-color: var(--text-color);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li:hover a::before {
+            opacity: 1;
+        }
+
+        .nav-bar .darkLight-searchBox {
+            margin-right: -150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .darkLight-searchBox .dark-light,
+        .darkLight-searchBox .searchToggle {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+
+        .dark-light i,
+        .searchToggle i {
+            position: absolute;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-light i.sun {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dark-light.active i.sun {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dark-light.active i.moon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle i.cancel {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle.active i.cancel {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .searchToggle.active i.search {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchBox {
+            position: relative;
+        }
+
+        .searchBox .search-field {
+            position: absolute;
+            bottom: -85px;
+            right: 5px;
+            height: 50px;
+            width: 300px;
+            display: flex;
+            align-items: center;
+            background-color: var(--nav-color);
+            padding: 3px;
+            border-radius: 6px;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .searchToggle.active~.search-field {
+            bottom: -74px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .search-field::before {
+            content: '';
+            position: absolute;
+            right: 14px;
+            top: -4px;
+            height: 12px;
+            width: 12px;
+            background-color: var(--nav-color);
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+
+        .search-field input {
+            height: 100%;
+            width: 100%;
+            padding: 0 45px 0 15px;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--search-text);
+            background-color: var(--search-bar);
+        }
+
+        body.dark .search-field input {
+            color: var(--text-color);
+        }
+
+        .search-field i {
+            position: absolute;
+            color: var(--nav-color);
+            right: 15px;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        body.dark .search-field i {
+            color: var(--text-color);
+        }
+
+        .Table {
+            position: relative;
+            text-align: center;
+            border-collapse: collapse;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background-color: #08ac4c;
+            color: white;
+        }
+
+        td {
+            background-color: #f7f7f7;
+        }
+
+        .table-wrapper {
+            padding-top: 80px;
+            display: grid;
+            grid-template-columns: .71fr 1fr;
+            grid-gap: 40px;
+        }
+
+        .single-table-container {
+            margin-left: 20px;
+            overflow: auto;
+        }
+
+        .avail {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 900;
+
+        }
+
+        .right-table-container {
+            margin-right: 20px;
+            margin-top: 18px;
+            overflow: auto;
+        }
+
+        .fixed {
+            position: sticky !important;
+            left: 0;
+            right: 0;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .center {
+            padding-top: 30px;
+            text-align: center;
+            padding-left: 50px;
+            padding-right: 50px;
+
+        }
+
+        .topusers,
+        h1,
+        h2 {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        h1 {
+            padding-top: 80px;
+        }
+
+        #searchinputschool {
+            width: 300px;
+        }
+
+        #search-input {
+            width: 300px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        #filter-select {
+            width: 150px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .searchinputs {
+            width: 150px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .searchtitle {
+            width: 300px;
+            height: 40px;
+            padding: 5px;
+            font-size: 16px;
+            margin-left: 10px;
+            margin-right: 10px;
+
+        }
+
+        #search-button {
+            margin-left: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #search-button:hover {
+            background-color: #555;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            margin-top: 10px;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+
+        #printModal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #printModal-content {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .printButton {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-left: 40px;
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .registration-form {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .user-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            position: relative;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+
+        }
+
+        .button {
+            margin-top: 20px;
+            margin-left: 160px;
+            margin-right: 200px;
+            /* moved from inline style */
+        }
+
+        .button input[type="submit"] {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 25px;
+            cursor: pointer;
+        }
+
+        .button input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        .input_field select {
+            width: 96%;
+            padding: 5px 0;
+            font-size: 18px;
+            color: #333;
+            border: none;
+            outline: none;
+            background: none;
+            border-bottom: 1px solid #999;
+        }
+
+        #openModal {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+
+        }
+
+        #openModal:hover {
+            background-color: #555;
+        }
+
+        #printTable {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #printTable:hover {
+            background-color: #555;
+        }
+
+        .table-buttons {
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .table-buttons button {
+            background-color: #006905;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .table-buttons button:last-child {
+            margin-right: 0;
+        }
+
+        .table-buttons button:hover {
+            background-color: #555;
+        }
+
+        .table-buttons button.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .room-button {
+            background-color: #ccc;
+            color: #000;
+            padding: 10px;
+            border: none;
+            margin-right: 10px;
+        }
+
+        .room-button.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hideme {
+            display: none;
+        }
+
+        @media (max-width: 790px) {
+            nav .nav-bar .sidebarOpen {
+                display: block;
+            }
+
+            .table-wrapper {
+                display: block;
+                margin-top: 90px;
+                padding: 10px;
+            }
+
+            .single-table-container {
+                display: block;
+                margin: auto;
+                width: 95%;
+            }
+
+            .right-table-container {
+                margin: auto;
+                width: 95%;
+            }
+
+            .room-button {
+                margin-top: 10px;
+                width: 90px;
+                overflow: auto;
+            }
+
+            th {
+                top: 0;
+            }
+
+            #search-input {
+                width: 186px;
+            }
+
+            .searchtitle {
+                margin-left: 0px;
+            }
+
+            .searchinputs {
+                width: 273px;
+            }
+
+            #searchinputschoolyear {
+                width: 305px;
+            }
+
+            #searchinputschool {
+                width: 273px;
+            }
+
+            #search-button {
+                width: 352px;
+                margin-bottom: 15px;
+                margin-left: 0px;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: auto;
+            }
+
+            #printModal-content {
+                width: 70%;
+                margin: auto;
+            }
+
+            nav {
+                z-index: 9999;
+            }
+
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 320px;
+                z-index: 9999;
+                left: -100%;
+                top: 0;
+                padding: 20px;
+                background-color: var(--side-nav);
+                transition: all 0.4s ease;
+            }
+
+            nav.active .menu {
+                left: -0%;
+            }
+
+            nav.active .nav-bar .navLogo a {
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links,
+            li {
+                width: 250px;
+                margin-right: 500px;
+            }
+
+            a {
+                width: 200px;
+            }
+
+            .menu .logo-toggle {
+                display: block;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo-toggle .siderbarClose {
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .nav-bar .nav-links {
+                flex-direction: column;
+                padding-top: 30px;
+            }
+
+            .nav-links li a {
+                display: block;
+                margin-top: 20px;
+                margin-right: 500px;
+            }
+
+            .logo.navLogo {
+                justify-content: center;
+                margin-right: 100px;
+            }
+
+        }
+
+        @media print {
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                margin-bottom: 1em;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                padding: 0.5em;
+                text-align: left;
+            }
+
+            th {
+                background-color: #ddd;
+            }
+
+            @page {
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+
+            #header,
+            #footer {
+                display: none;
+            }
+        }
+    </style>
+
+    <!-- ===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--<title>Responsive Navigation Menu Bar</title>-->
+</head>
+
+<body>
+
+
+    <nav>
+        <div class="nav-bar">
+            <i class='bx bx-menu sidebarOpen'></i>
+            <span class="logo navLogo" style="display: flex; align-items: center;">
+                <img src="..\img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
+                <a href="home.html" style="margin-left: 10px;">LiScTech</a>
+             </span>
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="home.html">LiScTech</a></span>
+                    <i class='bx bx-x siderbarClose'></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="home.html">Home</a></li>
+                    <li style="background-color: #089442; padding: 22px; border-radius: 10px;"><a
+                            href="monitor.html">Monitor</a></li>
+                    <li id="users-link"><a href="users.html">Users</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="" id="logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+
+            </div>
+    </nav>
+
+    <div class="table-wrapper">
+        <div class="single-table-container">
+            <h3 class="avail">Available Users</h3>
+            <div class="search-container" id="search-container">
+                <input type="text" id="search-input" placeholder="Search...">
+                <select id="filter-select">
+                    <option value="firstname">Firstname</option>
+                    <option value="lastname">Lastname</option>
+                    <option value="username">Username</option>
+                </select>
+                <span class="searchtitle" id="filter-select2" value="strand">Strand</span>
+                <select class="searchinputs" id="searchinputstrand">
+                    <option value="">All</option>
+                    <option value="GAS">GAS</option>
+                    <option value="HUMMS">HUMMS</option>
+                    <option value="STEM">STEM</option>
+                    <option value="ABM">ABM</option>
+                    <option value="TVL">TVL</option>
+                </select>
+            </div>
+            <div>
+                <span style="margin-left: 0px;" class="searchtitle" id="filter-select3" value="schoolyear">S.Y</span>
+                <select class="searchinputs" id="searchinputschoolyear">
+                    <option value="">All</option>
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026">2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                    <option value="2027-2028">2027-2028</option>
+                    <option value="2028-2029">2028-2029</option>
+                    <option value="2029-2030">2029-2030</option>
+                    <option value="2030-2031">2030-2031</option>
+                </select>
+                <span class="searchtitle" id="filter-select4" value="school">School</span>
+                <select class="searchinputs" id="searchinputschool">
+                    <option value="">All</option>
+                    <option value="Bucal Integrated NHS">Bucal Integrated NHS</option>
+                    <option value="Naic Integrated NHS">Naic Integrated NHS</option>
+                    <option value="Naic Coastal Integrated NHS">Naic Coastal Integrated NHS</option>
+                    <option value="Naic Senior HS Stand-Alone">Naic Senior HS Stand-Alone</option>
+                    <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
+                    <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science School</option>
+                    <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+                </select>
+                <button id="search-button">Search</button>
+            </div>
+            <div style="overflow-x: auto; overflow-y: auto; height: 680px;">
+                <table id="myTable" class="Table" style="table-layout: fixed; width: 725px;">
+                    <thead>
+                        <tr>
+                            <th style="position: sticky; left: 0; z-index: 999; width: 50px;">
+                                No.</th>
+                            <th style="width: 100px;"><img src="" id="image" width="" height="">Profile</th>
+                            <th class="hideme" style="width: 100px;">User ID</th>
+                            <th style="width: 150px;">Username</th>
+                            <th style="width: 150px;">Firstname</th>
+                            <th style="width: 150px;">Lastname</th>
+                            <th style="width: 75px;">Strand</th>
+                            <th style="width: 75px;">Section</th>
+                            <th style="width: 75px;">S.Y</th>
+                            <th style="width: 75px;">School</th>
+                            <th style="position: sticky; right: 0; z-index: 999; width: 75px;">
+                                Add</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr>
+                            <td colspan="10" style="text-align:center;">No available users</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="right-table-container">
+            <div class="table-buttons">
+                <button onclick="showTable(1)" class="room-button active">Room 1</button>
+                <button onclick="showTable(2)" class="room-button">Room 2</button>
+                <button onclick="showTable(3)" class="room-button">Room 3</button>
+                <button onclick="showTable(4)" class="room-button">Room 4</button>
+                <button onclick="showTable(5)" class="room-button">Room 5</button>
+            </div>
+            <div>
+                <button id="openModal">Create a user</button> <button id="printTable">Print</button>
+            </div>
+
+            <div style="overflow-x: auto; overflow-y: auto; width: 100%; height: 707px;">
+                <table id="table1" class="Table" style="display:none;">
+                    <thead>
+                        <th style="position: sticky; left: 0; z-index: 999; width: 50px;">Room
+                            Rank
+                            No.</th>
+                        <th class="hideme2"><img src="" id="image" width="" height="">Profile</th>
+                        <th class="hideme">User ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Strand</th>
+                        <th>Section</th>
+                        <th>S.Y</th>
+                        <th>School</th>
+                        <th>Room Code</th>
+                        <th style="position: sticky; right: 85px; z-index: 999; width: 50px;">
+                            Total
+                            Points</th>
+                        <th>Total Star</th>
+                        <th class="hideme2" style="position: sticky; right: 0; z-index: 999; width: 50px; ">
+                            Remove
+                        </th>
+                    </thead>
+                    <tbody id="tbody1">
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available in Room 1 <button
+                                    id="create-room-1">Create Room 1</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <table id="table2" class="Table" style="display:none;  height: 640px;">
+                    <thead>
+                        <th style="position: sticky; left: 0; z-index: 999; width: 50px; ">Room
+                            Rank
+                            No.</th>
+                        <th class="hideme2"><img src="" id="image" width="" height="">Profile</th>
+                        <th class="hideme">User ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Strand</th>
+                        <th>Section</th>
+                        <th>S.Y</th>
+                        <th>School</th>
+                        <th>Room Code</th>
+                        <th style="position: sticky; right: 85px; z-index: 999; width: 50px;">
+                            Total
+                            Points</th>
+                        <th>Total Star</th>
+                        <th class="hideme2" style="position: sticky; right: 0; z-index: 999; width: 50px;">
+                            Remove
+                        </th>
+                    </thead>
+                    <tbody id="tbody2">
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available in Room 2 <button
+                                    id="create-room-2">Create Room 2</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <table id="table3" class="Table" style="display:none;  height: 640px;">
+                    <thead>
+                        <th style="position: sticky; left: 0; z-index: 999; width: 50px;">Room
+                            Rank
+                            No.</th>
+                        <th class="hideme2"><img src="" id="image" width="" height="">Profile</th>
+                        <th class="hideme">User ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Strand</th>
+                        <th>Section</th>
+                        <th>S.Y</th>
+                        <th>School</th>
+                        <th>Room Code</th>
+                        <th style="position: sticky; right: 85px; z-index: 999; width: 50px;">
+                            Total
+                            Points</th>
+                        <th>Total Star</th>
+                        <th class="hideme2" style="position: sticky; right: 0; z-index: 999; width: 50px;">
+                            Remove
+                        </th>
+                    </thead>
+                    <tbody id="tbody3">
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available in Room 3<button
+                                    id="create-room-3">Create Room 3</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table id="table4" class="Table" style="display:none;  height: 640px;">
+                    <thead>
+                        <th style="position: sticky; left: 0; z-index: 999; width: 50px;">Room
+                            Rank
+                            No.</th>
+                        <th class="hideme2"><img src="" id="image" width="" height="">Profile</th>
+                        <th class="hideme">User ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Strand</th>
+                        <th>Section</th>
+                        <th>S.Y</th>
+                        <th>School</th>
+                        <th>Room Code</th>
+                        <th style="position: sticky; right: 85px; z-index: 999; width: 50px;">
+                            Total
+                            Points</th>
+                        <th>Total Star</th>
+                        <th class="hideme2" style="position: sticky; right: 0; z-index: 999; width: 50px;">
+                            Remove
+                        </th>
+                    </thead>
+                    <tbody id="tbody4">
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available in Room 4<button
+                                    id="create-room-4">Create Room 4</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table id="table5" class="Table" style="display:none; height: 640px;">
+                    <thead>
+                        <th style="position: sticky; left: 0; z-index: 999; width: 50px;">Room
+                            Rank
+                            No.</th>
+                        <th class="hideme2"><img src="" id="image" width="" height="">Profile</th>
+                        <th class="hideme">User ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Strand</th>
+                        <th>Section</th>
+                        <th>S.Y</th>
+                        <th>School</th>
+                        <th>Room Code</th>
+                        <th style="position: sticky; right: 85px; z-index: 999; width: 50px;">
+                            Total
+                            Points</th>
+                        <th>Total Star</th>
+                        <th class="hideme2" style="position: sticky; right: 0; z-index: 999; width: 50px;">
+                            Remove
+                        </th>
+                    </thead>
+                    <tbody id="tbody5">
+                        <tr>
+                            <td colspan="13" style="text-align:center;">No data available in Room 5<button
+                                    id="create-room-5">Create Room 5</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="userModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form action="#">
+                    <div class="user-details">
+                        <div class="input-box">
+                            <span class="details">Username</span>
+                            <input type="text" id="username" placeholder="Enter your username" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Email</span>
+                            <input type="text" id="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Password</span>
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">First Name</span>
+                            <input type="text" id="firstname" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Last Name</span>
+                            <input type="text" id="lastname" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="input-box hidden">
+                            <span class="details">Room</span>
+                            <input type="text" id="room" placeholder="Room" required>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">Strand</span>
+                            <select id="strand" required>
+                                <option value="">Select your strand</option>
+                                <option value="GAS">GAS</option>
+                                <option value="HUMMS">HUMMS</option>
+                                <option value="STEM">STEM</option>
+                                <option value="ABM">ABM</option>
+                                <option value="TVL">TVL</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Section</span>
+                            <input type="text" id="section" placeholder="Enter your section" required>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">School Year</span>
+                            <select id="schoolyear" required>
+                                <option value="">Select your school year</option>
+                                <option value="2023-2024">2023-2024</option>
+                                <option value="2024-2025">2024-2025</option>
+                                <option value="2025-2026">2025-2026</option>
+                                <option value="2026-2027">2026-2027</option>
+                                <option value="2027-2028">2027-2028</option>
+                                <option value="2028-2029">2028-2029</option>
+                                <option value="2029-2030">2029-2030</option>
+                                <option value="2030-2031">2030-2031</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">School</span>
+                            <select id="school" required>
+                                <option value="">Select your school</option>
+                                <option value="Bucal Integrated NHS">Bucal Integrated NHS</option>
+                                <option value="Naic Integrated NHS">Naic Integrated NHS</option>
+                                <option value="Naic Coastal Integrated NHS">Naic Coastal Integrated NHS</option>
+                                <option value="Naic Senior HS Stand-Alone">Naic Senior HS Stand-Alone</option>
+                                <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
+                                <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science
+                                    School
+                                </option>
+                                <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <span class="type-title hidden">User type</span>
+                        <div class="input_field select_option hidden">
+                            <select id="usertype">
+                                <option>Select user type</option>
+                                <option value="Student">Student</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                            <div class="select_arrow"></div>
+                        </div>
+                        <div class="button" id="register">
+                            <input type="submit" value="Register">
+                        </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div id="printModal" class="modal">
+        <div id="printModal-content" class="modal-content">
+            <span class="close">&times;</span>
+
+            <button class="printButton" id="printExcel">Excel/Sheet</button>
+            <button class="printButton" id="printPdf">Pdf/Word</button>
+        </div>
+    </div>
+
+
+
+
+    <script>
+
+        const body = document.querySelector("body"),
+            nav = document.querySelector("nav"),
+            modeToggle = document.querySelector(".dark-light"),
+            searchToggle = document.querySelector(".searchToggle"),
+            sidebarOpen = document.querySelector(".sidebarOpen"),
+            siderbarClose = document.querySelector(".siderbarClose");
+        const menu = document.querySelector('#search-input');
+        const menu2 = document.querySelector('#filter-select');
+
+
+
+
+        //   js code to toggle sidebar
+        sidebarOpen.addEventListener("click", () => {
+            nav.classList.add("active");
+            menu.style.zIndex = "100";
+            menu2.style.zIndex = "100";
+        });
+
+        body.addEventListener("click", e => {
+            let clickedElm = e.target;
+
+            if (!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")) {
+                nav.classList.remove("active");
+                menu.style.zIndex = "9000";
+                menu2.style.zIndex = "9000";
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            // Code to be executed when the window is scrolled
+            menu.style.zIndex = "9000";
+            menu2.style.zIndex = "9000";
+        });
+
+        function showTable(tableNum) {
+            // hide all tables
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById("table" + i).style.display = "none";
+            }
+            // show the selected table
+            document.getElementById("table" + tableNum).style.display = "block";
+        }
+
+        // Set the default active button on page load
+        document.querySelector('.room-button').classList.add('active');
+
+
+        // Get all the room buttons
+        const roomButtons = document.querySelectorAll('.room-button');
+
+        // Add click event listener to each button
+        roomButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove the active class from all buttons
+                roomButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Add the active class to the clicked button
+                button.classList.add('active');
+            });
+        });
+
+        window.onload = function () {
+            var table1 = document.getElementById("myTable");
+            document.getElementById('table1').style.display = 'block';
+            table1.style.display = "block";
+        };
+
+        // Get the modal
+        const modal = document.getElementById("userModal");
+
+        // Get the button that opens the modal
+        const btn = document.getElementById("openModal");
+
+        // Get the <span> element that closes the modal
+        const span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function () {
+            modal.style.display = "block";
+        };
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+    import {
+        getDatabase, set, update, ref, child, onValue, get, orderByKey,
+        query, limitToFirst, limitToLast, orderByChild,
+        startAt, startAfter, endAt, endBefore, equalTo
+    } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    const firebaseConfigs = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    const apps = initializeApp(firebaseConfigs, "Secondary");
+    const auths = getAuth(apps);
+    const databases = getDatabase(apps);
+    console.log(app);
+
+
+    //user auth
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User logged in:', user);
+            const uid = user.uid;
+            console.log("Sign-in provider: " + user.providerId);
+            console.log("  Provider-specific UID: " + user.uid);
+            console.log("  Name: " + user.displayName);
+            console.log("  Email: " + user.email);
+            console.log("  Photo URL: " + user.photoURL);
+
+            // Get a reference to the current user's node in the database
+            const currentUserRef = ref(database, 'users/' + uid);
+
+            // Attach a listener to the current user's node in the database
+            onValue(currentUserRef, snapshot => {
+                // Get the value of the node
+                const currentUserRef = snapshot.val();
+
+                // Check if the value is null
+                if (currentUserRef === null) {
+                    // If the value is null, delete the current user's account
+                    auth.currentUser.delete()
+                        .then(() => {
+                            console.log('User account deleted');
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user account:', error);
+                        });
+                }
+            });
+
+            // Get the user's ID token
+            user.getIdToken().then(idToken => {
+                // Use the user's ID token to authenticate requests to Firebase services
+                // ...
+            }).catch(error => {
+                // Failed to get the user's ID token
+                console.error('Error getting user ID token:', error);
+            });
+
+        } else {
+            console.log('User logged out');
+        }
+    });
+
+    //----- Logout code start	  
+    document.getElementById("logout").addEventListener("click", function () {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log('Sign-out successful.');
+            alert('Sign-out successful.');
+            window.location = "index.html";
+        }).catch((error) => {
+            // An error happened.
+            console.log('An error happened.');
+        });
+    });
+    //----- End
+
+    const usersLink = $('#users-link');
+
+    function checkAuth(user) {
+        const dbRef = database;
+        const uid = user.uid;
+
+        const que = ref(database, "users/" + uid + "/type");
+
+        onValue(que, (snapshot) => {
+            const userType = snapshot.val();
+            console.log(userType);
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', userType);
+
+            // Retrieve user type from localStorage
+            const storedUserType = localStorage.getItem('userType');
+
+            if (storedUserType !== "Admin" && storedUserType !== "Teacher") {
+                alert("Unauthorized User!!!");
+                auth.signOut();
+                window.location = "index.html";
+            } else if (storedUserType == "Teacher") {
+                $('#users-link').hide();
+            }
+            else if (storedUserType == "Admin") {
+                $('#users-link').show();
+            }
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', storedUserType);
+
+            GetAllDataRealTime();
+            GetAllDataRealTime2();
+            GetAllDataRealTime3();
+            GetAllDataRealTime4();
+            GetAllDataRealTime5();
+            GetAllDataRealTime6();
+
+        });
+    }
+
+
+
+    var createRoom2Btn = document.getElementById('create-room-2');
+    const room2btn = $('#create-room-2');
+
+
+    // Call checkAuth when auth state changes
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            checkAuth(user);
+            const uid = user.uid;
+            const room1Ref = ref(database, "users/" + uid + "/room1");
+            onValue(room1Ref, (snapshot) => {
+                if (snapshot.exists() && snapshot.val() !== "") {
+                    $('#create-room-1').hide();
+                } else {
+                    $('#create-room-1').show();
+                }
+            });
+            const room2Ref = ref(database, "users/" + uid + "/room2");
+            onValue(room2Ref, (snapshot) => {
+                if (snapshot.exists() && snapshot.val() !== "") {
+                    $('#create-room-2').hide();
+                } else {
+                    $('#create-room-2').show();
+                }
+            });
+
+        } else {
+            // Redirect to login page if user is not signed in
+            window.location = "index.html";
+        }
+    });
+
+    $(document).ready(function () {
+        $('#users-link, #create-room-1, #create-room-2, #create-room-3').hide();
+    });
+
+
+
+    createRoom2Btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var uid = auth.currentUser.uid;
+        var usersRef = ref(database, 'users');
+        // Ask if the user wants to create Room 2
+        var createRoom2 = confirm("Do you want to create Room 2?");
+        if (createRoom2) {
+            const room2Ref = query(ref(database, 'users'), orderByChild('room2'));
+            get(room2Ref).then(function (snapshot) {
+                var exists = false;
+                snapshot.forEach(function (childSnapshot) {
+                    if (childSnapshot.val().room2) { // check if room2 is not null
+                        if (childSnapshot.val().room2 === room2) {
+                            exists = true;
+                        }
+                    }
+                });
+                if (exists) {
+                    alert("Room code already exists. Please try again.");
+                } else {
+                    var room2 = generateRandomCode(); // Generate a random code for room2
+                    update(ref(database, 'users/' + uid), {
+                        room2: room2,
+                    });
+                    alert("Room 2 successfully created with code " + room2);
+                }
+            });
+        } else {
+            alert("Room 2 was not created.");
+        }
+    });
+
+    function generateRandomCode() {
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var code = "";
+        for (var i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return code;
+    }
+
+    var rankno = 0;
+    var globalrank = 0;
+    var tbody = document.getElementById("tbody");
+    var tbody1 = document.getElementById("tbody1");
+    var tbody2 = document.getElementById("tbody2");
+    var tbody3 = document.getElementById("tbody3");
+    var tbody4 = document.getElementById("tbody4");
+    var tbody5 = document.getElementById("tbody5");
+
+    var img = document.getElementById("image");
+    const filterSelect = document.getElementById("filter-select");
+    var size = 40;
+
+    let tableIsEmpty = true;
+
+    function SearchTable() {
+        console.log("Starting SearchTable function");
+
+        const filterValue = filterSelect.value;
+        const filterValue2 = "strand";
+        const filterValue3 = "schoolyear";
+        const filterValue4 = "school";
+
+        const inputValue = searchInput.value.trim().replace(/[^a-zA-Z0-9\s]/g, '');
+        const inputValue2 = searchinputstrand.value || "";
+        const inputValue3 = searchinputschoolyear.value || "";
+        const inputValue4 = searchinputschool.value || "";
+
+        const dbRef = ref(database, "users");
+        let queryRef = dbRef;
+
+        if (filterValue) {
+            queryRef = query(queryRef, orderByChild(filterValue));
+        }
+        if (filterValue2) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue2));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue2);
+            }
+        }
+        if (filterValue3) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue3));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue3);
+            }
+        }
+        if (filterValue4) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue4));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue4);
+            }
+        }
+
+        console.log("queryRef:", queryRef);
+
+        get(queryRef)
+            .then((snapshot) => {
+                const data = snapshot.val() || {};
+
+                const dataArray = Object.entries(data)
+                    .filter(([key, value]) => {
+                        const fields = [filterValue, filterValue2, filterValue3, filterValue4];
+                        const inputValues = [inputValue, inputValue2, inputValue3, inputValue4];
+
+                        const matches = fields.map((field, index) => {
+                            const fieldValue = value[field];
+                            const inputValue = inputValues[index];
+                            if (typeof fieldValue === "number") {
+                                return fieldValue.toString().includes(inputValue);
+                            } else {
+                                return fieldValue && fieldValue.toUpperCase().includes(inputValue.toUpperCase());
+                            }
+                        });
+                        return matches.every((match) => match);
+                    })
+                    .filter(([key, value]) => value.type === "Student" && (!value.room || value.room === ""))
+                    .map(([key, value]) => ({
+                        ...value,
+                        uid: key,
+                    }))
+                    .sort((a, b) => {
+                        if (typeof a[filterValue] === "number") {
+                            return b[filterValue] - a[filterValue];
+                        } else {
+                            return a[filterValue]
+                                .toLowerCase()
+                                .localeCompare(b[filterValue].toLowerCase());
+                        }
+                    });
+                AddAllItemsToTable(dataArray);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch data", error);
+            });
+    }
+
+    const searchButton = document.getElementById("search-button");
+    searchButton.addEventListener("click", SearchTable);
+
+    const searchInput = document.getElementById("search-input");
+    searchInput.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            SearchTable();
+        }
+    });
+
+    function AddItemToTable(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = '<button class="add-btn" data-username="' + useruid + '">Add to Room</button>';
+        td11.classList.add("fixed");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+
+        tbody.appendChild(trow);
+
+        const addButton = trow.querySelector('.add-btn');
+        addButton.addEventListener('click', () => {
+            AddUser(useruid);
+        });
+    }
+
+
+    function AddUser(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef)
+            .then((snapshot) => {
+                const userData = snapshot.val();
+                if (!userData) {
+                    console.error(`User ${useruid} not found`);
+                    return;
+                }
+
+                // Check if the rooms have data
+                const currentUser = auth.currentUser;
+                if (!currentUser) {
+                    console.error(`No authenticated user`);
+                    return;
+                }
+                const roomsRef = ref(db, `users/${currentUser.uid}`);
+                get(roomsRef)
+                    .then((roomsSnapshot) => {
+                        const roomsData = roomsSnapshot.val();
+                        const availableRooms = [];
+                        for (const roomName in roomsData) {
+                            if (roomName.startsWith("room") && roomsData[roomName]) {
+                                availableRooms.push(roomsData[roomName]);
+                            }
+                        }
+
+                        // Prompt the user to choose a room
+                        if (availableRooms.length === 0) {
+                            alert("No available rooms, create a room first!");
+                            return;
+                        } else if (availableRooms.length === 1) {
+                            const roomName = availableRooms[0];
+                            const confirmed = confirm(`Join ${roomName}?`);
+                            if (!confirmed) {
+                                return;
+                            }
+                            const chosenRoom = roomName;
+                            // Update the user's data in the database
+                            update(userRef, {
+                                room: chosenRoom,
+                            })
+                                .then(() => {
+                                    console.log(`User ${useruid} updated successfully`);
+
+                                })
+                                .catch((error) => {
+                                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                                });
+                            return;
+                        }
+                        const choices = availableRooms.map((roomName, i) => `${i + 1}. ${roomName}`);
+                        const promptMessage = `Choose a room:\n${choices.join("\n")}`;
+                        const chosenRoomIndex = parseInt(prompt(promptMessage));
+                        if (isNaN(chosenRoomIndex) || chosenRoomIndex < 1 || chosenRoomIndex > availableRooms.length) {
+                            alert(`Invalid choice`);
+                            return;
+                        }
+                        const chosenRoom = availableRooms[chosenRoomIndex - 1];
+
+                        // Update the user's data in the database
+                        update(userRef, {
+                            room: chosenRoom,
+                        })
+                            .then(() => {
+                                console.log(`User ${useruid} updated successfully`);
+                            })
+                            .catch((error) => {
+                                console.error(`Failed to update user ${useruid}: ${error.message}`);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error(`Failed to fetch room data: ${error.message}`);
+                    });
+            })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddUser2(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef)
+            .then((snapshot) => {
+                const userData = snapshot.val();
+                if (!userData) {
+                    console.error(`User ${useruid} not found`);
+                    return;
+                }
+
+                // Check if the rooms have data
+                const currentUser = auth.currentUser;
+                if (!currentUser) {
+                    console.error(`No authenticated user`);
+                    return;
+                }
+                const roomsRef = ref(db, `users/${currentUser.uid}`);
+                get(roomsRef)
+                    .then((roomsSnapshot) => {
+                        const roomsData = roomsSnapshot.val();
+                        const availableRooms = [];
+                        for (const roomName in roomsData) {
+                            if (roomName.startsWith("room") && roomsData[roomName]) {
+                                availableRooms.push(roomsData[roomName]);
+                            }
+                        }
+
+                        // Prompt the user to choose a room
+                        if (availableRooms.length === 0) {
+                            alert("No available rooms, create a room first!");
+                            return;
+                        } else if (availableRooms.length === 1) {
+                            const roomName = availableRooms[0];
+                            const confirmed = confirm(`Join ${roomName}?`);
+                            if (!confirmed) {
+                                return;
+                            }
+                            const chosenRoom = roomName;
+                            // Update the user's data in the database
+                            update(userRef, {
+                                room: chosenRoom,
+                            })
+                                .then(() => {
+                                    console.log(`User ${useruid} updated successfully`);
+
+                                })
+                                .catch((error) => {
+                                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                                });
+                            return;
+                        }
+                        const choices = availableRooms.map((roomName, i) => `${i + 1}. ${roomName}`);
+                        const promptMessage = `Choose a room:\n${choices.join("\n")}`;
+                        const chosenRoomIndex = parseInt(prompt(promptMessage));
+                        if (isNaN(chosenRoomIndex) || chosenRoomIndex < 1 || chosenRoomIndex > availableRooms.length) {
+                            return;
+                        }
+                        const chosenRoom = availableRooms[chosenRoomIndex - 1];
+
+                        // Update the user's data in the database
+                        update(userRef, {
+                            room: chosenRoom,
+                        })
+                            .then(() => {
+                                console.log(`User ${useruid} updated successfully`);
+                            })
+                            .catch((error) => {
+                                console.error(`Failed to update user ${useruid}: ${error.message}`);
+                            });
+                    })
+                    .catch((error) => {
+                        console.error(`Failed to fetch room data: ${error.message}`);
+                    });
+            })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+
+
+    function AddAllItemsToTable(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTable(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section);
+        });
+
+    }
+
+    const db = getDatabase();
+
+
+    function GetAllDataRealTime() {
+        const ref1 = query(ref(db, "users"), orderByChild("type"), equalTo("Student"));
+
+        onValue(ref1, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            // Convert the data to an array and filter it based on the search criteria
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    const searchValue = element[filterSelect.value].toUpperCase();
+                    const inputValue = searchInput.value.toUpperCase();
+                    return searchValue.indexOf(inputValue) > -1;
+                })
+                .filter(([key, element]) => {
+                    return !element.room; // Only include elements where room is empty or null
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints)
+                .map(([key, element]) => ({
+                    ...element,
+                    uid: key // Add the user's UID to the element
+                }));
+
+            // Update the table with the filtered data
+            AddAllItemsToTable(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+            if (TheUsers.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">No available users</td></tr>';
+                tableIsEmpty = true;
+            } else {
+                tableIsEmpty = false;
+            }
+        }, {
+            error: (error) => {
+                console.error("Failed to fetch data", error);
+            }
+        });
+    }
+
+    function RemoveUser(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Prompt the user to confirm deletion
+            const confirmed = confirm("Are you sure you want to remove this user?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Update the user's data in the database
+            update(userRef, {
+                room: "",
+            })
+                .then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+
+                })
+                .catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+        })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddItemToTableV2(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section, room, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+        let td12 = document.createElement("td");
+        let td13 = document.createElement("td");
+        let td14 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td2.classList.add("hideme2");
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = room || '';
+        td12.innerHTML = totalpoints.toFixed(2);
+        td12.classList.add("fixed");
+        td12.style.position = "sticky";
+        td12.style.right = "85px";
+        td13.innerHTML = totalstar;
+        td14.innerHTML = '<button class="remove-btn" data-username="' + useruid + '">Remove to Room</button>';
+        td14.classList.add("fixed");
+        td14.classList.add("hideme2");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        trow.appendChild(td12);
+        trow.appendChild(td13);
+        trow.appendChild(td14);
+
+        tbody1.appendChild(trow);
+
+        const removeButton = trow.querySelector('.remove-btn');
+        removeButton.addEventListener('click', () => {
+            RemoveUser(useruid);
+        });
+    }
+
+    function AddAllItemsToTableV2(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody1');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTableV2(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section, element.room, element.totalpoints, element.totalstar);
+        });
+
+    }
+
+    let tableIsEmpty2 = true;
+
+    function GetAllDataRealTime2() {
+        const userRef = ref(db, "users");
+        const uid = auth.currentUser.uid;
+        let room1Value;
+
+        // Get the value of "room1" from the currently logged in user data
+        const userQuery = query(child(userRef, uid));
+        onValue(userQuery, (snapshot) => {
+            const userData = snapshot.val();
+            room1Value = userData.room1;
+            console.log(room1Value);
+        });
+
+        const queryRef = query(
+            userRef,
+            orderByChild("totalpoints")
+        );
+
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    return element.room === room1Value && element.room && !element.office; // Only include elements where "room1" is equal to the value of the currently logged in user and "room" is not null or undefined
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints) // Sort the users by total points in descending order
+                .map(([key, element]) => ({ ...element, uid: key })); // Add the user's UID to the element
+
+            // Update the table with the filtered and sorted data
+            AddAllItemsToTableV2(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+
+            if (TheUsers.length === 0) {
+                const userRef = ref(db, "users");
+                const uid = auth.currentUser.uid;
+
+                // Get the value of "room1" from the currently logged in user data
+                const userQuery = query(child(userRef, uid));
+                onValue(userQuery, (snapshot) => {
+                    const userData = snapshot.val();
+                    const room1Value = userData.room1;
+                    console.log(room1Value);
+
+                    if (room1Value) {
+                        tbody1.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 1</td></tr>';
+                    } else {
+                        tbody1.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 1 <button id="create-room-1">Create Room 1</button></td></tr>';
+                    }
+                });
+
+                tableIsEmpty2 = true;
+            } else {
+                tableIsEmpty2 = false;
+            }
+
+
+            // Get the button element and add the click event listener
+            var createRoom1Btn = document.getElementById('create-room-1');
+            if (createRoom1Btn) {
+                // Listen for form submit
+                createRoom1Btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var uid = auth.currentUser.uid;
+                    var usersRef = ref(database, 'users');
+                    var createRoom1 = confirm("Do you want to create Room 1?");
+                    if (createRoom1) {
+                        const room1Ref = query(ref(database, 'users'), orderByChild('room1'));
+                        get(room1Ref).then(function (snapshot) {
+                            var exists = false;
+                            snapshot.forEach(function (childSnapshot) {
+                                if (childSnapshot.val().room1) { // check if room1 is not null
+                                    if (childSnapshot.val().room1 === room1) {
+                                        exists = true;
+                                    }
+                                }
+
+                            });
+                            if (exists) {
+                                alert("Room code already exists. Please try again.");
+                            } else {
+                                var room1 = generateRandomCode(); // Generate a random code for room1
+                                update(ref(database, 'users/' + uid), {
+                                    room1: room1,
+                                });
+                                alert("Room 1 successfully created with code " + room1);
+                            }
+                        });
+
+                    } else {
+                        alert("Room 1 was not created.");
+                    }
+
+                });
+            } else {
+                console.log("create-room-1 button not found");
+            }
+
+        });
+    }
+
+    function RemoveUserV3(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Prompt the user to confirm deletion
+            const confirmed = confirm("Are you sure you want to remove this user in your Room 2?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Update the user's data in the database
+            update(userRef, {
+                room: "",
+            })
+                .then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+                })
+                .catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+        })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddItemToTableV3(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section, room, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+        let td12 = document.createElement("td");
+        let td13 = document.createElement("td");
+        let td14 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td2.classList.add("hideme2");
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = room || '';
+        td12.innerHTML = totalpoints.toFixed(2);
+        td12.classList.add("fixed");
+        td12.style.position = "sticky";
+        td12.style.right = "85px";
+        td13.innerHTML = totalstar;
+        td14.innerHTML = '<button class="remove-btn2" data-username="' + useruid + '">Remove to Room</button>';
+        td14.classList.add("fixed");
+        td14.classList.add("hideme2");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        trow.appendChild(td12);
+        trow.appendChild(td13);
+        trow.appendChild(td14);
+
+        tbody2.appendChild(trow);
+
+        const removeButton = trow.querySelector('.remove-btn2');
+        removeButton.addEventListener('click', () => {
+            RemoveUserV3(useruid);
+        });
+    }
+
+    function AddAllItemsToTableV3(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody2');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTableV3(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section, element.room, element.totalpoints, element.totalstar);
+        });
+
+    }
+
+    let tableIsEmpty3 = true;
+
+    function GetAllDataRealTime3() {
+        const userRef = ref(db, "users");
+        const uid = auth.currentUser.uid;
+        let room2Value;
+
+        // Get the value of "room2" from the currently logged in user data
+        const userQuery = query(child(userRef, uid));
+        onValue(userQuery, (snapshot) => {
+            const userData = snapshot.val();
+            room2Value = userData.room2;
+            console.log(room2Value);
+        });
+
+        const queryRef = query(
+            userRef,
+            orderByChild("totalpoints")
+        );
+
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    return element.room === room2Value && element.room && !element.office; // Only include elements where "room2" is equal to the value of the currently logged in user and "room" is not null or undefined
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints) // Sort the users by total points in descending order
+                .map(([key, element]) => ({ ...element, uid: key })); // Add the user's UID to the element
+
+            // Update the table with the filtered and sorted data
+            AddAllItemsToTableV3(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+
+            if (TheUsers.length === 0) {
+                const userRef = ref(db, "users");
+                const uid = auth.currentUser.uid;
+
+                // Get the value of "room2" from the currently logged in user data
+                const userQuery = query(child(userRef, uid));
+                onValue(userQuery, (snapshot) => {
+                    const userData = snapshot.val();
+                    const room2Value = userData.room2;
+                    console.log(room2Value);
+
+                    if (room2Value) {
+                        tbody2.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 2</td></tr>';
+                    } else {
+                        tbody2.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 2 <button id="create-room-2">Create Room 2</button></td></tr>';
+                    }
+                });
+
+                tableIsEmpty3 = true;
+            } else {
+                tableIsEmpty3 = false;
+            }
+
+
+            // Get the button element and add the click event listener
+            var createRoom2Btn = document.getElementById('create-room-2');
+            if (createRoom2Btn) {
+                // Listen for form submit
+                createRoom2Btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var uid = auth.currentUser.uid;
+                    var usersRef = ref(database, 'users');
+                    var createRoom2 = confirm("Do you want to create Room 2?");
+
+                    if (createRoom2) {
+                        const room1Ref = ref(database, 'users/' + uid + '/room1');
+                        get(room1Ref).then(function (snapshot) {
+                            var userData = snapshot.val();
+                            // Check if room1 is not empty or null
+                            if (!userData) {
+                                alert("Room 1 must be created first.");
+                                return;
+                            }
+                            const room2Ref = query(ref(database, 'users'), orderByChild('room2'));
+                            get(room2Ref).then(function (erSnapshot) {
+                                var exists = false;
+                                erSnapshot.forEach(function (childSnapshot) {
+                                    if (childSnapshot.val().room2) { // check if room2 is not null
+                                        if (childSnapshot.val().room2 === room2) {
+                                            exists = true;
+                                        }
+                                    }
+                                });
+                                if (exists) {
+                                    alert("Room code already exists. Please try again.");
+                                } else {
+                                    var room2 = generateRandomCode(); // Generate a random code for room2
+                                    update(ref(database, 'users/' + uid), {
+                                        room2: room2,
+                                    });
+                                    alert("Room 2 successfully created with code " + room2);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("Room 2 was not created.");
+                    }
+                });
+            } else {
+                console.log("create-room-2 button not found");
+            }
+        });
+    }
+
+    function RemoveUserV4(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Prompt the user to confirm deletion
+            const confirmed = confirm("Are you sure you want to remove this user in your Room 3?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Update the user's data in the database
+            update(userRef, {
+                room: "",
+            })
+                .then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+                })
+                .catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+        })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddItemToTableV4(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section, room, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+        let td12 = document.createElement("td");
+        let td13 = document.createElement("td");
+        let td14 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td2.classList.add("hideme2");
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = room || '';
+        td12.innerHTML = totalpoints.toFixed(2);
+        td12.classList.add("fixed");
+        td12.style.position = "sticky";
+        td12.style.right = "85px";
+        td13.innerHTML = totalstar;
+        td14.innerHTML = '<button class="remove-btn3" data-username="' + useruid + '">Remove to Room</button>';
+        td14.classList.add("fixed");
+        td14.classList.add("hideme2");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        trow.appendChild(td12);
+        trow.appendChild(td13);
+        trow.appendChild(td14);
+
+        tbody3.appendChild(trow);
+
+        const removeButton = trow.querySelector('.remove-btn3');
+        removeButton.addEventListener('click', () => {
+            RemoveUserV4(useruid);
+        });
+    }
+
+    function AddAllItemsToTableV4(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody3');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTableV4(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section, element.room, element.totalpoints, element.totalstar);
+        });
+
+    }
+
+    let tableIsEmpty4 = true;
+
+    function GetAllDataRealTime4() {
+        const userRef = ref(db, "users");
+        const uid = auth.currentUser.uid;
+        let room3Value;
+
+        // Get the value of "room3" from the currently logged in user data
+        const userQuery = query(child(userRef, uid));
+        onValue(userQuery, (snapshot) => {
+            const userData = snapshot.val();
+            room3Value = userData.room3;
+            console.log(room3Value);
+        });
+
+        const queryRef = query(
+            userRef,
+            orderByChild("totalpoints")
+        );
+
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    return element.room === room3Value && element.room && !element.office; // Only include elements where "room3" is equal to the value of the currently logged in user and "room" is not null or undefined
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints) // Sort the users by total points in descending order
+                .map(([key, element]) => ({ ...element, uid: key })); // Add the user's UID to the element
+
+            // Update the table with the filtered and sorted data
+            AddAllItemsToTableV4(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+
+            if (TheUsers.length === 0) {
+                const userRef = ref(db, "users");
+                const uid = auth.currentUser.uid;
+
+                // Get the value of "room3" from the currently logged in user data
+                const userQuery = query(child(userRef, uid));
+                onValue(userQuery, (snapshot) => {
+                    const userData = snapshot.val();
+                    const room3Value = userData.room3;
+                    console.log(room3Value);
+
+                    if (room3Value) {
+                        tbody3.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 3</td></tr>';
+                    } else {
+                        tbody3.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 3 <button id="create-room-3">Create Room 3</button></td></tr>';
+                    }
+                });
+
+                tableIsEmpty4 = true;
+            } else {
+                tableIsEmpty4 = false;
+            }
+
+            // Get the button element and add the click event listener
+            var createRoom3Btn = document.getElementById('create-room-3');
+            if (createRoom3Btn) {
+                // Listen for form submit
+                createRoom3Btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var uid = auth.currentUser.uid;
+                    var usersRef = ref(database, 'users');
+                    var createRoom3 = confirm("Do you want to create Room 3?");
+                    if (createRoom3) {
+                        const room2Ref = ref(database, 'users/' + uid + '/room2');
+                        get(room2Ref).then(function (snapshot) {
+                            var userData = snapshot.val();
+                            // Check if room1 is not empty or null
+                            if (!userData) {
+                                alert("Room 2 must be created first.");
+                                return;
+                            }
+                            const room3Ref = query(ref(database, 'users'), orderByChild('room3'));
+                            get(room3Ref).then(function (erSnapshot) {
+                                var exists = false;
+                                erSnapshot.forEach(function (childSnapshot) {
+                                    if (childSnapshot.val().room3) { // check if room3 is not null
+                                        if (childSnapshot.val().room3 === room3) {
+                                            exists = true;
+                                        }
+                                    }
+                                });
+                                if (exists) {
+                                    alert("Room code already exists. Please try again.");
+                                } else {
+                                    var room3 = generateRandomCode(); // Generate a random code for room2
+                                    update(ref(database, 'users/' + uid), {
+                                        room3: room3,
+                                    });
+                                    alert("Room 3 successfully created with code " + room3);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("Room 3 was not created.");
+                    }
+                });
+            } else {
+                console.log("create-room-3 button not found");
+            }
+
+        });
+    }
+
+    function RemoveUserV5(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Prompt the user to confirm deletion
+            const confirmed = confirm("Are you sure you want to remove this user in your Room 4?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Update the user's data in the database
+            update(userRef, {
+                room: "",
+            })
+                .then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+                })
+                .catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+        })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddItemToTableV5(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section, room, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+        let td12 = document.createElement("td");
+        let td13 = document.createElement("td");
+        let td14 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td2.classList.add("hideme2");
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = room || '';
+        td12.innerHTML = totalpoints.toFixed(2);
+        td12.classList.add("fixed");
+        td12.style.position = "sticky";
+        td12.style.right = "85px";
+        td13.innerHTML = totalstar;
+        td14.innerHTML = '<button class="remove-btn4" data-username="' + useruid + '">Remove to Room</button>';
+        td14.classList.add("fixed");
+        td14.classList.add("hideme2");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        trow.appendChild(td12);
+        trow.appendChild(td13);
+        trow.appendChild(td14);
+
+        tbody4.appendChild(trow);
+
+        const removeButton = trow.querySelector('.remove-btn4');
+        removeButton.addEventListener('click', () => {
+            RemoveUserV5(useruid);
+        });
+    }
+
+    function AddAllItemsToTableV5(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody4');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTableV5(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section, element.room, element.totalpoints, element.totalstar);
+        });
+
+    }
+
+    let tableIsEmpty5 = true;
+
+    function GetAllDataRealTime5() {
+        const userRef = ref(db, "users");
+        const uid = auth.currentUser.uid;
+        let room4Value;
+
+        // Get the value of "room4" from the currently logged in user data
+        const userQuery = query(child(userRef, uid));
+        onValue(userQuery, (snapshot) => {
+            const userData = snapshot.val();
+            room4Value = userData.room4;
+            console.log(room4Value);
+        });
+
+        const queryRef = query(
+            userRef,
+            orderByChild("totalpoints")
+        );
+
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    return element.room === room4Value && element.room && !element.office; // Only include elements where "room4" is equal to the value of the currently logged in user and "room" is not null or undefined
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints) // Sort the users by total points in descending order
+                .map(([key, element]) => ({ ...element, uid: key })); // Add the user's UID to the element
+
+            // Update the table with the filtered and sorted data
+            AddAllItemsToTableV5(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+
+            if (TheUsers.length === 0) {
+                const userRef = ref(db, "users");
+                const uid = auth.currentUser.uid;
+
+                // Get the value of "room4" from the currently logged in user data
+                const userQuery = query(child(userRef, uid));
+                onValue(userQuery, (snapshot) => {
+                    const userData = snapshot.val();
+                    const room4Value = userData.room4;
+                    console.log(room4Value);
+
+                    if (room4Value) {
+                        tbody4.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 4</td></tr>';
+                    } else {
+                        tbody4.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 4 <button id="create-room-4">Create Room 4</button></td></tr>';
+                    }
+                });
+
+                tableIsEmpty5 = true;
+            } else {
+                tableIsEmpty5 = false;
+            }
+
+
+            // Get the button element and add the click event listener
+            var createRoom4Btn = document.getElementById('create-room-4');
+            if (createRoom4Btn) {
+                // Listen for form submit
+                createRoom4Btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var uid = auth.currentUser.uid;
+                    var usersRef = ref(database, 'users');
+                    var createRoom4 = confirm("Do you want to create Room 4?");
+                    if (createRoom4) {
+                        const room3Ref = ref(database, 'users/' + uid + '/room3');
+                        get(room3Ref).then(function (snapshot) {
+                            var userData = snapshot.val();
+                            // Check if room1 is not empty or null
+                            if (!userData) {
+                                alert("Room 3 must be created first.");
+                                return;
+                            }
+                            const room4Ref = query(ref(database, 'users'), orderByChild('room4'));
+                            get(room4Ref).then(function (erSnapshot) {
+                                var exists = false;
+                                erSnapshot.forEach(function (childSnapshot) {
+                                    if (childSnapshot.val().room4) { // check if room4 is not null
+                                        if (childSnapshot.val().room4 === room4) {
+                                            exists = true;
+                                        }
+                                    }
+                                });
+                                if (exists) {
+                                    alert("Room code already exists. Please try again.");
+                                } else {
+                                    var room4 = generateRandomCode(); // Generate a random code for room2
+                                    update(ref(database, 'users/' + uid), {
+                                        room4: room4,
+                                    });
+                                    alert("Room 4 successfully created with code " + room4);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("Room 4 was not created.");
+                    }
+                });
+            } else {
+                console.log("create-room-4 button not found");
+            }
+
+        });
+    }
+
+    function RemoveUserV6(useruid) {
+        const userRef = ref(db, `users/${useruid}`);
+        get(userRef).then((snapshot) => {
+            const userData = snapshot.val();
+            if (!userData) {
+                console.error(`User ${useruid} not found`);
+                return;
+            }
+
+            // Prompt the user to confirm deletion
+            const confirmed = confirm("Are you sure you want to remove this user in your Room 5?");
+
+            if (!confirmed) {
+                return;
+            }
+
+            // Update the user's data in the database
+            update(userRef, {
+                room: "",
+            })
+                .then(() => {
+                    console.log(`User ${useruid} updated successfully`);
+                })
+                .catch((error) => {
+                    console.error(`Failed to update user ${useruid}: ${error.message}`);
+                });
+        })
+            .catch((error) => {
+                console.error(`Failed to fetch user ${useruid}: ${error.message}`);
+            });
+    }
+
+    function AddItemToTableV6(useruid, profile, username, firstname, lastname, strand, schoolyear, school, section, room, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+        let td12 = document.createElement("td");
+        let td13 = document.createElement("td");
+        let td14 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td1.classList.add("fixed");
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td2.classList.add("hideme2");
+        td3.innerHTML = useruid;
+        td3.classList.add("hideme");
+        td4.innerHTML = username;
+        td5.innerHTML = firstname;
+        td6.innerHTML = lastname;
+        td7.innerHTML = strand;
+        td8.innerHTML = section;
+        td9.innerHTML = schoolyear;
+        td10.innerHTML = school;
+        td11.innerHTML = room || '';
+        td12.innerHTML = totalpoints.toFixed(2);
+        td12.classList.add("fixed");
+        td12.style.position = "sticky";
+        td12.style.right = "85px";
+        td13.innerHTML = totalstar;
+        td14.innerHTML = '<button class="remove-btn5" data-username="' + useruid + '">Remove to Room</button>';
+        td14.classList.add("fixed");
+        td14.classList.add("hideme2");
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        trow.appendChild(td12);
+        trow.appendChild(td13);
+        trow.appendChild(td14);
+
+        tbody5.appendChild(trow);
+
+        const removeButton = trow.querySelector('.remove-btn5');
+        removeButton.addEventListener('click', () => {
+            RemoveUserV6(useruid);
+        });
+    }
+
+    function AddAllItemsToTableV6(TheUsers) {
+        rankno = 0;
+        const tableBody = document.getElementById('tbody5');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+
+        // Add each element to the table
+        TheUsers.forEach((element) => {
+            const uid = element.uid;
+            AddItemToTableV6(uid, element.profileurl, element.username, element.firstname, element.lastname, element.strand, element.schoolyear, element.school, element.section, element.room, element.totalpoints, element.totalstar);
+        });
+
+    }
+
+    let tableIsEmpty6 = true;
+
+    function GetAllDataRealTime6() {
+        const userRef = ref(db, "users");
+        const uid = auth.currentUser.uid;
+        let room5Value;
+
+        // Get the value of "room5" from the currently logged in user data
+        const userQuery = query(child(userRef, uid));
+        onValue(userQuery, (snapshot) => {
+            const userData = snapshot.val();
+            room5Value = userData.room5;
+            console.log(room5Value);
+        });
+
+        const queryRef = query(
+            userRef,
+            orderByChild("totalpoints")
+        );
+
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            const TheUsers = Object.entries(data)
+                .filter(([key, element]) => {
+                    return element.room === room5Value && element.room && !element.office; // Only include elements where "room5" is equal to the value of the currently logged in user and "room" is not null or undefined
+                })
+                .sort(([, a], [, b]) => b.totalpoints - a.totalpoints) // Sort the users by total points in descending order
+                .map(([key, element]) => ({ ...element, uid: key })); // Add the user's UID to the element
+
+            // Update the table with the filtered and sorted data
+            AddAllItemsToTableV6(TheUsers);
+
+            // If the table is still empty, show the "No available users" message
+
+            if (TheUsers.length === 0) {
+                const userRef = ref(db, "users");
+                const uid = auth.currentUser.uid;
+
+                // Get the value of "room5" from the currently logged in user data
+                const userQuery = query(child(userRef, uid));
+                onValue(userQuery, (snapshot) => {
+                    const userData = snapshot.val();
+                    const room5Value = userData.room5;
+                    console.log(room5Value);
+
+                    if (room5Value) {
+                        tbody5.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 5</td></tr>';
+                    } else {
+                        tbody5.innerHTML =
+                            '<tr><td colspan="13" style="text-align:center;">No data available in Room 5 <button id="create-room-5">Create Room 5</button></td></tr>';
+                    }
+                });
+
+                tableIsEmpty6 = true;
+            } else {
+                tableIsEmpty6 = false;
+            }
+
+
+            // Get the button element and add the click event listener
+            var createRoom5Btn = document.getElementById('create-room-5');
+            if (createRoom5Btn) {
+                // Listen for form submit
+                createRoom5Btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var uid = auth.currentUser.uid;
+                    var usersRef = ref(database, 'users');
+                    var createRoom5 = confirm("Do you want to create Room 5?");
+                    if (createRoom5) {
+                        const room4Ref = ref(database, 'users/' + uid + '/room4');
+                        get(room4Ref).then(function (snapshot) {
+                            var userData = snapshot.val();
+                            // Check if room4 is not empty or null
+                            if (!userData) {
+                                alert("Room 4 must be created first.");
+                                return;
+                            }
+                            const room5Ref = query(ref(database, 'users'), orderByChild('room5'));
+                            get(room5Ref).then(function (erSnapshot) {
+                                var exists = false;
+                                erSnapshot.forEach(function (childSnapshot) {
+                                    if (childSnapshot.val().room5) { // check if room5 is not null
+                                        if (childSnapshot.val().room5 === room5) {
+                                            exists = true;
+                                        }
+                                    }
+                                });
+                                if (exists) {
+                                    alert("Room code already exists. Please try again.");
+                                } else {
+                                    var room5 = generateRandomCode(); // Generate a random code for room2
+                                    update(ref(database, 'users/' + uid), {
+                                        room5: room5,
+                                    });
+                                    alert("Room 5 successfully created with code " + room5);
+                                }
+                            });
+                        });
+                    } else {
+                        alert("Room 5 was not created.");
+                    }
+                });
+            } else {
+                console.log("create-room-5 button not found");
+            }
+
+        });
+    }
+
+    document.getElementById("register").addEventListener('click', function () {
+
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var username = document.getElementById('username').value;
+        var firstname = document.getElementById('firstname').value;
+        var lastname = document.getElementById('lastname').value;
+        var strand = document.getElementById('strand').value;
+        var section = document.getElementById('section').value;
+        var schoolyear = document.getElementById('schoolyear').value;
+        var school = document.getElementById('school').value;
+        var room = document.getElementById('room').value;
+        var usertype = document.getElementById('usertype').value;
+
+        // Check if school and user type are selected
+        if (school === "" || email === "" || password === "" || username === "" || firstname === "" || lastname === "" ||
+            strand === "" || section === "" || schoolyear === "") {
+            alert("Please fill out the fields!");
+            return;
+        }
+
+        createUserWithEmailAndPassword(auths, email, password, username)
+            .then((userCredential) => {
+                // Signed in
+                console.log("User created successfully with email:", email);
+                const user = userCredential.user;
+                console.log("User UID:", user.uid);
+                set(ref(databases, 'users/' + user.uid), {
+                    username: username,
+                    firstname: firstname,
+                    lastname: lastname,
+                    strand: strand,
+                    section: section,
+                    schoolyear: schoolyear,
+                    school: school,
+                    type: "Student",
+                    totalpoints: 0,
+                    totalstar: 0,
+                    module1Q1: 0,
+                    module1Q2: 0,
+                    module1Q3: 0,
+                    module2Q1: 0,
+                    module2Q2: 0,
+                    module2Q3: 0,
+                    module3Q1: 0,
+                    module3Q2: 0,
+                    module3Q3: 0,
+                    module4Q1: 0,
+                    module4Q2: 0,
+                    module4Q3: 0,
+                    module5Q1: 0,
+                    module5Q2: 0,
+                    module5Q3: 0,
+                    module6Q1: 0,
+                    module6Q2: 0,
+                    module6Q3: 0,
+                    module7Q1: 0,
+                    module7Q2: 0,
+                    module7Q3: 0,
+                    module8Q1: 0,
+                    module8Q2: 0,
+                    module8Q3: 0,
+                    module9Q1: 0,
+                    module9Q2: 0,
+                    module9Q3: 0,
+                    module10Q1: 0,
+                    module10Q2: 0,
+                    module10Q3: 0,
+                    module1Q1points: 0,
+                    module1Q2points: 0,
+                    module1Q3points: 0,
+                    module2Q1points: 0,
+                    module2Q2points: 0,
+                    module2Q3points: 0,
+                    module3Q1points: 0,
+                    module3Q2points: 0,
+                    module3Q3points: 0,
+                    module4Q1points: 0,
+                    module4Q2points: 0,
+                    module4Q3points: 0,
+                    module5Q1points: 0,
+                    module5Q2points: 0,
+                    module5Q3points: 0,
+                    module6Q1points: 0,
+                    module6Q2points: 0,
+                    module6Q3points: 0,
+                    module7Q1points: 0,
+                    module7Q2points: 0,
+                    module7Q3points: 0,
+                    module8Q1points: 0,
+                    module8Q2points: 0,
+                    module8Q3points: 0,
+                    module9Q1points: 0,
+                    module9Q2points: 0,
+                    module9Q3points: 0,
+                    module10Q1points: 0,
+                    module10Q2points: 0,
+                    module10Q3points: 0,
+                    novicebool: 0,
+                    apprenticebool: 0,
+                    juniorbool: 0,
+                    intermidiatebool: 0,
+                    seniorbool: 0,
+                    expertbool: 0,
+                    masterbool: 0,
+                    grandmasterbool: 0,
+                    wizardbool: 0,
+                    profileurl: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+                })
+                    .then(() => {
+                        // Data saved successfully!
+                        console.log("User data saved successfully.");
+                        AddUser2(user.uid);
+                        alert('User created successfully');
+                        document.getElementById('email').value = '';
+                        document.getElementById('password').value = '';
+                        document.getElementById('username').value = '';
+                        document.getElementById('firstname').value = '';
+                        document.getElementById('lastname').value = '';
+                        
+                    })
+                    .catch((error) => {
+                        // The write failed...
+                        console.error("Error writing user data:", error);
+                        alert(error);
+                    });
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.error("Error creating user:", errorMessage);
+                alert(errorMessage);
+            });
+
+        return false;
+    });
+
+    document.getElementById("printExcel").addEventListener('click', function () {
+        // Ask the user to choose a table
+        const tableNumber = prompt('(Excel/Sheet) Choose a table to export (1-5):');
+        if (!tableNumber || isNaN(tableNumber)) {
+            return; // Exit the function if the user clicks 'Cancel' or inputs an invalid value
+        }
+
+        // Create a new workbook
+        const wb = XLSX.utils.book_new();
+
+        // Get the table data as an array
+        const table = document.getElementById(`table${tableNumber}`);
+        const tableData = [];
+        const rows = table.querySelectorAll('tr');
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const rowData = [];
+            const cells = row.querySelectorAll('th:not(.hideme):not(.hideme2), td:not(.hideme):not(.hideme2)');
+
+            for (let j = 0; j < cells.length; j++) {
+                rowData.push(cells[j].innerText);
+            }
+            tableData.push(rowData);
+        }
+
+        // Add the table data to a new worksheet
+        const ws = XLSX.utils.aoa_to_sheet(tableData);
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        // Export the workbook to an Excel file
+        XLSX.writeFile(wb, `table${tableNumber}.xlsx`);
+    });
+
+    function exportTableToExcel(tableId, filename) {
+        const sheetName = 'Sheet1';
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.table_to_sheet(document.getElementById(tableId));
+
+        // Add column headers and cell styles
+        const headerStyle = {
+            font: { bold: true },
+            fill: { fgColor: { rgb: 'DDDDDD' } },
+            alignment: { horizontal: 'center' },
+            border: { top: { style: 'thin' }, bottom: { style: 'thin' } }
+        };
+        XLSX.utils.sheet_add_json(worksheet, [{ A: '', B: 'Name', C: 'Email', D: 'Points' }], { header: ['A', 'B', 'C', 'D'], skipHeader: true, origin: 'A1' });
+        XLSX.utils.sheet_format_cols(worksheet, [{ wch: 10 }, { wch: 30 }, { wch: 30 }, { wch: 10 }]); // set column widths
+        XLSX.utils.sheet_set_range_style(worksheet, 'A1:D1', headerStyle); // apply header style to row 1
+
+        // Add table data and cell styles
+        const dataStyle = {
+            border: { bottom: { style: 'thin' } },
+            alignment: { horizontal: 'center' }
+        };
+        const tableRows = document.getElementById(tableId).querySelectorAll('tbody tr');
+        const tableData = [];
+        tableRows.forEach((row) => {
+            const rowData = [];
+            row.querySelectorAll('td:not(.hideme)').forEach((cell) => {
+                rowData.push(cell.innerText);
+            });
+            tableData.push(rowData);
+        });
+        XLSX.utils.sheet_add_aoa(worksheet, tableData, { origin: 'A2' });
+        XLSX.utils.sheet_set_range_style(worksheet, `A2:D${tableData.length + 1}`, dataStyle); // apply data style to rows 2 to n
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+        XLSX.writeFile(workbook, `${filename}.xlsx`);
+    }
+
+    document.getElementById("printPdf").addEventListener('click', function () {
+        // Ask the user to choose a table
+        const tableNumber = prompt('(Pdf/Word) Choose a table to print (1-5):');
+        if (!tableNumber || isNaN(tableNumber)) {
+            return; // Exit the function if the user clicks 'Cancel' or inputs an invalid value
+        }
+
+        // Open a new window for printing
+        const printWindow = window.open();
+
+        // Clone the table and its contents
+        const clonedTable = document.createElement('table');
+        const originalTable = document.getElementById(`table${tableNumber}`);
+        clonedTable.innerHTML = originalTable.innerHTML;
+
+        // Modify styles for printing
+        clonedTable.style.width = "100%"; // make table take up full width of printed page
+        clonedTable.style.borderCollapse = "collapse";
+        clonedTable.style.border = "1px solid black";
+
+        // Hide the 'hideme' class for th and td elements
+        const hideMeElements = clonedTable.querySelectorAll('.hideme');
+        for (let i = 0; i < hideMeElements.length; i++) {
+            hideMeElements[i].style.display = 'none';
+        }
+
+        const clonedTh = clonedTable.querySelectorAll('th:not(.hideme)');
+        for (let i = 0; i < clonedTh.length; i++) {
+            clonedTh[i].style.border = "1px solid black";
+            clonedTh[i].style.padding = "8px";
+            clonedTh[i].style.position = "static"; // remove position: sticky from headers
+            clonedTh[i].style.backgroundColor = "white";
+        }
+
+        const clonedTd = clonedTable.querySelectorAll('td:not(.hideme)');
+        for (let i = 0; i < clonedTd.length; i++) {
+            clonedTd[i].style.border = "1px solid black";
+            clonedTd[i].style.padding = "8px";
+            clonedTd[i].style.position = "static"; // remove position: sticky from cells
+        }
+
+        const totalPointsCell = clonedTable.querySelector('th:last-child:not(.hideme)');
+        totalPointsCell.style.backgroundColor = "white"; // adjust background color to prevent overlapping
+        totalPointsCell.style.position = "static"; // remove position: sticky from cell
+
+        // Remove "Remove" column header and cells
+        const removeHeader = clonedTable.querySelector('th:last-of-type:not(.hideme)');
+        removeHeader.style.display = 'none';
+        const removeCells = clonedTable.querySelectorAll('td:last-of-type:not(.hideme)');
+        for (let i = 0; i < removeCells.length; i++) {
+            removeCells[i].style.display = 'none';
+        }
+
+
+        // Add the cloned table to the print window document
+        printWindow.document.body.appendChild(clonedTable);
+
+        // Print the document
+        printWindow.print();
+
+        // Close the print window
+        printWindow.close();
+    })
+
+    document.getElementById("printTable").addEventListener('click', function () {
+        // Show the modal
+        const modal = document.querySelector('#printModal');
+        modal.style.display = "block";
+
+        // Handle modal close button
+        const closeBtn = modal.querySelector('.close');
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = "none";
+        });
+
+        // Handle clicks outside of the modal
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    })
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.2/dist/xlsx.full.min.js"></script>
+
+
+</html>

@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<!-- === Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="..\img\Lisctech.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- ===== CSS ===== -->
+    <style>
+        /* ===== Google Font Import - Poppins ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.4s ease;
+            ;
+        }
+
+
+        /* ===== Colours ===== */
+        :root {
+            --body-color: #E4E9F7;
+            --nav-color: #08ac4c;
+            --side-nav: #010718;
+            --text-color: #FFF;
+            --search-bar: #F2F2F2;
+            --search-text: #010718;
+        }
+
+        body {
+            height: 100vh;
+            background-color: var(--body-color);
+        }
+
+        body.dark {
+            --body-color: #18191A;
+            --nav-color: #242526;
+            --side-nav: #242526;
+            --text-color: #CCC;
+            --search-bar: #242526;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            width: 100%;
+            background-color: var(--nav-color);
+            z-index: 100;
+        }
+
+        body.dark nav {
+            border: 1px solid #393838;
+
+        }
+
+        nav .nav-bar {
+            position: relative;
+            height: 100%;
+            max-width: 1000px;
+            width: 100%;
+            background-color: var(--nav-color);
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .nav-bar .sidebarOpen {
+            color: var(--text-color);
+            font-size: 25px;
+            padding: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        nav .nav-bar .logo a {
+            font-size: 25px;
+            font-weight: 500;
+            margin-left: -150px;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .menu .logo-toggle {
+            display: none;
+        }
+
+        .nav-bar .nav-links {
+            margin-right: -400px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links .logout {
+            font-weight: bold;
+            background-color: #0107188c;
+            padding-top: 27%;
+            padding-bottom: 29%;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-bar .nav-links li {
+            margin: 10px 10px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            position: relative;
+            font-size: 17px;
+            font-weight: 400;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .nav-links li a::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            background-color: var(--text-color);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links li:hover a::before {
+            opacity: 1;
+        }
+
+        .nav-bar .darkLight-searchBox {
+            margin-right: -150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .darkLight-searchBox .dark-light,
+        .darkLight-searchBox .searchToggle {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+        }
+
+        .dark-light i,
+        .searchToggle i {
+            position: absolute;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dark-light i.sun {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dark-light.active i.sun {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .dark-light.active i.moon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle i.cancel {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .searchToggle.active i.cancel {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .searchToggle.active i.search {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px #888;
+        }
+
+        .avatar {
+            width: 200px;
+            height: 200px;
+            margin: 40px 20px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin: 0 0 10px;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        span{
+            font-weight: 400;
+        }
+
+        #username {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0 0 10px;
+        }
+
+
+        @media (max-width: 790px) {
+            nav .nav-bar .sidebarOpen {
+                display: block;
+            }
+
+            .container {
+                margin-top: 40px;
+
+                text-align: center;
+            }
+
+            .avatar {
+                margin: 20px auto;
+            }
+
+            h1 {
+                font-size: 28px;
+                margin: 0 0 5px;
+            }
+
+            p {
+                font-size: 16px;
+                margin: 0 0 5px;
+            }
+
+            .username {
+                font-size: 28px;
+                margin: 0 0 5px;
+            }
+
+            .menu {
+                position: fixed;
+                height: 100%;
+                width: 320px;
+                left: -100%;
+                top: 0;
+                padding: 20px;
+                background-color: var(--side-nav);
+                transition: all 0.4s ease;
+            }
+
+            nav.active .menu {
+                left: -0%;
+            }
+
+            nav.active .nav-bar .navLogo a {
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links,
+            li {
+                width: 250px;
+                margin-right: 500px;
+            }
+
+            a {
+                width: 200px;
+            }
+
+            .menu .logo-toggle {
+                display: block;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .logo-toggle .siderbarClose {
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+            }
+
+            .nav-bar .nav-links {
+                flex-direction: column;
+                padding-top: 30px;
+            }
+
+            .nav-links li a {
+                display: block;
+                margin-top: 20px;
+                margin-right: 500px;
+            }
+
+            .logo.navLogo {
+                justify-content: center;
+                margin-right: 100px;
+            }
+
+        }
+    </style>
+    <!-- ===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-bar">
+            <i class='bx bx-menu sidebarOpen'></i>
+            <span class="logo navLogo" style="display: flex; align-items: center;">
+                <img src="..\img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
+                <a href="home.html" style="margin-left: 10px;">LiScTech</a>
+             </span>
+
+            <div class="menu">
+                <div class="logo-toggle">
+                    <span class="logo"><a href="home.html">LiScTech</a></span>
+                    <i class='bx bx-x siderbarClose'></i>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="monitor.html">Monitor</a></li>
+                    <li id="users-link"><a href="users.html">Users</a></li>
+                    <li style="background-color: #089442; padding: 22px; border-radius: 10px;"><a
+                            href="profile.html">Profile</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="" id="logout">Logout</a></li>
+                </ul>
+            </div>
+
+            <div class="darkLight-searchBox">
+
+            </div>
+    </nav>
+
+    <div class="container">
+        <div class="avatar">
+            <a id="avatar-edit-btn"><img id="avatar-img" src="https://via.placeholder.com/200x200.png?text=User+Avatar"
+                    alt="User Avatar"></a>
+        </div>
+        <div id="avatar-form-container"></div>
+        <div class="user-info">
+            <div id="username-form-container">
+                <p class="username"> <span id="username">Username</span> <button id="username-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button>
+            </div>
+            </p>
+            <div id="email-form-container">
+                <p>Email: <span id="email"></span> <button id="email-edit-btn"><i class='bx bxs-edit-alt'></i></button>
+                </p>
+            </div>
+            <div id="password-form-container">
+                <p>Password: <span id="password"></span> <button id="password-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="first-name-form-container">
+                <p>Firstname: <span id="firstname"></span> <button id="first-name-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="last-name-form-container">
+                <p>Lastname: <span id="lastname"></span> <button id="last-name-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="strand-form-container">
+                <p>Strand: <span id="strand"></span> <button id="strand-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="section-form-container">
+                <p>Section: <span id="section"></span> <button id="section-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="school-year-form-container">
+                <p>S.Y: <span id="school-year"></span> <button id="school-year-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+            <div id="school-form-container">
+                <p>School: <span id="school"></span> <button id="school-edit-btn"><i
+                            class='bx bxs-edit-alt'></i></button></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        const body = document.querySelector("body"),
+            nav = document.querySelector("nav"),
+            modeToggle = document.querySelector(".dark-light"),
+            searchToggle = document.querySelector(".searchToggle"),
+            sidebarOpen = document.querySelector(".sidebarOpen"),
+            siderbarClose = document.querySelector(".siderbarClose");
+        const avatar = document.querySelector(".avatar");
+
+
+
+        //   js code to toggle sidebar
+        sidebarOpen.addEventListener("click", () => {
+            nav.classList.add("active");
+            nav.style.zIndex = "100";
+            avatar.style.zIndex = "100";
+        });
+
+        body.addEventListener("click", e => {
+            let clickedElm = e.target;
+
+            if (!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")) {
+                nav.classList.remove("active");
+                nav.style.zIndex = "100";
+                avatar.style.zIndex = "10000";
+            }
+        });
+
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+    import { getAuth, signOut, updateEmail, reauthenticateWithCredential, updatePassword, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
+    import {
+        getDatabase, ref, update, child, onValue, get, orderByKey,
+        query, limitToFirst, limitToLast, orderByChild,
+        startAt, startAfter, endAt, endBefore, equalTo
+    } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDnKmN4L9-sYWSq-m--BaVPBFcwp9Lztqo",
+        authDomain: "lisctech.firebaseapp.com",
+        databaseURL: "https://lisctech-default-rtdb.firebaseio.com",
+        projectId: "lisctech",
+        storageBucket: "lisctech.appspot.com",
+        messagingSenderId: "965633359057",
+        appId: "1:965633359057:web:496166fc06853c473899f0",
+        measurementId: "G-T9HE18HFM5"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+    console.log(app);
+
+    //user auth
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            console.log('User logged in:', user);
+            const uid = user.uid;
+            console.log("Sign-in provider: " + user.providerId);
+            console.log("  Provider-specific UID: " + user.uid);
+            console.log("  Name: " + user.displayName);
+            console.log("  Email: " + user.email);
+            console.log("  Photo URL: " + user.photoURL);
+
+            // Get a reference to the current user's node in the database
+            const currentUserRef = ref(database, 'users/' + uid);
+
+            // Attach a listener to the current user's node in the database
+            onValue(currentUserRef, snapshot => {
+                // Get the value of the node
+                const currentUserRef = snapshot.val();
+
+                // Check if the value is null
+                if (currentUserRef === null) {
+                    // If the value is null, delete the current user's account
+                    auth.currentUser.delete()
+                        .then(() => {
+                            console.log('User account deleted');
+                        })
+                        .catch(error => {
+                            console.error('Error deleting user account:', error);
+                        });
+                }
+            });
+
+            // Get the user's ID token
+            user.getIdToken().then(idToken => {
+                // Use the user's ID token to authenticate requests to Firebase services
+                // ...
+            }).catch(error => {
+                // Failed to get the user's ID token
+                console.error('Error getting user ID token:', error);
+            });
+
+        } else {
+            console.log('User logged out');
+        }
+    });
+
+    //----- Logout code start	  
+    document.getElementById("logout").addEventListener("click", function () {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            console.log('Sign-out successful.');
+            alert('Sign-out successful.');
+            window.location = "index.html";
+        }).catch((error) => {
+            // An error happened.
+            console.log('An error happened.');
+        });
+    });
+    //----- End
+
+    const usersLink = $('#users-link');
+
+    function checkAuth(user) {
+        const dbRef = database;
+        const uid = user.uid;
+
+        const que = ref(database, "users/" + uid + "/type");
+
+        onValue(que, (snapshot) => {
+            const userType = snapshot.val();
+            console.log(userType);
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', userType);
+
+            // Retrieve user type from localStorage
+            const storedUserType = localStorage.getItem('userType');
+
+            if (storedUserType !== "Admin" && storedUserType !== "Teacher") {
+                alert("Unauthorized User!!!");
+                auth.signOut();
+                window.location = "index.html";
+            } else if (storedUserType == "Teacher") {
+                $('#users-link').hide();
+            }
+            else if (storedUserType == "Admin") {
+                $('#users-link').show();
+            }
+
+            // Save user type in localStorage
+            localStorage.setItem('userType', storedUserType);
+        });
+    }
+
+    // Call checkAuth when auth state changes
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            checkAuth(user);
+        } else {
+            // Redirect to login page if user is not signed in
+            window.location = "index.html";
+        }
+    });
+
+    $(document).ready(function () {
+        $('#users-link').hide();
+    });
+
+    auth.onAuthStateChanged(function (user) {
+        if (user) {
+            var userId = user.uid;
+            var dbRef = ref(database, 'users/' + userId);
+            onValue(dbRef, (snapshot) => {
+                var userData = snapshot.val();
+
+                document.querySelector('.avatar img').src = userData.profileurl;
+                document.querySelector('#username').textContent = userData.username;
+                document.querySelector('#firstname').textContent = userData.firstname;
+                document.querySelector('#lastname').textContent = userData.lastname;
+                document.querySelector('#strand').textContent = userData.strand;
+                document.querySelector('#section').textContent = userData.section;
+                document.querySelector('#school-year').textContent = userData.schoolyear;
+                document.querySelector('#school').textContent = userData.school;
+
+                // Retrieving user email and password
+                var email = user.email;
+                var password = user.password;
+                document.querySelector('#email').textContent = email;
+                document.querySelector('#password').textContent = "**********";
+
+                const displayName = userData.username;
+                document.title = displayName + " | LiScTech";
+            });
+        } else {
+            auths.signOut();
+            window.location = "index.html";
+        }
+    });
+
+
+
+    // Get the email edit button and add a click event listener
+    const emailEditBtn = document.querySelector('#email-edit-btn');
+    emailEditBtn.addEventListener('click', async function () {
+        // Get the current email value
+        const currentEmail = document.querySelector('#email').textContent;
+
+        // Create a form with the current email value, a save button, and a close button
+        const emailForm = document.createElement('form');
+        emailForm.innerHTML = `
+        <label for="current-password">Current Password:</label>
+        <input type="password" id="current-password-input" name="current-password" required>
+        <label for="email">New Email:</label>
+        <input type="email" id="email-input" name="email" required>
+        <button type="submit">Save</button>
+        <button type="button" id="email-close-btn">Close</button>
+    `;
+
+        // Add a submit event listener to the form
+        emailForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newEmail = emailForm.querySelector('#email-input').value;
+            const currentPassword = emailForm.querySelector('#current-password-input').value;
+            const user = auth.currentUser;
+            const credential = EmailAuthProvider.credential(user.email, currentPassword);
+
+            // Reauthenticate the user before changing the email
+            reauthenticateWithCredential(user, credential)
+                .then(() => {
+                    // Update the user's email in Firebase Authentication
+                    updateEmail(user, newEmail)
+                        .then(() => {
+                            // Email updated!
+                            alert("Email updated successfully!");
+                            document.querySelector('#email').textContent = newEmail;
+                            emailForm.remove();
+                        })
+                        .catch((error) => {
+                            // An error occurred
+                            console.log(error);
+                            // Remove the form from the DOM
+                            emailForm.remove();
+                        });
+                })
+                .catch((error) => {
+                    // An error occurred during reauthentication
+                    console.log(error);
+                    alert('Incorrect current password');
+                });
+        });
+
+        // Add a click event listener to the close button
+        const emailCloseBtn = emailForm.querySelector('#email-close-btn');
+        emailCloseBtn.addEventListener('click', function () {
+            emailForm.remove();
+        });
+
+        // Append the form to a container element
+        const emailFormContainer = document.querySelector('#email-form-container');
+        if (!emailFormContainer.querySelector('form')) {
+            emailFormContainer.appendChild(emailForm);
+        }
+    });
+
+    // Get the password edit button and add a click event listener
+    const passwordEditBtn = document.querySelector('#password-edit-btn');
+    passwordEditBtn.addEventListener('click', async function () {
+        // Create a form with the current password fields, a save button, and a close button
+        const passwordForm = document.createElement('form');
+        passwordForm.innerHTML = `
+<label for="old-password">Old Password:</label>
+<input type="password" id="old-password-input" name="old-password" required>
+<label for="new-password">New Password:</label>
+<input type="password" id="new-password-input" name="new-password" required>
+<label for="confirm-password">Confirm New Password:</label>
+<input type="password" id="confirm-password-input" name="confirm-password" required>
+<button type="submit">Save</button>
+<button type="button" id="password-close-btn">Close</button>
+`;
+
+        // Add a submit event listener to the form
+        passwordForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const oldPassword = passwordForm.querySelector('#old-password-input').value;
+            const newPassword = passwordForm.querySelector('#new-password-input').value;
+            const confirmPassword = passwordForm.querySelector('#confirm-password-input').value;
+
+            if (newPassword !== confirmPassword) {
+                // Check if there is already an error message present in the form
+                let errorMessage = passwordForm.querySelector('.error-message');
+                if (!errorMessage) {
+                    // If not, create a new error message element
+                    errorMessage = document.createElement('p');
+                    errorMessage.className = 'error-message';
+                    errorMessage.style.color = 'red';
+                    passwordForm.appendChild(errorMessage);
+                }
+
+                // Set the error message text
+                errorMessage.textContent = 'New passwords do not match';
+                return;
+            }
+
+            // Re-authenticate the user with their old password
+            const user = auth.currentUser;
+            const credential = EmailAuthProvider.credential(user.email, oldPassword);
+            console.log(credential);
+            console.log('reauthenticating...');
+            try {
+                await reauthenticateWithCredential(user, credential);
+                console.log('reauthentication successful!');
+            } catch (error) {
+                console.log('reauthentication failed:', error.message);
+                // Check if there is already an error message present in the form
+                let errorMessage = passwordForm.querySelector('.error-message');
+                if (!errorMessage) {
+                    // If not, create a new error message element
+                    errorMessage = document.createElement('p');
+                    errorMessage.className = 'error-message';
+                    errorMessage.style.color = 'red';
+                    passwordForm.appendChild(errorMessage);
+                }
+
+                // Set the error message text
+                errorMessage.textContent = 'Incorrect old password';
+                return;
+            }
+
+            // Update the user's password in Firebase Authentication
+            try {
+                await updatePassword(user, newPassword);
+                // Password updated!
+                alert("Password changed successfuly!");
+                passwordForm.remove();
+            } catch (error) {
+                // An error occurred
+                console.log(error);
+                // Remove the form from the DOM
+                passwordForm.remove();
+            }
+        });
+
+        // Add a click event listener to the close button
+        const passwordCloseBtn = passwordForm.querySelector('#password-close-btn');
+        passwordCloseBtn.addEventListener('click', function () {
+            passwordForm.remove();
+        });
+
+        // Append the form to a container element
+        const passwordFormContainer = document.querySelector('#password-form-container');
+        if (!passwordFormContainer.querySelector('form')) {
+            passwordFormContainer.appendChild(passwordForm);
+        }
+    });
+
+
+    // Get the username edit button and add a click event listener
+    const usernameEditBtn = document.querySelector('#username-edit-btn');
+    usernameEditBtn.addEventListener('click', async function () {
+        // Get the current username value
+        const currentUsername = document.querySelector('#username').textContent;
+
+        // Create a form with the current username value, a save button, and a close button
+        const usernameForm = document.createElement('form');
+        usernameForm.innerHTML = `
+    <label for="username">Username:</label>
+    <input type="text" id="username-input" name="username" value="${currentUsername}" required>
+    <button type="submit">Save</button>
+    <button type="button" id="username-close-btn">Close</button>
+  `;
+
+        // Add a submit event listener to the form
+        usernameForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newUsername = usernameForm.querySelector('#username-input').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                username: newUsername,
+            })
+                .then(() => {
+                    // Username updated!
+                    alert("Username updated successfully!");
+                    document.querySelector('#username').textContent = newUsername;
+                    usernameForm.remove();
+                }).catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    usernameForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const usernameCloseBtn = usernameForm.querySelector('#username-close-btn');
+        usernameCloseBtn.addEventListener('click', function () {
+            usernameForm.remove();
+        });
+
+        // Append the form to a container element
+        const usernameFormContainer = document.querySelector('#username-form-container');
+        if (!usernameFormContainer.querySelector('form')) {
+            usernameFormContainer.appendChild(usernameForm);
+        }
+    });
+
+    // Get the first name edit button and add a click event listener
+    const firstNameEditBtn = document.querySelector('#first-name-edit-btn');
+    firstNameEditBtn.addEventListener('click', async function () {
+        // Get the current first name value
+        const currentFirstName = document.querySelector('#firstname').textContent;
+
+        // Create a form with the current first name value, a save button, and a close button
+        const firstNameForm = document.createElement('form');
+        firstNameForm.innerHTML = `
+    <label for="first-name">First Name:</label>
+    <input type="text" id="first-name-input" name="first-name" value="${currentFirstName}" required>
+    <button type="submit">Save</button>
+    <button type="button" id="first-name-close-btn">Close</button>
+  `;
+
+        // Add a submit event listener to the form
+        firstNameForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newFirstName = firstNameForm.querySelector('#first-name-input').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                firstname: newFirstName,
+            })
+                .then(() => {
+                    // First name updated!
+                    alert("First name updated successfully!");
+                    document.querySelector('#first-name').textContent = newFirstName;
+                    firstNameForm.remove();
+                }).catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    firstNameForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const firstNameCloseBtn = firstNameForm.querySelector('#first-name-close-btn');
+        firstNameCloseBtn.addEventListener('click', function () {
+            firstNameForm.remove();
+        });
+
+        // Append the form to a container element
+        const firstNameFormContainer = document.querySelector('#first-name-form-container');
+        if (!firstNameFormContainer.querySelector('form')) {
+            firstNameFormContainer.appendChild(firstNameForm);
+        }
+    });
+
+    // Get the last name edit button and add a click event listener
+    const lastNameEditBtn = document.querySelector('#last-name-edit-btn');
+    lastNameEditBtn.addEventListener('click', async function () {
+        // Get the current last name value
+        const currentLastName = document.querySelector('#lastname').textContent;
+
+        // Create a form with the current last name value, a save button, and a close button
+        const lastNameForm = document.createElement('form');
+        lastNameForm.innerHTML = `
+    <label for="last-name">Last Name:</label>
+    <input type="text" id="last-name-input" name="last-name" value="${currentLastName}" required>
+    <button type="submit">Save</button>
+    <button type="button" id="last-name-close-btn">Close</button>
+  `;
+
+        // Add a submit event listener to the form
+        lastNameForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newLastName = lastNameForm.querySelector('#last-name-input').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                lastname: newLastName,
+            })
+                .then(() => {
+                    // Last name updated!
+                    alert("Last name updated successfully!");
+                    document.querySelector('#last-name').textContent = newLastName;
+                    lastNameForm.remove();
+                }).catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    lastNameForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const lastNameCloseBtn = lastNameForm.querySelector('#last-name-close-btn');
+        lastNameCloseBtn.addEventListener('click', function () {
+            lastNameForm.remove();
+        });
+
+        // Append the form to a container element
+        const lastNameFormContainer = document.querySelector('#last-name-form-container');
+        if (!lastNameFormContainer.querySelector('form')) {
+            lastNameFormContainer.appendChild(lastNameForm);
+        }
+    });
+
+    // Get the strand edit button and add a click event listener
+    const strandEditBtn = document.querySelector('#strand-edit-btn');
+    strandEditBtn.addEventListener('click', async function () {
+        // Get the current strand value
+        const currentStrand = document.querySelector('#strand').textContent;
+
+        // Create a form with the current strand value, a save button, and a close button
+        const strandForm = document.createElement('form');
+        strandForm.innerHTML = `
+        <label for="strand">Strand:</label>
+        <select id="strand-select" name="strand" required>
+            <option value="GAS" ${currentStrand === 'GAS' ? 'selected' : ''}>GAS</option>
+            <option value="HUMMS" ${currentStrand === 'HUMMS' ? 'selected' : ''}>HUMMS</option>
+            <option value="STEM" ${currentStrand === 'STEM' ? 'selected' : ''}>STEM</option>
+            <option value="ABM" ${currentStrand === 'ABM' ? 'selected' : ''}>ABM</option>
+            <option value="TVL" ${currentStrand === 'TVL' ? 'selected' : ''}>TVL</option>
+        </select>
+        <button type="submit">Save</button>
+        <button type="button" id="strand-close-btn">Close</button>
+    `;
+
+        // Add a submit event listener to the form
+        strandForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newStrand = strandForm.querySelector('#strand-select').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                strand: newStrand,
+            })
+                .then(() => {
+                    // Strand updated!
+                    alert("Strand updated successfully!");
+                    document.querySelector('#strand').textContent = newStrand;
+                    strandForm.remove();
+                })
+                .catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    strandForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const strandCloseBtn = strandForm.querySelector('#strand-close-btn');
+        strandCloseBtn.addEventListener('click', function () {
+            strandForm.remove();
+        });
+
+        // Append the form to a container element if it doesn't already exist
+        const strandFormContainer = document.querySelector('#strand-form-container');
+        if (!strandFormContainer.querySelector('form')) {
+            strandFormContainer.appendChild(strandForm);
+        }
+    });
+
+
+    // Get the section edit button and add a click event listener
+    const sectionEditBtn = document.querySelector('#section-edit-btn');
+    sectionEditBtn.addEventListener('click', async function () {
+        // Get the current section value
+        const currentSection = document.querySelector('#section').textContent;
+
+        // Create a form with the current section value, a save button, and a close button
+        const sectionForm = document.createElement('form');
+        sectionForm.innerHTML = `
+    <label for="section">Section:</label>
+    <input type="text" id="section-input" name="section" value="${currentSection}" required>
+    <button type="submit">Save</button>
+    <button type="button" id="section-close-btn">Close</button>
+  `;
+
+        // Add a submit event listener to the form
+        sectionForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newSection = sectionForm.querySelector('#section-input').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                section: newSection,
+            })
+                .then(() => {
+                    // Section updated!
+                    alert("Section updated successfully!");
+                    document.querySelector('#section').textContent = newSection;
+                    sectionForm.remove();
+                })
+                .catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    sectionForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const sectionCloseBtn = sectionForm.querySelector('#section-close-btn');
+        sectionCloseBtn.addEventListener('click', function () {
+            sectionForm.remove();
+        });
+
+        // Append the form to a container element
+        const sectionFormContainer = document.querySelector('#section-form-container');
+        if (!sectionFormContainer.querySelector('form')) {
+            sectionFormContainer.appendChild(sectionForm);
+        }
+    });
+
+    // Get the school year edit button and add a click event listener
+    const schoolYearEditBtn = document.querySelector('#school-year-edit-btn');
+    schoolYearEditBtn.addEventListener('click', async function () {
+        // Get the current school year value
+        const currentSchoolYear = document.querySelector('#school-year').textContent;
+
+        // Create a form with the current school year value, a save button, and a close button
+        const schoolYearForm = document.createElement('form');
+        schoolYearForm.innerHTML = `
+    <label for="school-year">School Year:</label>
+    <select id="school-year-select" name="school-year" required>
+      <option value="2023-2024" ${currentSchoolYear === '2023-2024' ? 'selected' : ''}>2023-2024</option>
+      <option value="2024-2025" ${currentSchoolYear === '2024-2025' ? 'selected' : ''}>2024-2025</option>
+      <option value="2025-2026" ${currentSchoolYear === '2025-2026' ? 'selected' : ''}>2025-2026</option>
+      <option value="2026-2027" ${currentSchoolYear === '2026-2027' ? 'selected' : ''}>2026-2027</option>
+      <option value="2027-2028" ${currentSchoolYear === '2027-2028' ? 'selected' : ''}>2027-2028</option>
+      <option value="2028-2029" ${currentSchoolYear === '2028-2029' ? 'selected' : ''}>2028-2029</option>
+      <option value="2029-2030" ${currentSchoolYear === '2029-2030' ? 'selected' : ''}>2029-2030</option>
+      <option value="2030-2031" ${currentSchoolYear === '2030-2031' ? 'selected' : ''}>2030-2031</option>
+    </select>
+    <button type="submit">Save</button>
+    <button type="button" id="school-year-close-btn">Close</button>
+  `;
+
+        // Add a submit event listener to the form
+        schoolYearForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newSchoolYear = schoolYearForm.querySelector('#school-year-select').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                schoolyear: newSchoolYear,
+            })
+                .then(() => {
+                    // School year updated!
+                    alert("School year updated successfully!");
+                    document.querySelector('#school-year').textContent = newSchoolYear;
+                    schoolYearForm.remove();
+                })
+                .catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    schoolYearForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const schoolYearCloseBtn = schoolYearForm.querySelector('#school-year-close-btn');
+        schoolYearCloseBtn.addEventListener('click', function () {
+            schoolYearForm.remove();
+        });
+
+        // Append the form to a container element if it doesn't already exist
+        const schoolYearFormContainer = document.querySelector('#school-year-form-container');
+        if (!schoolYearFormContainer.querySelector('form')) {
+            schoolYearFormContainer.appendChild(schoolYearForm);
+        }
+    });
+
+
+    // Get the school edit button and add a click event listener
+    const schoolEditBtn = document.querySelector('#school-edit-btn');
+    schoolEditBtn.addEventListener('click', async function () {
+        // Get the current school value
+        const currentSchool = document.querySelector('#school').textContent;
+
+        // Create a form with the current school value, a save button, and a close button
+        const schoolForm = document.createElement('form');
+        schoolForm.innerHTML = `
+        <label for="school">School:</label>
+        <select id="school-select" name="school" required>
+            <option value="Bucal Integrated NHS" ${currentSchool === 'Bucal Integrated NHS' ? 'selected' : ''}>Bucal Integrated NHS</option>
+            <option value="Naic Integrated NHS" ${currentSchool === 'Naic Integrated NHS' ? 'selected' : ''}>Naic Integrated NHS</option>
+            <option value="Naic Coastal Integrated NHS" ${currentSchool === 'Naic Coastal Integrated NHS' ? 'selected' : ''}>Naic Coastal Integrated NHS</option>
+            <option value="Naic Senior HS Stand-Alone" ${currentSchool === 'Naic Senior HS Stand-Alone' ? 'selected' : ''}>Naic Senior HS Stand-Alone</option>
+            <option value="Cavite Community Academy Inc." ${currentSchool === 'Cavite Community Academy Inc.' ? 'selected' : ''}>Cavite Community Academy Inc.</option>
+            <option value="La Vlaize Integrated Science School" ${currentSchool === 'La Vlaize Integrated Science School' ? 'selected' : ''}>La Vlaize Integrated Science School</option>
+            <option value="Western Colleges Inc." ${currentSchool === 'Western Colleges Inc.' ? 'selected' : ''}>Western Colleges Inc.</option>
+        </select>
+        <button type="submit">Save</button>
+        <button type="button" id="school-close-btn">Close</button>
+    `;
+
+        // Add a submit event listener to the form
+        schoolForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newSchool = schoolForm.querySelector('#school-select').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                school: newSchool,
+            })
+                .then(() => {
+                    // School updated!
+                    alert("School updated successfully!");
+                    document.querySelector('#school').textContent = newSchool;
+                    schoolForm.remove();
+                })
+                .catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    schoolForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const schoolCloseBtn = schoolForm.querySelector('#school-close-btn');
+        schoolCloseBtn.addEventListener('click', function () {
+            schoolForm.remove();
+        });
+
+        // Append the form to a container element if it doesn't already exist
+        const schoolFormContainer = document.querySelector('#school-form-container');
+        if (!schoolFormContainer.querySelector('form')) {
+            schoolFormContainer.appendChild(schoolForm);
+        }
+    });
+
+
+    // Get the avatar edit button and add a click event listener
+    const avatarEditBtn = document.querySelector('#avatar-edit-btn');
+    avatarEditBtn.addEventListener('click', async function () {
+
+        // Check if the avatar form already exists
+        const existingAvatarForm = document.querySelector('#avatar-form');
+        if (existingAvatarForm) {
+            // If it does, remove it and exit the function
+            existingAvatarForm.remove();
+            return;
+        }
+
+        // Get the current avatar URL
+        const currentAvatarUrl = document.querySelector('#avatar-img').getAttribute('src');
+
+        // Create a form with the current avatar URL, a save button, and a close button
+        const avatarForm = document.createElement('form');
+        avatarForm.id = 'avatar-form';
+        avatarForm.innerHTML = `
+        <label for="avatar">Avatar URL:</label>
+        <input type="url" id="avatar-input" name="avatar" value="${currentAvatarUrl}" required>
+        <button type="submit">Save</button>
+        <button type="button" id="avatar-close-btn">Close</button>
+    `;
+
+        // Add a submit event listener to the form
+        avatarForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const newAvatarUrl = avatarForm.querySelector('#avatar-input').value;
+            const user = auth.currentUser;
+            console.log("User UID:", user.uid);
+            update(ref(database, 'users/' + user.uid), {
+                profileurl: newAvatarUrl,
+            })
+                .then(() => {
+                    // Avatar updated!
+                    alert("Avatar updated successfully!");
+                    document.querySelector('#avatar').setAttribute('src', newAvatarUrl);
+                    avatarForm.remove();
+                })
+                .catch((error) => {
+                    // An error occurred
+                    console.log(error);
+                    // Remove the form from the DOM
+                    avatarForm.remove();
+                });
+        });
+
+        // Add a click event listener to the close button
+        const avatarCloseBtn = avatarForm.querySelector('#avatar-close-btn');
+        avatarCloseBtn.addEventListener('click', function () {
+            avatarForm.remove();
+        });
+
+        // Append the form to a container element
+        const avatarFormContainer = document.querySelector('#avatar-form-container');
+        avatarFormContainer.appendChild(avatarForm);
+    });
+
+
+
+</script>
+
+</html>
