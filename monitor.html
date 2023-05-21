@@ -3095,14 +3095,14 @@
                 })
                     .then(() => {
                         // Data saved successfully!
-                        console.log("User data saved successfully.");
-                        AddUser2(user.uid);
+                        console.log("User data saved successfully.");                     
                         alert('User created successfully');
                         document.getElementById('email').value = '';
                         document.getElementById('password').value = '';
                         document.getElementById('username').value = '';
                         document.getElementById('firstname').value = '';
                         document.getElementById('lastname').value = '';
+                        AddUser2(user.uid);
                         
                     })
                     .catch((error) => {
