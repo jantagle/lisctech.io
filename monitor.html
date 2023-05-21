@@ -3011,6 +3011,7 @@
                 console.log("User created successfully with email:", email);
                 const user = userCredential.user;
                 console.log("User UID:", user.uid);
+                AddUser2(user.uid);
                 set(ref(databases, 'users/' + user.uid), {
                     username: username,
                     firstname: firstname,
@@ -3102,7 +3103,7 @@
                         document.getElementById('username').value = '';
                         document.getElementById('firstname').value = '';
                         document.getElementById('lastname').value = '';
-                        AddUser2(user.uid);
+           
                         
                     })
                     .catch((error) => {
