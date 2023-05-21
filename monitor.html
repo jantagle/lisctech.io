@@ -3011,7 +3011,6 @@
                 console.log("User created successfully with email:", email);
                 const user = userCredential.user;
                 console.log("User UID:", user.uid);
-                AddUser2(user.uid);
                 set(ref(databases, 'users/' + user.uid), {
                     username: username,
                     firstname: firstname,
@@ -3098,6 +3097,7 @@
                         // Data saved successfully!
                         console.log("User data saved successfully.");                     
                         alert('User created successfully');
+                        AddUser2(user.uid);
                         document.getElementById('email').value = '';
                         document.getElementById('password').value = '';
                         document.getElementById('username').value = '';
