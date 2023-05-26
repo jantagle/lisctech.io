@@ -521,6 +521,7 @@
             text-transform: uppercase;
             padding: 10px 25px;
             cursor: pointer;
+            border-radius: 5px;
         }
 
         .button input[type="submit"]:hover {
@@ -632,9 +633,12 @@
             }
 
             .single-table-container {
-                display: block;
-                margin: auto;
-                width: 95%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin-right: 10px;
+                margin-left: 10px;
             }
 
             .right-table-container {
@@ -652,36 +656,96 @@
                 top: 0;
             }
 
-            #search-input {
-                width: 186px;
-            }
-
-            .searchtitle {
-                margin-left: 0px;
-            }
-
             .searchinputs {
-                width: 273px;
-            }
-
-            #searchinputschoolyear {
-                width: 305px;
+                width: auto;
+                min-width: 250px;
+              display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+               
             }
 
             #searchinputschool {
-                width: 273px;
+                width: 250px;
+                margin: auto;
+                min-width: 250px;
+                
+                
+            }
+
+            #search-input{
+                width: auto;
+                min-width: 250px;
+              display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+            }
+
+            #filter-select {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                width: auto;
+                min-width: 250px;
+                height: 40px;
+                padding: 5px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin: auto;
+               
+            }
+
+            .searchtitle {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                width: auto;
+                height: 40px;
+                padding: 5px;
+                font-size: 16px;
+                margin-left: 10px;
+                margin-right: 10px;
+                margin: auto;
+
             }
 
             #search-button {
-                width: 352px;
-                margin-bottom: 15px;
-                margin-left: 0px;
+                margin-left: 5px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                width: auto;
+                min-width: 250px;
+              display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+               
             }
 
             .modal-content {
-                width: 90%;
+                width: 95%;
                 margin: auto;
             }
+
+            .button input[type="submit"] {
+                background-color: #333;
+                border: none;
+                color: #fff;
+                font-size: 18px;
+                font-weight: bold;
+                text-transform: uppercase;
+                padding: 10px 10px;
+                cursor: pointer;
+
+            }
+
 
             #printModal-content {
                 width: 70%;
@@ -800,7 +864,7 @@
             <span class="logo navLogo" style="display: flex; align-items: center;">
                 <img src="img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
                 <a href="home.html" style="margin-left: 10px;">LiScTech</a>
-             </span>
+            </span>
 
             <div class="menu">
                 <div class="logo-toggle">
@@ -3095,16 +3159,16 @@
                 })
                     .then(() => {
                         // Data saved successfully!
-                        console.log("User data saved successfully.");    
-                        AddUser2(user.uid);
-                        alert('User created successfully');  
+                        console.log("User data saved successfully.");
+                        if (window.confirm('User created successfully. Do you want to proceed with AddUser2?')) {
+                            AddUser2(user.uid);
+                        }
                         document.getElementById('email').value = '';
                         document.getElementById('password').value = '';
                         document.getElementById('username').value = '';
                         document.getElementById('firstname').value = '';
                         document.getElementById('lastname').value = '';
-           
-                        
+
                     })
                     .catch((error) => {
                         // The write failed...

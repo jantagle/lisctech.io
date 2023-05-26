@@ -511,7 +511,7 @@
         #openModal {
             background-color: #333;
             color: #fff;
-            margin-left: 115px;
+            margin-left: 90px;
             padding: 9px 25px;
             font-size: 18px;
             border: none;
@@ -601,64 +601,68 @@
                 transition: all 0.4s ease;
             }
 
-
-
             .center {
                 width: 90%;
                 margin: auto;
             }
 
+            #search-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin-right: 50px;
+            }
 
-
-            #search-input {
-                width: 133px;
-                margin-top: 10px;
+            #filter-select {
+                width: auto;
+                min-width: 200px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
             }
 
             .searchtitle {
-                margin-left: 0px;
-                margin-top: 10px;
-            }
 
-            .searchinputs {
-                width: 220px;
-                margin-top: 10px;
-            }
-
-            #searchinputschoolyear {
-                width: 252px;
-                margin-top: 10px;
-            }
-
-            #searchinputschool {
-                width: 220px;
-                margin-top: 10px;
-            }
-
-            #search-button {
-                width: 298px;
-                margin-top: 20px;
-                margin-left: 0px;
-
-            }
-
-            .modal-content {
-                width: 90%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
                 margin: auto;
 
             }
 
-
-
-            #openModal {
-                margin-bottom: 10px;
-                margin-top: 10px;
-                width: 298px;
-                margin-left: 0px;
+            .searchinputs {
+                width: 150px;
             }
 
+            #search-button,
+            #openModal {
+                margin-left: 5px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
 
+            .modal-content {
+                width: 95%;
+                margin: auto;
+            }
 
+            #editForm {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+              
+                
+            }
+
+           #editForm span, label{
+           
+                margin-right: 300px;
+               
+           }
 
             nav {
                 z-index: 9999;
@@ -734,7 +738,14 @@
                 justify-content: center;
                 margin-right: 100px;
             }
+        }
 
+        /* Media query for small screens */
+        @media (max-width: 600px) {
+
+            .searchinputs {
+                width: 100%;
+            }
         }
     </style>
 
@@ -753,7 +764,7 @@
             <span class="logo navLogo" style="display: flex; align-items: center;">
                 <img src="img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
                 <a href="home.html" style="margin-left: 10px;">LiScTech</a>
-             </span>
+            </span>
 
             <div class="menu">
                 <div class="logo-toggle">
@@ -784,7 +795,7 @@
             <option value="username">Username</option>
             <option value="room">Room</option>
             <option value="totalpoints">Total Points</option>
-            <option value="type">User type</option>
+            <option value="totalstar">Total Stars</option>
         </select>
         <span class="searchtitle" id="filter-select2" value="strand">Strand</span>
         <select class="searchinputs" id="searchinputstrand">
@@ -817,6 +828,13 @@
             <option value="Cavite Community Academy Inc.">Cavite Community Academy Inc.</option>
             <option value="La Vlaize Integrated Science School">La Vlaize Integrated Science School</option>
             <option value="Western Colleges Inc.">Western Colleges Inc.</option>
+        </select>
+        <span class="searchtitle" id="filter-select5" value="type">User Type</span>
+        <select class="searchinputs" id="searchinputtype">
+            <option value="">All</option>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Admin">Admin</option>
         </select>
         <button id="search-button">Search</button>
         <button id="openModal">Create a user</button>
@@ -1328,7 +1346,7 @@
 
             if (!clickedElm.classList.contains("sidebarOpen") && !clickedElm.classList.contains("menu")) {
                 nav.classList.remove("active");
-                menu.style.zIndex = "10000";
+                menu.style.zIndex = "90";
                 nav.style.zIndex = "100";
             }
         });
@@ -1476,6 +1494,7 @@
     const filterSelect2 = document.getElementById("filter-select2");
     const filterSelect3 = document.getElementById("filter-select3");
     const filterSelect4 = document.getElementById("filter-select4");
+    const filterSelect5 = document.getElementById("filter-select5");
     var size = 40;
 
     function SearchTable() {
@@ -1485,11 +1504,13 @@
         const filterValue2 = "strand";
         const filterValue3 = "schoolyear";
         const filterValue4 = "school";
+        const filterValue5 = "type";
 
         const inputValue = searchInput.value.trim().replace(/[^a-zA-Z0-9\s]/g, '');
         const inputValue2 = searchinputstrand.value || "";
         const inputValue3 = searchinputschoolyear.value || "";
         const inputValue4 = searchinputschool.value || "";
+        const inputValue5 = searchinputtype.value || "";
 
         const dbRef = ref(database, "users");
         let queryRef = dbRef;
@@ -1518,6 +1539,13 @@
                 queryRef = queryRef.orderByChild(filterValue4);
             }
         }
+        if (filterValue5) {
+            if (!queryRef.orderByChild) {
+                queryRef = query(dbRef, orderByChild(filterValue5));
+            } else {
+                queryRef = queryRef.orderByChild(filterValue5);
+            }
+        }
 
         console.log("queryRef:", queryRef);
 
@@ -1527,8 +1555,8 @@
 
                 const dataArray = Object.entries(data)
                     .filter(([key, value]) => {
-                        const fields = [filterValue, filterValue2, filterValue3, filterValue4];
-                        const inputValues = [inputValue, inputValue2, inputValue3, inputValue4];
+                        const fields = [filterValue, filterValue2, filterValue3, filterValue4, filterValue5];
+                        const inputValues = [inputValue, inputValue2, inputValue3, inputValue4, inputValue5];
 
                         const matches = fields.map((field, index) => {
                             const fieldValue = value[field];
