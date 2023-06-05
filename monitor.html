@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Classroom Monitor | LiScTech</title>
-    <link rel="shortcut icon" href="img\Lisctech.png">
+    <link rel="shortcut icon" href="img\Lisctechs.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -275,7 +276,6 @@
         td,
         th {
             border: 1px solid black;
-            padding: 8px;
         }
 
         th {
@@ -287,6 +287,7 @@
 
         td {
             background-color: #f7f7f7;
+            padding: 2px 2px;
         }
 
         .table-wrapper {
@@ -659,26 +660,26 @@
             .searchinputs {
                 width: auto;
                 min-width: 250px;
-              display: flex;
+                display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
                 margin: auto;
-               
+
             }
 
             #searchinputschool {
                 width: 250px;
                 margin: auto;
                 min-width: 250px;
-                
-                
+
+
             }
 
-            #search-input{
+            #search-input {
                 width: auto;
                 min-width: 250px;
-              display: flex;
+                display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
@@ -698,7 +699,7 @@
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 margin: auto;
-               
+
             }
 
             .searchtitle {
@@ -722,11 +723,11 @@
                 margin-bottom: 10px;
                 width: auto;
                 min-width: 250px;
-              display: flex;
+                display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
                 align-items: center;
-               
+
             }
 
             .modal-content {
@@ -933,21 +934,21 @@
                 </select>
                 <button id="search-button">Search</button>
             </div>
-            <div style="overflow-x: auto; overflow-y: auto; height: 680px;">
-                <table id="myTable" class="Table" style="table-layout: fixed; width: 725px;">
+            <div style="overflow-x: auto; overflow-y: auto; width: 100%; height: 680px;">
+                <table id="myTable" class="Table" style="table-layout: fixed;">
                     <thead>
                         <tr>
                             <th style="position: sticky; left: 0; z-index: 999; width: 50px;">
                                 No.</th>
-                            <th style="width: 100px;"><img src="" id="image" width="" height="">Profile</th>
-                            <th class="hideme" style="width: 100px;">User ID</th>
-                            <th style="width: 150px;">Username</th>
-                            <th style="width: 150px;">Firstname</th>
-                            <th style="width: 150px;">Lastname</th>
-                            <th style="width: 75px;">Strand</th>
-                            <th style="width: 75px;">Section</th>
-                            <th style="width: 75px;">S.Y</th>
-                            <th style="width: 75px;">School</th>
+                            <th><img src="" id="image" width="" height="">Profile</th>
+                            <th class="hideme">User ID</th>
+                            <th>Username</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Strand</th>
+                            <th>Section</th>
+                            <th style="height: 50px;">S.Y</th>
+                            <th style="width: 250px;">School</th>
                             <th style="position: sticky; right: 0; z-index: 999; width: 75px;">
                                 Add</th>
                         </tr>
@@ -1006,7 +1007,7 @@
                 </table>
 
 
-                <table id="table2" class="Table" style="display:none;  height: 640px;">
+                <table id="table2" class="Table" style="display:none; height: 640px;">
                     <thead>
                         <th style="position: sticky; left: 0; z-index: 999; width: 50px; ">Room
                             Rank
@@ -1208,6 +1209,12 @@
                                 <option value="Western Colleges Inc.">Western Colleges Inc.</option>
                             </select>
                             <div class="select_arrow"></div>
+                        </div>
+                        <div class="input_field select_option">
+                            <span class="type-title">Add to room</span>
+                            <select id="roomdrop">
+                                <option value="">None</option>
+                            </select>
                         </div>
                         <span class="type-title hidden">User type</span>
                         <div class="input_field select_option hidden">
@@ -1486,6 +1493,7 @@
             GetAllDataRealTime4();
             GetAllDataRealTime5();
             GetAllDataRealTime6();
+            generateDropdownOptions();
 
         });
     }
@@ -1707,7 +1715,7 @@
         td8.innerHTML = section;
         td9.innerHTML = schoolyear;
         td10.innerHTML = school;
-        td11.innerHTML = '<button class="add-btn" data-username="' + useruid + '">Add to Room</button>';
+        td11.innerHTML = '<button class="add-btn" data-username="' + useruid + '"><i class="fas fa-user-plus"></i></button>';
         td11.classList.add("fixed");
 
         trow.appendChild(td1);
@@ -1783,7 +1791,7 @@
                             return;
                         }
                         const choices = availableRooms.map((roomName, i) => `${i + 1}. ${roomName}`);
-                        const promptMessage = `Choose a room:\n${choices.join("\n")}`;
+                        const promptMessage = `Choose a room:(1-5)\n${choices.join("\n")}`;
                         const chosenRoomIndex = parseInt(prompt(promptMessage));
                         if (isNaN(chosenRoomIndex) || chosenRoomIndex < 1 || chosenRoomIndex > availableRooms.length) {
                             alert(`Invalid choice`);
@@ -1909,7 +1917,6 @@
 
     const db = getDatabase();
 
-
     function GetAllDataRealTime() {
         const ref1 = query(ref(db, "users"), orderByChild("type"), equalTo("Student"));
 
@@ -1959,7 +1966,7 @@
             }
 
             // Prompt the user to confirm deletion
-            const confirmed = confirm("Are you sure you want to remove this user?");
+            const confirmed = confirm("Are you sure you want to remove this user in your Room 1?");
 
             if (!confirmed) {
                 return;
@@ -2018,7 +2025,8 @@
         td12.style.position = "sticky";
         td12.style.right = "85px";
         td13.innerHTML = totalstar;
-        td14.innerHTML = '<button class="remove-btn" data-username="' + useruid + '">Remove to Room</button>';
+        td14.innerHTML = '<button class="remove-btn" data-username="' + useruid + '"><i class="fas fa-user-minus"></i></button>';
+
         td14.classList.add("fixed");
         td14.classList.add("hideme2");
 
@@ -2233,7 +2241,7 @@
         td12.style.position = "sticky";
         td12.style.right = "85px";
         td13.innerHTML = totalstar;
-        td14.innerHTML = '<button class="remove-btn2" data-username="' + useruid + '">Remove to Room</button>';
+        td14.innerHTML = '<button class="remove-btn2" data-username="' + useruid + '"><i class="fas fa-user-minus"></i></button>';
         td14.classList.add("fixed");
         td14.classList.add("hideme2");
 
@@ -2454,7 +2462,7 @@
         td12.style.position = "sticky";
         td12.style.right = "85px";
         td13.innerHTML = totalstar;
-        td14.innerHTML = '<button class="remove-btn3" data-username="' + useruid + '">Remove to Room</button>';
+        td14.innerHTML = '<button class="remove-btn3" data-username="' + useruid + '"><i class="fas fa-user-minus"></i></button>';
         td14.classList.add("fixed");
         td14.classList.add("hideme2");
 
@@ -2674,7 +2682,7 @@
         td12.style.position = "sticky";
         td12.style.right = "85px";
         td13.innerHTML = totalstar;
-        td14.innerHTML = '<button class="remove-btn4" data-username="' + useruid + '">Remove to Room</button>';
+        td14.innerHTML = '<button class="remove-btn4" data-username="' + useruid + '"><i class="fas fa-user-minus"></i></button>';
         td14.classList.add("fixed");
         td14.classList.add("hideme2");
 
@@ -2895,7 +2903,7 @@
         td12.style.position = "sticky";
         td12.style.right = "85px";
         td13.innerHTML = totalstar;
-        td14.innerHTML = '<button class="remove-btn5" data-username="' + useruid + '">Remove to Room</button>';
+        td14.innerHTML = '<button class="remove-btn5" data-username="' + useruid + '"><i class="fas fa-user-minus"></i></button>';
         td14.classList.add("fixed");
         td14.classList.add("hideme2");
 
@@ -3048,6 +3056,44 @@
         });
     }
 
+    function generateDropdownOptions() {
+        var uid = auth.currentUser.uid;
+        const roomRef = ref(database, 'users/' + uid);
+        const roomNames = ["room1", "room2", "room3", "room4", "room5"];
+        const selectElement = document.getElementById("roomdrop");
+
+        // Get the existing "None" option
+        const noneOption = selectElement.querySelector('option[value=""]');
+
+        // Clear existing options except the "None" option
+        selectElement.innerHTML = "";
+        selectElement.appendChild(noneOption);
+
+        // Attach real-time listener for each room
+        roomNames.forEach((roomName) => {
+            const roomChildRef = child(roomRef, roomName);
+            onValue(roomChildRef, (snapshot) => {
+                const roomValue = snapshot.val();
+
+                if (roomValue !== null) {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = roomValue;
+                    optionElement.text = roomName;
+                    selectElement.appendChild(optionElement);
+                } else {
+                    // Remove the option if the room value becomes null
+                    const options = selectElement.options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].text === roomName) {
+                            options[i].remove();
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+    }
+
     document.getElementById("register").addEventListener('click', function () {
 
         var email = document.getElementById('email').value;
@@ -3059,7 +3105,7 @@
         var section = document.getElementById('section').value;
         var schoolyear = document.getElementById('schoolyear').value;
         var school = document.getElementById('school').value;
-        var room = document.getElementById('room').value;
+        var room = document.getElementById('roomdrop').value;
         var usertype = document.getElementById('usertype').value;
 
         // Check if school and user type are selected
@@ -3083,6 +3129,7 @@
                     section: section,
                     schoolyear: schoolyear,
                     school: school,
+                    room: room,
                     type: "Student",
                     totalpoints: 0,
                     totalstar: 0,
@@ -3160,9 +3207,7 @@
                     .then(() => {
                         // Data saved successfully!
                         console.log("User data saved successfully.");
-                        if (window.confirm('User created successfully. Do you want to proceed with AddUser2?')) {
-                            AddUser2(user.uid);
-                        }
+                        window.confirm("User created successfully.");
                         document.getElementById('email').value = '';
                         document.getElementById('password').value = '';
                         document.getElementById('username').value = '';
@@ -3193,68 +3238,111 @@
             return; // Exit the function if the user clicks 'Cancel' or inputs an invalid value
         }
 
-        // Create a new workbook
-        const wb = XLSX.utils.book_new();
+        const user = auth.currentUser.uid;
 
-        // Get the table data as an array
-        const table = document.getElementById(`table${tableNumber}`);
-        const tableData = [];
-        const rows = table.querySelectorAll('tr');
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-            const rowData = [];
-            const cells = row.querySelectorAll('th:not(.hideme):not(.hideme2), td:not(.hideme):not(.hideme2)');
+        // Retrieve the user's first name and last name from Realtime Database
+        const userRef = ref(database, 'users/' + user);
+        get(userRef)
+            .then((snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    const firstName = userData.firstname;
+                    const lastName = userData.lastname;
+                    const Usertype = userData.type;
 
-            for (let j = 0; j < cells.length; j++) {
-                rowData.push(cells[j].innerText);
-            }
-            tableData.push(rowData);
-        }
+                    // Create a new workbook
+                    const wb = XLSX.utils.book_new();
 
-        // Add the table data to a new worksheet
-        const ws = XLSX.utils.aoa_to_sheet(tableData);
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                    // Get the table data as an array
+                    const table = document.getElementById(`table${tableNumber}`);
+                    const tableData = [];
+                    const rows = table.querySelectorAll('tr');
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const rowData = [];
+                        const cells = row.querySelectorAll('th:not(.hideme):not(.hideme2), td:not(.hideme):not(.hideme2)');
 
-        // Export the workbook to an Excel file
-        XLSX.writeFile(wb, `table${tableNumber}.xlsx`);
+                        for (let j = 0; j < cells.length; j++) {
+                            rowData.push(cells[j].innerText);
+                        }
+                        tableData.push(rowData);
+                    }
+
+                    // Add the user information to the table data
+                    const userInformation = [`${Usertype}:`, `${firstName} ${lastName}`];
+                    tableData.unshift(userInformation);
+
+                    // Add the table data to a new worksheet
+                    const ws = XLSX.utils.aoa_to_sheet(tableData);
+                    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+                    // Export the workbook to an Excel file
+                    XLSX.writeFile(wb, `table${tableNumber}.xlsx`);
+                }
+            })
+            .catch((error) => {
+                console.log("Error getting user data:", error);
+            });
     });
 
     function exportTableToExcel(tableId, filename) {
-        const sheetName = 'Sheet1';
-        const workbook = XLSX.utils.book_new();
-        const worksheet = XLSX.utils.table_to_sheet(document.getElementById(tableId));
+        // Retrieve the user's first name and last name from Realtime Database
+        const user = auth.currentUser.uid;
+        const userRef = ref(database, 'users/' + user);
+        get(userRef)
+            .then((snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    const firstName = userData.firstname;
+                    const lastName = userData.lastname;
+                    const Usertype = userData.type;
 
-        // Add column headers and cell styles
-        const headerStyle = {
-            font: { bold: true },
-            fill: { fgColor: { rgb: 'DDDDDD' } },
-            alignment: { horizontal: 'center' },
-            border: { top: { style: 'thin' }, bottom: { style: 'thin' } }
-        };
-        XLSX.utils.sheet_add_json(worksheet, [{ A: '', B: 'Name', C: 'Email', D: 'Points' }], { header: ['A', 'B', 'C', 'D'], skipHeader: true, origin: 'A1' });
-        XLSX.utils.sheet_format_cols(worksheet, [{ wch: 10 }, { wch: 30 }, { wch: 30 }, { wch: 10 }]); // set column widths
-        XLSX.utils.sheet_set_range_style(worksheet, 'A1:D1', headerStyle); // apply header style to row 1
+                    const sheetName = 'Sheet1';
+                    const workbook = XLSX.utils.book_new();
+                    const worksheet = XLSX.utils.table_to_sheet(document.getElementById(tableId));
 
-        // Add table data and cell styles
-        const dataStyle = {
-            border: { bottom: { style: 'thin' } },
-            alignment: { horizontal: 'center' }
-        };
-        const tableRows = document.getElementById(tableId).querySelectorAll('tbody tr');
-        const tableData = [];
-        tableRows.forEach((row) => {
-            const rowData = [];
-            row.querySelectorAll('td:not(.hideme)').forEach((cell) => {
-                rowData.push(cell.innerText);
+                    // Add column headers and cell styles
+                    const headerStyle = {
+                        font: { bold: true },
+                        fill: { fgColor: { rgb: 'DDDDDD' } },
+                        alignment: { horizontal: 'center' },
+                        border: { top: { style: 'thin' }, bottom: { style: 'thin' } }
+                    };
+                    XLSX.utils.sheet_add_json(worksheet, [{ A: '', B: 'Name', C: 'Email', D: 'Points' }], { header: ['A', 'B', 'C', 'D'], skipHeader: true, origin: 'A1' });
+                    XLSX.utils.sheet_format_cols(worksheet, [{ wch: 10 }, { wch: 30 }, { wch: 30 }, { wch: 10 }]); // set column widths
+                    XLSX.utils.sheet_set_range_style(worksheet, 'A1:D1', headerStyle); // apply header style to row 1
+
+                    // Add table data and cell styles
+                    const dataStyle = {
+                        border: { bottom: { style: 'thin' } },
+                        alignment: { horizontal: 'center' }
+                    };
+                    const tableRows = document.getElementById(tableId).querySelectorAll('tbody tr');
+                    const tableData = [];
+                    tableRows.forEach((row) => {
+                        const rowData = [];
+                        row.querySelectorAll('td:not(.hideme)').forEach((cell) => {
+                            rowData.push(cell.innerText);
+                        });
+                        tableData.push(rowData);
+                    });
+
+                    // Add the user information to the table data
+                    const userInformation = [`${Usertype}:`, `${firstName} ${lastName}`];
+                    tableData.unshift(userInformation);
+
+                    XLSX.utils.sheet_add_aoa(worksheet, tableData, { origin: 'A2' });
+                    XLSX.utils.sheet_set_range_style(worksheet, `A2:D${tableData.length + 1}`, dataStyle); // apply data style to rows 2 to n
+
+                    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+                    XLSX.writeFile(workbook, `${filename}.xlsx`);
+                }
+            })
+            .catch((error) => {
+                console.log("Error getting user data:", error);
             });
-            tableData.push(rowData);
-        });
-        XLSX.utils.sheet_add_aoa(worksheet, tableData, { origin: 'A2' });
-        XLSX.utils.sheet_set_range_style(worksheet, `A2:D${tableData.length + 1}`, dataStyle); // apply data style to rows 2 to n
-
-        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-        XLSX.writeFile(workbook, `${filename}.xlsx`);
     }
+
 
     document.getElementById("printPdf").addEventListener('click', function () {
         // Ask the user to choose a table
@@ -3263,62 +3351,95 @@
             return; // Exit the function if the user clicks 'Cancel' or inputs an invalid value
         }
 
-        // Open a new window for printing
-        const printWindow = window.open();
+        // Retrieve the current authenticated user
+        const user = auth.currentUser.uid;
 
-        // Clone the table and its contents
-        const clonedTable = document.createElement('table');
-        const originalTable = document.getElementById(`table${tableNumber}`);
-        clonedTable.innerHTML = originalTable.innerHTML;
+        if (user) {
+            // Open a new window for printing
+            const printWindow = window.open();
 
-        // Modify styles for printing
-        clonedTable.style.width = "100%"; // make table take up full width of printed page
-        clonedTable.style.borderCollapse = "collapse";
-        clonedTable.style.border = "1px solid black";
+            // Clone the table and its contents
+            const clonedTable = document.createElement('table');
+            const originalTable = document.getElementById(`table${tableNumber}`);
+            clonedTable.innerHTML = originalTable.innerHTML;
 
-        // Hide the 'hideme' class for th and td elements
-        const hideMeElements = clonedTable.querySelectorAll('.hideme');
-        for (let i = 0; i < hideMeElements.length; i++) {
-            hideMeElements[i].style.display = 'none';
+            // Modify styles for printing
+            clonedTable.style.width = "100%"; // make table take up full width of printed page
+            clonedTable.style.borderCollapse = "collapse";
+            clonedTable.style.border = "1px solid black";
+
+            // Hide the 'hideme' class for th and td elements
+            const hideMeElements = clonedTable.querySelectorAll('.hideme');
+            for (let i = 0; i < hideMeElements.length; i++) {
+                hideMeElements[i].style.display = 'none';
+            }
+
+            const clonedTh = clonedTable.querySelectorAll('th:not(.hideme)');
+            for (let i = 0; i < clonedTh.length; i++) {
+                clonedTh[i].style.border = "1px solid black";
+                clonedTh[i].style.padding = "8px";
+                clonedTh[i].style.position = "static"; // remove position: sticky from headers
+                clonedTh[i].style.backgroundColor = "white";
+            }
+
+            const clonedTd = clonedTable.querySelectorAll('td:not(.hideme)');
+            for (let i = 0; i < clonedTd.length; i++) {
+                clonedTd[i].style.border = "1px solid black";
+                clonedTd[i].style.padding = "8px";
+                clonedTd[i].style.position = "static"; // remove position: sticky from cells
+            }
+
+            const totalPointsCell = clonedTable.querySelector('th:last-child:not(.hideme)');
+            totalPointsCell.style.backgroundColor = "white"; // adjust background color to prevent overlapping
+            totalPointsCell.style.position = "static"; // remove position: sticky from cell
+
+            // Remove "Remove" column header and cells
+            const removeHeader = clonedTable.querySelector('th:last-of-type:not(.hideme)');
+            removeHeader.style.display = 'none';
+            const removeCells = clonedTable.querySelectorAll('td:last-of-type:not(.hideme)');
+            for (let i = 0; i < removeCells.length; i++) {
+                removeCells[i].style.display = 'none';
+            }
+
+            // Retrieve the user's first name and last name from Realtime Database
+            const userRef = ref(database, 'users/' + user);
+            get(userRef)
+                .then((snapshot) => {
+                    const userData = snapshot.val();
+                    if (userData) {
+                        const firstName = userData.firstname;
+                        const lastName = userData.lastname;
+                        const Usertype = userData.type;
+
+                        console.log(firstName);
+
+                        // Create a new row at the top of the cloned table for the user information
+                        const userRow = clonedTable.insertRow(0);
+                        const userCell = userRow.insertCell(0);
+                        userCell.colSpan = originalTable.rows[0].cells.length; // Set the cell to span the entire row
+                        userCell.innerHTML = `<strong>${Usertype}:</strong> ${firstName} ${lastName}`;
+
+                        // Modify styles for the user information row
+                        userCell.style.border = "none";
+                        userCell.style.textAlign = "center";
+                        userCell.style.padding = "8px";
+
+                        // Add the cloned table to the print window document
+                        printWindow.document.body.appendChild(clonedTable);
+
+                        // Print the document
+                        printWindow.print();
+
+                        // Close the print window
+                        printWindow.close();
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error getting user data:", error);
+                });
+
         }
-
-        const clonedTh = clonedTable.querySelectorAll('th:not(.hideme)');
-        for (let i = 0; i < clonedTh.length; i++) {
-            clonedTh[i].style.border = "1px solid black";
-            clonedTh[i].style.padding = "8px";
-            clonedTh[i].style.position = "static"; // remove position: sticky from headers
-            clonedTh[i].style.backgroundColor = "white";
-        }
-
-        const clonedTd = clonedTable.querySelectorAll('td:not(.hideme)');
-        for (let i = 0; i < clonedTd.length; i++) {
-            clonedTd[i].style.border = "1px solid black";
-            clonedTd[i].style.padding = "8px";
-            clonedTd[i].style.position = "static"; // remove position: sticky from cells
-        }
-
-        const totalPointsCell = clonedTable.querySelector('th:last-child:not(.hideme)');
-        totalPointsCell.style.backgroundColor = "white"; // adjust background color to prevent overlapping
-        totalPointsCell.style.position = "static"; // remove position: sticky from cell
-
-        // Remove "Remove" column header and cells
-        const removeHeader = clonedTable.querySelector('th:last-of-type:not(.hideme)');
-        removeHeader.style.display = 'none';
-        const removeCells = clonedTable.querySelectorAll('td:last-of-type:not(.hideme)');
-        for (let i = 0; i < removeCells.length; i++) {
-            removeCells[i].style.display = 'none';
-        }
-
-
-        // Add the cloned table to the print window document
-        printWindow.document.body.appendChild(clonedTable);
-
-        // Print the document
-        printWindow.print();
-
-        // Close the print window
-        printWindow.close();
-    })
+    });
 
     document.getElementById("printTable").addEventListener('click', function () {
         // Show the modal

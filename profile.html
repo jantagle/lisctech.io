@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" href="img\Lisctech.png">
+    <link rel="shortcut icon" href="img\Lisctechs.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -234,7 +234,7 @@
             font-weight: bold;
         }
 
-        span{
+        span {
             font-weight: 400;
         }
 
@@ -348,7 +348,7 @@
             <span class="logo navLogo" style="display: flex; align-items: center;">
                 <img src="img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
                 <a href="home.html" style="margin-left: 10px;">LiScTech</a>
-             </span>
+            </span>
 
             <div class="menu">
                 <div class="logo-toggle">
@@ -463,6 +463,8 @@
         query, limitToFirst, limitToLast, orderByChild,
         startAt, startAfter, endAt, endBefore, equalTo
     } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
+    import { ref as sRef, getStorage, uploadBytes, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-storage.js";
+
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -482,6 +484,7 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const database = getDatabase(app);
+    const storage = getStorage(app);
     console.log(app);
 
     //user auth
@@ -1160,64 +1163,78 @@
     });
 
 
-    // Get the avatar edit button and add a click event listener
     const avatarEditBtn = document.querySelector('#avatar-edit-btn');
     avatarEditBtn.addEventListener('click', async function () {
-
         // Check if the avatar form already exists
         const existingAvatarForm = document.querySelector('#avatar-form');
         if (existingAvatarForm) {
-            // If it does, remove it and exit the function
             existingAvatarForm.remove();
             return;
         }
 
-        // Get the current avatar URL
-        const currentAvatarUrl = document.querySelector('#avatar-img').getAttribute('src');
+        const avatarImg = document.querySelector('#avatar-img');
+        const originalAvatarUrl = avatarImg.src;
 
-        // Create a form with the current avatar URL, a save button, and a close button
         const avatarForm = document.createElement('form');
         avatarForm.id = 'avatar-form';
         avatarForm.innerHTML = `
-        <label for="avatar">Avatar URL:</label>
-        <input type="url" id="avatar-input" name="avatar" value="${currentAvatarUrl}" required>
-        <button type="submit">Save</button>
-        <button type="button" id="avatar-close-btn">Close</button>
-    `;
+    <label for="avatar">Avatar:</label>
+    <input type="file" id="avatar-input" accept="image/*" required>
+    <button type="submit">Save</button>
+    <button type="button" id="avatar-close-btn">Close</button>
+  `;
 
-        // Add a submit event listener to the form
-        avatarForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const newAvatarUrl = avatarForm.querySelector('#avatar-input').value;
-            const user = auth.currentUser;
-            console.log("User UID:", user.uid);
-            update(ref(database, 'users/' + user.uid), {
-                profileurl: newAvatarUrl,
-            })
-                .then(() => {
-                    // Avatar updated!
-                    alert("Avatar updated successfully!");
-                    document.querySelector('#avatar').setAttribute('src', newAvatarUrl);
-                    avatarForm.remove();
-                })
-                .catch((error) => {
-                    // An error occurred
-                    console.log(error);
-                    // Remove the form from the DOM
-                    avatarForm.remove();
-                });
-        });
-
-        // Add a click event listener to the close button
         const avatarCloseBtn = avatarForm.querySelector('#avatar-close-btn');
         avatarCloseBtn.addEventListener('click', function () {
+            // Revert to the original profile picture
+            avatarImg.src = originalAvatarUrl;
             avatarForm.remove();
         });
 
-        // Append the form to a container element
+        const avatarInput = avatarForm.querySelector('#avatar-input');
+        avatarInput.addEventListener('change', function () {
+            // Preview the selected image
+            const file = avatarInput.files[0];
+            if (file) {
+                avatarImg.src = URL.createObjectURL(file);
+            }
+        });
+
+        avatarForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const fileInput = avatarForm.querySelector('#avatar-input');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const user = auth.currentUser;
+                const storageRef = sRef(storage, `profile_pictures/${user.uid}.jpg`);
+
+                uploadBytes(storageRef, file)
+                    .then(() => getDownloadURL(storageRef))
+                    .then((downloadURL) => {
+                        const userRef = ref(database, `users/${user.uid}`);
+                        return update(userRef, {
+                            profileurl: downloadURL,
+                        });
+                    })
+                    .then(() => {
+                        alert("Avatar updated successfully!");
+                        avatarImg.src = URL.createObjectURL(file);
+                        avatarForm.remove();
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        avatarForm.remove();
+                    });
+            }
+        });
+
         const avatarFormContainer = document.querySelector('#avatar-form-container');
         avatarFormContainer.appendChild(avatarForm);
     });
+
+
+
 
 
 

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home | LiScTech</title>
-    <link rel="shortcut icon" href="img\Lisctech.png">
+    <link rel="shortcut icon" href="img\Lisctechs.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -421,11 +421,11 @@
     <nav>
         <div class="nav-bar">
             <i class='bx bx-menu sidebarOpen'></i>
-            
-           <span class="logo navLogo" style="display: flex; align-items: center;">
-   <img src="img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
-   <a href="home.html" style="margin-left: 10px;">LiScTech</a>
-</span>
+
+            <span class="logo navLogo" style="display: flex; align-items: center;">
+                <img src="img\LisctechLogo2.png" alt="logo" style="width: 70px; height: 70px;">
+                <a href="home.html" style="margin-left: 10px;">LiScTech</a>
+            </span>
 
 
             <div class="menu">
@@ -481,6 +481,7 @@
                 <th>Rank No.</th>
                 <th><img src="" id="image" width="" height="">Profile</th>
                 <th>Username</th>
+                <th>School</th>
                 <th>Total Points</th>
                 <th>Total Star</th>
             <tbody id="tbody1"></tbody>
@@ -524,7 +525,7 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
     import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
     import {
-        getDatabase, ref, child, onValue, get, orderByKey,
+        getDatabase, update, set, remove, ref, child, onValue, get, orderByKey,
         query, limitToFirst, limitToLast, orderByChild,
         startAt, startAfter, endAt, endBefore, equalTo
     } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
@@ -610,92 +611,6 @@
     });
     //----- End
 
-    var rankno = 0;
-    var tbody = document.getElementById("tbody1");
-    var img = document.getElementById("image");
-    var size = 40;
-
-    function AddItemToTable(profile, username, totalpoints, totalstar) {
-        let trow = document.createElement("tr");
-        let td1 = document.createElement("td");
-        let td2 = document.createElement("td");
-        let td3 = document.createElement("td");
-        let td4 = document.createElement("td");
-        let td5 = document.createElement("td");
-
-        td1.innerHTML = ++rankno;
-        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
-        td3.innerHTML = username;
-        td4.innerHTML = totalpoints.toFixed(2);
-        td5.innerHTML = totalstar;
-
-        trow.appendChild(td1);
-        trow.appendChild(td2);
-        trow.appendChild(td3);
-        trow.appendChild(td4);
-        trow.appendChild(td5);
-
-        tbody.appendChild(trow);
-
-        Rankshow();
-
-    }
-
-    function AddAllItemsToTable(TheUsers) {
-
-        rankno = 0;
-        tbody.innerHTML = "";
-        TheUsers.forEach(element => {
-            AddItemToTable(element.profileurl, element.username, element.totalpoints, element.totalstar);
-        });
-    }
-
-    const db = getDatabase();
-
-    function GetAllDataRealTime() {
-        const ref1 = query(ref(db, "users"), orderByChild("totalpoints"), limitToFirst(150));
-        const ref2 = query(ref(db, "users"), orderByChild("type"), equalTo("Student"), limitToFirst(150));
-
-        // Retrieve user type from localStorage
-        const userType = localStorage.getItem('userType');
-
-        // Hide users link if user type is not Admin or Teacher
-        if (userType !== "Admin" && userType !== "Teacher") {
-            $('#users-link').hide();
-        }
-
-        // Fetch data from both references in parallel
-        Promise.all([get(ref1), get(ref2)])
-            .then((snapshots) => {
-                const data1 = snapshots[0].val() || {};
-                const data2 = snapshots[1].val() || {};
-
-                // Merge the two data sets and remove duplicates
-                const mergedData = { ...data1, ...data2 };
-                Object.keys(data1).forEach((key) => {
-                    if (key in data2) {
-                        mergedData[key] = { ...data1[key], ...data2[key] };
-                    }
-                });
-
-                // Log the merged data
-                console.log(mergedData);
-
-                // Filter the merged data to only include records with "type" field equal to "Student"
-                const studentData = Object.values(mergedData).filter(item => item.type === "Student");
-
-                // Order the filtered data by "totalpoints" field
-                const sortedData = studentData.sort((a, b) => b.totalpoints - a.totalpoints);
-
-                // Pass the sorted data to AddAllItemsToTable function
-                AddAllItemsToTable(sortedData);
-            })
-            .catch((error) => {
-                console.error("Failed to fetch data", error);
-            });
-    }
-
-
     const usersLink = $('#users-link');
 
     function checkAuth(user) {
@@ -746,6 +661,84 @@
         $('#users-link').hide();
     });
 
+    var rankno = 0;
+    var tbody = document.getElementById("tbody1");
+    var img = document.getElementById("image");
+    var size = 40;
+
+    function AddItemToTable(profile, username, school, totalpoints, totalstar) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+
+        td1.innerHTML = ++rankno;
+        td2.innerHTML += '<img src="' + profile + '" width= "' + size + '" height= "' + size + '"/>';
+        td3.innerHTML = username;
+        td4.innerHTML = school;
+        td5.innerHTML = totalpoints.toFixed(2);
+        td6.innerHTML = totalstar;
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+
+        tbody.appendChild(trow);
+
+        Rankshow();
+
+    }
+
+    function AddAllItemsToTable(TheUsers) {
+
+        rankno = 0;
+        const tableBody = document.getElementById('tbody1');
+
+        // Clear the table before adding new data
+        tableBody.innerHTML = '';
+        TheUsers.forEach(element => {
+            AddItemToTable(element.profileurl, element.username, element.school, element.totalpoints, element.totalstar);
+        });
+    }
+
+    function GetAllDataRealTime() {
+        const usersRef = ref(database, "users");
+        const queryRef = query(usersRef, orderByChild("type"), equalTo("Student"));
+
+        // Retrieve user type from localStorage
+        const userType = localStorage.getItem('userType');
+
+        // Hide users link if user type is not Admin or Teacher
+        if (userType !== "Admin" && userType !== "Teacher") {
+            $('#users-link').hide();
+        }
+
+        // Listen for value changes in the reference
+        onValue(queryRef, (snapshot) => {
+            const data = snapshot.val() || {};
+
+            // Filter the data to include only users with totalpoints >= 1
+            const filteredData = Object.values(data).filter(item => item.totalpoints >= 1);
+
+            // Order the filtered data by "totalpoints" field
+            const sortedData = filteredData.sort((a, b) => b.totalpoints - a.totalpoints);
+
+            // Limit the sorted data to the first 150 records
+            const limitedData = sortedData.slice(0, 150);
+
+            // Pass the limited data to AddAllItemsToTable function
+            AddAllItemsToTable(limitedData);
+        }, (error) => {
+            console.error("Failed to fetch data", error);
+        });
+    }
+
     function Rankshow() {
         // Access the table element
         var table = document.getElementById("myTable");
@@ -770,7 +763,7 @@
         n2.innerHTML = "2nd " + name2;
         n3.innerHTML = "3rd " + name3;
     }
-    window.onload = GetAllDataRealTime;
+
 
 
 
