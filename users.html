@@ -7,6 +7,7 @@
     <title>User Management | LiScTech</title>
     <link rel="shortcut icon" href="img\Lisctechs.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1394,9 +1395,9 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
     import { getAuth, createUserWithEmailAndPassword, signOut, deleteUser } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-auth.js";
     import {
-        getDatabase, update, set, remove, ref, child, onValue, get, orderByKey,
+        getDatabase, update, push, set, remove, ref, child, onValue, get, orderByKey,
         query, limitToFirst, limitToLast, orderByChild,
-        startAt, startAfter, endAt, endBefore, equalTo
+        startAt, startAfter, endAt, endBefore, equalTo, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-database.js";
     import { ref as sRef, getStorage, uploadBytes, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-storage.js";
 
@@ -1808,7 +1809,7 @@
             td77.innerHTML = (module10Q3points || 0).toFixed(2);
             td78.innerHTML = (module10Q3 || 0) + "/5";
             td79.innerHTML = type;
-            td80.innerHTML = '<button class="edit-btn" data-username="' + useruid + '"><i class="fas fa-edit"></i></button>';
+            td80.innerHTML = '<button class="edit-btn" data-username="' + useruid + '"><i class="bx bxs-edit-alt" style="font-size: 15px;"></i></button>';
             td80.classList.add("fixed");
             td80.style.position = "sticky";
             td80.style.right = "82px";
@@ -1817,7 +1818,7 @@
                 td81.classList.add("fixed");
             }
             else {
-                td81.innerHTML = '<button class="delete-btn" data-username="' + useruid + '"><i class="fas fa-trash-alt"></i></button>';
+                td81.innerHTML = '<button class="delete-btn" data-username="' + useruid + '"><i class="bx bxs-trash" style="font-size: 15px;"></i></button>';
                 td81.classList.add("fixed");
             }
 
@@ -2823,7 +2824,6 @@
                 return;
             }
 
-
             console.log(userData);
             // Update the values of the form fields with the user data
             const editForm = document.querySelector('#editForm');
@@ -3300,6 +3300,8 @@
                     module10Q3points: newM10Q3points,
                 }).then(() => {
                     console.log(`User ${useruid} updated successfully`);
+                    const userId = auth.currentUser.uid;
+                    logFunction(userId, newFirstName);
                     // Hide the modal
                     modal.style.display = "none";
                 }).catch((error) => {
@@ -3322,6 +3324,23 @@
         }).catch((error) => {
             console.error(`Failed to fetch user ${useruid}: ${error.message}`);
         });
+    }
+
+    function logFunction(userId, newData) {
+        const logRef = ref(database, "activity_logs");
+        const logKey = push(logRef).key;
+        const logData = {
+            userId: userId,
+            log: newData
+        };
+
+        set(child(logRef, logKey), logData)
+            .then(() => {
+                // Log was successfully added to the database
+            })
+            .catch(error => {
+                // An error occurred while writing the log
+            });
     }
 
     function AddAllItemsToTable(TheUsers) {
