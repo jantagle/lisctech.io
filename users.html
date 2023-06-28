@@ -3587,6 +3587,15 @@
                     .then(() => {
                         console.log("User data saved successfully.");
                         alert('User created successfully');
+
+                        Email.send({
+                            SecureToken: "f9aad6b1-5635-4c0c-9366-368cdd01d3b4",
+                            To: email,
+                            From: "lisctechio@gmail.com",
+                            Subject: "Account Succesfully created!",
+                            Body: "Your email is now connected to an account in LiScTech Mobile app! with password:" + password + ", sign in now and explore the app!"
+                        })
+
                         document.getElementById('email').value = '';
                         document.getElementById('password').value = '';
                         document.getElementById('username').value = '';
@@ -3608,6 +3617,7 @@
     });
 
 </script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
 
 
 </html>
